@@ -1,0 +1,340 @@
+\input texinfo   @c -*-texinfo-*-
+
+@setfilename dgeom.info
+@settitle Package dgeom
+
+@ifinfo
+@macro var {expr}
+<\expr\>
+@end macro
+@end ifinfo
+
+@dircategory Mathematics/Maxima
+@direntry
+* Package dgeom: (maxima) Maxima share package dgeom
+@end direntry
+
+@menu
+* Introduction to package dgeom::
+* Functions and Variables for dgeom::
+@end menu
+@node Top, Introduction to package dgeom, (dir), (dir)
+@top
+
+
+@menu
+* Introduction to package dgeom::
+* Functions and Variables for dgeom::
+
+@detailmenu
+ --- The Detailed Node Listing ---
+
+* Introduction to package dgeom::
+* Functions and Variables for dgeom::
+
+@end detailmenu
+@end menu
+
+
+@chapter Package dgeom
+
+@node Introduction to package dgeom, Functions and Variables for dgeom, Top, Top
+@section Introduction to package dgeom
+
+The @code{dgeom} package provides some basic functions useful for
+exploring metrics and manifolds. In particular coordinate
+transformations that allow one to define embedded manifolds in flat
+space. But the package provides more general tools for computing metrics
+after a coordinate transformation.
+
+The @code{dgeom} package computes the frame field connections for an
+embedded surface using frames defined by the attitude matrix.
+
+The basic use of the package begins by defining the coordinates in the
+variables @code{cords_in}, @code{cords_tr}, and @code{cords_ot}. This
+can be done manually or by using the built-in function @code{dg_cords}.
+
+In a typical session, one should first call @code{dg_cords(all)} to see
+the available coordinate systems and then choose one, or set up the
+coordinates by hand. Second, call @code{dg_metric()} to compute the
+metric.  Then one can call the divergence or Laplace functions
+@code{dg_diverg()} or @code{dg_laplac()} if desired. If the frame field
+connections are desired, call @code{dg_ffc()}.
+
+Note: It helps to simplify the resulting formulas by restricting
+coordinate ranges. For example, if studying the sphere one should use
+@code{assume(theta>0,theta<%pi)} and @code{assume(r>0)}. These are set
+automatically in the package, but for coordinate systems input by hand
+one should consider setting the ranges manually.
+
+@node Functions and Variables for dgeom, , Introduction to package dgeom, Top
+@section Functions and Variables for dgeom
+
+@defvr {Variable} cord_in
+Input coordinates are given as a list in the variable @code{cord_in}.
+@end defvr
+
+@defvr {Variable} cord_ot
+Output coordinates are given as a list in the variable @code{cord_ot}.
+@end defvr
+
+@defvr {Variable} cord_tr
+Coordinate transformations are given as a list in the variable @code{cord_tr}.
+@code{cord_tr:[r*sin(theta)*cos(phi),r*sin(theta)*sin(phi),r*cos(theta)]}.
+@end defvr
+
+@defvr {Variable} dg_minkowski
+The variable @code{dg_minkowski} (default value: 1) determines whether
+the metric in the output coordinates @code{cords_ot} is computed with a
+Minkowski signature. This variable is set automatically for the
+predefined coordinate transformations 'rindler'. If defining coordinates
+in Minkowski signature without using the function @code{dg_cords}, the
+timelike coordinate must be the first element in the list for both
+@code{cords_in} and @code{cords_ot}.
+@end defvr
+
+@example
+@group
+(%i1) dg_cords(rindler);
+(%o1)                                done
+(%i2) show_cords();
+                               cords_in = [t, x]
+
+                 cords_tr = [sinh(omega) rho, cosh(omega) rho]
+
+                            cords_ot = [omega, rho]
+
+                              dg_minkowski = - 1
+
+(%o2)                                done
+(%i3) dg_metric();
+                               2           2    2
+                      ds2 = del (rho) - rho  del (omega)
+
+                                   [      2    ]
+                               g = [ - rho   0 ]
+                                   [           ]
+                                   [   0     1 ]
+
+(%o3)                                done
+@end group
+@end example
+
+@anchor{show_cords}
+@deffn {Function} show_cords ( )
+The function @code{show_cords} takes no arguments. It displays the
+variables @code{cord_in}, @code{cord_tr}, @code{cord,ot}, and
+@code{dg_minkowski}.
+@end deffn
+
+@anchor{dg_cords}
+@deffn {Function} dg_cords (@var{coordinate system})
+The function @code{dg_cords} takes a predefined coordinate system name
+and sets the variables @code{cord_in}, @code{cord_tr}, @code{cord,ot}.
+To see the available predefined coordinate systems use
+@code{dg_cords(all)}.
+@end deffn
+
+@anchor{dg_derivs} 
+@deffn {Function} dg_derivs ( )
+This function takes no arguments, but the input and output coordinates
+and the transformation functions must be defined beforehand for this
+function to work. See the function @ref{dg_cords}.  The function
+@code{dg_derivs} computes the partial derivative functions of the output
+coordinates in terms of the input coordinates using the transformation
+functions. For example, for input coordinates @code{[x,y,z]}, and output
+coordinates @code{[r,phi,z]}, and using the predefined cylindrical
+coordinate transformation @code{xyz_to_cyl}, one obtains the partial
+derivatives with respect to @var{(x,y,z)} in terms of the partial
+derivatives with respect to the variables @var{(r,phi,z)}.
+
+The resulting partial derivative functions are named according to the
+input variable names, in the following notation. The partial derivative
+with respect to @var{x} is denoted @code{d_dx}, and likewise for the
+other input coordinates. The functions are defined with argument names
+generated by @code{gensym}.
+@end deffn
+
+@example
+@group
+(%i1) dg_cords(xyz_to_cyl);
+(%o1)                                done
+(%i2) dg_derivs();
+(%o2)                                done
+(%i3) fundef(d_dx);
+                               dg203            dg203
+(%o3)            d_dx(g203) := ----- sin(phi) + ----- cos(phi)
+                               dphi              dr
+@end group
+@end example
+
+@anchor{dg_metric}
+@deffn {Function} dg_metric ( )
+This function takes no arguments, but the input and output coordinates
+and the transformation functions must be defined beforehand for this
+function to work. See the function @ref{dg_cords}.
+
+The function @code{dg_metric} computes the metric in terms of the output
+coordinates @code{cords_ot}. This function assumes the input coordinates
+are flat. This function returns the line element @var{ds@sup{2}} in the
+variable @code{ds2}, and the metric in the matrix @code{g}.
+@end deffn
+
+@example
+@group
+(%i1) dg_cords(xyz_to_spher);
+(%o1)                                done
+(%i2) dg_metric();
+                  2    2             2       2    2           2
+           ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
+
+                             [ 1  0         0        ]
+                             [                       ]
+                             [     2                 ]
+                         g = [ 0  r         0        ]
+                             [                       ]
+                             [         2    2        ]
+                             [ 0  0   r  sin (theta) ]
+
+(%o2)                                done
+@end group
+@end example
+
+
+@anchor{dg_diverg}
+@deffn {Function} dg_diverg ( )
+This function takes no arguments. The input and output coordinates and
+the transformation functions must be defined beforehand for this
+function to work. See the function @ref{dg_cords}.
+
+The function @code{dg_diverg} returns a function @code{dg_div(W)} that
+takes arument @code{W} and returns the divergence in terms of the
+output coordinates @code{cord_ot}. The function @code{dg_metric} must be
+called before calling @code{dg_diverg}.
+@end deffn
+
+@example
+@group
+(%i1) dg_cords(xyz_to_cyl);
+(%o1)                                done
+(%i2) dg_metric();
+                             2         2       2    2
+                    ds2 = del (z) + del (r) + r  del (phi)
+
+                                   [ 1  0   0 ]
+                                   [          ]
+                               g = [     2    ]
+                                   [ 0  r   0 ]
+                                   [          ]
+                                   [ 0  0   1 ]
+
+(%o2)                                done
+(%i3) dg_diverg();
+                                        W_r   dW_z   dW_r   dW_phi
+(%o3)        dg_div(W_r, W_phi, W_z) := --- + ---- + ---- + ------
+                                         r     dz     dr     dphi
+@end group
+@end example
+
+
+@anchor{dg_laplac}
+@deffn {Function} dg_laplac ( )
+This function takes no arguments. The input and output coordinates and
+the transformation functions must be defined beforehand for this
+function to work. See the function @ref{dg_cords}.
+
+The function @code{dg_laplac} returns a function @code{dg_lap(W)} that
+takes arument @code{W} and returns the Laplacian in terms of the output
+coordinates @code{cord_ot}. The function @code{dg_metric} must be called
+before calling @code{dg_laplac}.
+@end deffn
+
+@example
+@group
+(%i1) dg_cords(xyz_to_cyl);
+(%o1)                                done
+(%i2) dg_metric();
+                             2         2       2    2
+                    ds2 = del (z) + del (r) + r  del (phi)
+
+                                   [ 1  0   0 ]
+                                   [          ]
+                               g = [     2    ]
+                                   [ 0  r   0 ]
+                                   [          ]
+                                   [ 0  0   1 ]
+
+(%o2)                                done
+(%i3) dg_laplac();
+                                 2     2                 2
+                                d F   d F   2   dF      d F
+                               (--- + ---) r  + -- r + -----
+                                  2     2       dr         2
+                                dz    dr               dphi
+(%o3)             dg_lap(F) := -----------------------------
+                                             2
+                                            r
+@end group
+@end example
+
+
+@anchor{dg_ffc}
+@deffn {Function} dg_ffc (@var{[constraint equations]})
+Compute the frame field connections. The input and output coordinates
+and the transformation functions must be defined beforehand for this
+function to work. See the function @ref{dg_cords}.
+
+The function @code{dg_ffc} computes the attitude matrix @code{A}, the
+connection coefficients in the matrix @code{Omega}, and the dual 1-forms
+in the array @code{thi}. Any constraint equations given are imposed after
+calculating the attitude matrix.
+
+The structural equations are computed by first computing the matrices
+@code{TT[i,j]: thi[i] . thi[j]}, and @code{DD[i,j]: diff(Omega[i,j])},
+and then computing @code{KK[i,j]} by solving
+@var{domega(i,j) = K th(i) * thi(j)}.
+@end deffn
+
+@example
+@group
+(%i1) dg_cords(xyz_to_cyl);
+(%o1)                                done
+(%i2) dg_ffc([r = 1]);
+(%o2)                                done
+(%i3) A;
+                          [  cos(phi)   sin(phi)  0 ]
+                          [                         ]
+(%o3)                     [ - sin(phi)  cos(phi)  0 ]
+                          [                         ]
+                          [     0          0      1 ]
+(%i4) Omega;
+                          [     0       del(phi)  0 ]
+                          [                         ]
+(%o4)                     [ - del(phi)     0      0 ]
+                          [                         ]
+                          [     0          0      0 ]
+(%i5) thi;
+                                [   del(r)   ]
+                                [            ]
+(%o5)                           [ r del(phi) ]
+                                [            ]
+                                [   del(z)   ]
+@end group
+@end example
+
+
+@subsection SubsectionName
+
+blah blah blah
+
+@subsection SubsectionName
+
+blah blah blah
+
+
+@node Function and Variable Index, , Top, Top
+@appendix Function and Variable index
+@printindex fn
+@printindex vr
+
+@bye

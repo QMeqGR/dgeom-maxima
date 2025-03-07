@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<!-- Created by GNU Texinfo 7.1, https://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Top (Package dgeom)</title>
+
+<meta name="description" content="Top (Package dgeom)">
+<meta name="keywords" content="Top (Package dgeom)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<link href="#Top" rel="start" title="Top">
+<link href="Function-and-Variable-Index.html" rel="index" title="Function and Variable Index">
+<link href="../dir_html/index.html" rel="up" title="(dir)">
+<link href="#Introduction-to-package-dgeom" rel="next" title="Introduction to package dgeom">
+<link href="../dir_html/index.html" rel="prev" title="(dir)">
+<style type="text/css">
+<!--
+a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
+div.example {margin-left: 3.2em}
+span:hover a.copiable-link {visibility: visible}
+strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+
+
+
+<div class="top-level-extent" id="Top">
+<div class="nav-panel">
+<p>
+Next: <a href="#Introduction-to-package-dgeom" accesskey="n" rel="next">Introduction to package dgeom</a>, Previous: <a href="../dir_html/index.html" accesskey="p" rel="prev">(dir)</a>, Up: <a href="../dir_html/index.html" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="Function-and-Variable-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<a class="top" id="SEC_Top"></a>
+
+
+
+<ul class="mini-toc">
+<li><a href="#Package-dgeom" accesskey="1">Package dgeom</a></li>
+<li><a href="Function-and-Variable-Index.html" accesskey="2">Function and Variable index</a></li>
+</ul>
+<div class="chapter-level-extent" id="Package-dgeom">
+<h2 class="chapter"><span>1 Package dgeom<a class="copiable-link" href="#Package-dgeom"> &para;</a></span></h2>
+
+<ul class="mini-toc">
+<li><a href="#Introduction-to-package-dgeom" accesskey="1">Introduction to package dgeom</a></li>
+<li><a href="#Functions-and-Variables-for-dgeom" accesskey="2">Functions and Variables for dgeom</a></li>
+</ul>
+<hr>
+<div class="section-level-extent" id="Introduction-to-package-dgeom">
+<div class="nav-panel">
+<p>
+Next: <a href="#Functions-and-Variables-for-dgeom" accesskey="n" rel="next">Functions and Variables for dgeom</a> &nbsp; [<a href="Function-and-Variable-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<h3 class="section" id="Introduction-to-package-dgeom-1"><span>1.1 Introduction to package dgeom<a class="copiable-link" href="#Introduction-to-package-dgeom-1"> &para;</a></span></h3>
+
+<p>The <code class="code">dgeom</code> package provides some basic functions useful for
+exploring metrics and manifolds. In particular coordinate
+transformations that allow one to define embedded manifolds in flat
+space. But the package provides more general tools for computing metrics
+after a coordinate transformation.
+</p>
+<p>The <code class="code">dgeom</code> package computes the frame field connections for an
+embedded surface using frames defined by the attitude matrix.
+</p>
+<p>The basic use of the package begins by defining the coordinates in the
+variables <code class="code">cords_in</code>, <code class="code">cords_tr</code>, and <code class="code">cords_ot</code>. This
+can be done manually or by using the built-in function <code class="code">dg_cords</code>.
+</p>
+<p>In a typical session, one should first call <code class="code">dg_cords(all)</code> to see
+the available coordinate systems and then choose one, or set up the
+coordinates by hand. Second, call <code class="code">dg_metric()</code> to compute the
+metric.  Then one can call the divergence or Laplace functions
+<code class="code">dg_diverg()</code> or <code class="code">dg_laplac()</code> if desired. If the frame field
+connections are desired, call <code class="code">dg_ffc()</code>.
+</p>
+<p>Note: It helps to simplify the resulting formulas by restricting
+coordinate ranges. For example, if studying the sphere one should use
+<code class="code">assume(theta&gt;0,theta&lt;%pi)</code> and <code class="code">assume(r&gt;0)</code>. These are set
+automatically in the package, but for coordinate systems input by hand
+one should consider setting the ranges manually.
+</p>
+<hr>
+</div>
+<div class="section-level-extent" id="Functions-and-Variables-for-dgeom">
+<div class="nav-panel">
+<p>
+Previous: <a href="#Introduction-to-package-dgeom" accesskey="p" rel="prev">Introduction to package dgeom</a> &nbsp; [<a href="Function-and-Variable-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+<h3 class="section" id="Functions-and-Variables-for-dgeom-1"><span>1.2 Functions and Variables for dgeom<a class="copiable-link" href="#Functions-and-Variables-for-dgeom-1"> &para;</a></span></h3>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-cord_005fin"><span class="category-def">Variable: </span><span><strong class="def-name">cord_in</strong><a class="copiable-link" href="#index-cord_005fin"> &para;</a></span></dt>
+<dd><p>Input coordinates are given as a list in the variable <code class="code">cord_in</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-cord_005fot"><span class="category-def">Variable: </span><span><strong class="def-name">cord_ot</strong><a class="copiable-link" href="#index-cord_005fot"> &para;</a></span></dt>
+<dd><p>Output coordinates are given as a list in the variable <code class="code">cord_ot</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-cord_005ftr"><span class="category-def">Variable: </span><span><strong class="def-name">cord_tr</strong><a class="copiable-link" href="#index-cord_005ftr"> &para;</a></span></dt>
+<dd><p>Coordinate transformations are given as a list in the variable <code class="code">cord_tr</code>.
+<code class="code">cord_tr:[r*sin(theta)*cos(phi),r*sin(theta)*sin(phi),r*cos(theta)]</code>.
+</p></dd></dl>
+
+<dl class="first-defvr">
+<dt class="defvr" id="index-dg_005fminkowski"><span class="category-def">Variable: </span><span><strong class="def-name">dg_minkowski</strong><a class="copiable-link" href="#index-dg_005fminkowski"> &para;</a></span></dt>
+<dd><p>The variable <code class="code">dg_minkowski</code> (default value: 1) determines whether
+the metric in the output coordinates <code class="code">cords_ot</code> is computed with a
+Minkowski signature. This variable is set automatically for the
+predefined coordinate transformations &rsquo;rindler&rsquo;. If defining coordinates
+in Minkowski signature without using the function <code class="code">dg_cords</code>, the
+timelike coordinate must be the first element in the list for both
+<code class="code">cords_in</code> and <code class="code">cords_ot</code>.
+</p></dd></dl>
+
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) dg_cords(rindler);
+(%o1)                                done
+(%i2) show_cords();
+                               cords_in = [t, x]
+
+                 cords_tr = [sinh(omega) rho, cosh(omega) rho]
+
+                            cords_ot = [omega, rho]
+
+                              dg_minkowski = - 1
+
+(%o2)                                done
+(%i3) dg_metric();
+                               2           2    2
+                      ds2 = del (rho) - rho  del (omega)
+
+                                   [      2    ]
+                               g = [ - rho   0 ]
+                                   [           ]
+                                   [   0     1 ]
+
+(%o3)                                done
+</pre></div></div>
+
+<a class="anchor" id="show_005fcords"></a><dl class="first-deffn">
+<dt class="deffn" id="index-show_005fcords"><span class="category-def">Function: </span><span><strong class="def-name">show_cords</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-show_005fcords"> &para;</a></span></dt>
+<dd><p>The function <code class="code">show_cords</code> takes no arguments. It displays the
+variables <code class="code">cord_in</code>, <code class="code">cord_tr</code>, <code class="code">cord,ot</code>, and
+<code class="code">dg_minkowski</code>.
+</p></dd></dl>
+
+<a class="anchor" id="dg_005fcords"></a><dl class="first-deffn">
+<dt class="deffn" id="index-dg_005fcords"><span class="category-def">Function: </span><span><strong class="def-name">dg_cords</strong> <var class="def-var-arguments">(<var class="var">coordinate system</var>)</var><a class="copiable-link" href="#index-dg_005fcords"> &para;</a></span></dt>
+<dd><p>The function <code class="code">dg_cords</code> takes a predefined coordinate system name
+and sets the variables <code class="code">cord_in</code>, <code class="code">cord_tr</code>, <code class="code">cord,ot</code>.
+To see the available predefined coordinate systems use
+<code class="code">dg_cords(all)</code>.
+</p></dd></dl>
+
+<a class="anchor" id="dg_005fderivs"></a><dl class="first-deffn">
+<dt class="deffn" id="index-dg_005fderivs"><span class="category-def">Function: </span><span><strong class="def-name">dg_derivs</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005fderivs"> &para;</a></span></dt>
+<dd><p>This function takes no arguments, but the input and output coordinates
+and the transformation functions must be defined beforehand for this
+function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.  The function
+<code class="code">dg_derivs</code> computes the partial derivative functions of the output
+coordinates in terms of the input coordinates using the transformation
+functions. For example, for input coordinates <code class="code">[x,y,z]</code>, and output
+coordinates <code class="code">[r,phi,z]</code>, and using the predefined cylindrical
+coordinate transformation <code class="code">xyz_to_cyl</code>, one obtains the partial
+derivatives with respect to <var class="var">(x,y,z)</var> in terms of the partial
+derivatives with respect to the variables <var class="var">(r,phi,z)</var>.
+</p>
+<p>The resulting partial derivative functions are named according to the
+input variable names, in the following notation. The partial derivative
+with respect to <var class="var">x</var> is denoted <code class="code">d_dx</code>, and likewise for the
+other input coordinates. The functions are defined with argument names
+generated by <code class="code">gensym</code>.
+</p></dd></dl>
+
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) dg_cords(xyz_to_cyl);
+(%o1)                                done
+(%i2) dg_derivs();
+(%o2)                                done
+(%i3) fundef(d_dx);
+                               dg203            dg203
+(%o3)            d_dx(g203) := ----- sin(phi) + ----- cos(phi)
+                               dphi              dr
+</pre></div></div>
+
+<a class="anchor" id="dg_005fmetric"></a><dl class="first-deffn">
+<dt class="deffn" id="index-dg_005fmetric"><span class="category-def">Function: </span><span><strong class="def-name">dg_metric</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005fmetric"> &para;</a></span></dt>
+<dd><p>This function takes no arguments, but the input and output coordinates
+and the transformation functions must be defined beforehand for this
+function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
+</p>
+<p>The function <code class="code">dg_metric</code> computes the metric in terms of the output
+coordinates <code class="code">cords_ot</code>. This function assumes the input coordinates
+are flat. This function returns the line element <var class="var">ds<sup class="sup">2</sup></var> in the
+variable <code class="code">ds2</code>, and the metric in the matrix <code class="code">g</code>.
+</p></dd></dl>
+
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) dg_cords(xyz_to_spher);
+(%o1)                                done
+(%i2) dg_metric();
+                  2    2             2       2    2           2
+           ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
+
+                             [ 1  0         0        ]
+                             [                       ]
+                             [     2                 ]
+                         g = [ 0  r         0        ]
+                             [                       ]
+                             [         2    2        ]
+                             [ 0  0   r  sin (theta) ]
+
+(%o2)                                done
+</pre></div></div>
+
+
+<a class="anchor" id="dg_005fdiverg"></a><dl class="first-deffn">
+<dt class="deffn" id="index-dg_005fdiverg"><span class="category-def">Function: </span><span><strong class="def-name">dg_diverg</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005fdiverg"> &para;</a></span></dt>
+<dd><p>This function takes no arguments. The input and output coordinates and
+the transformation functions must be defined beforehand for this
+function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
+</p>
+<p>The function <code class="code">dg_diverg</code> returns a function <code class="code">dg_div(W)</code> that
+takes arument <code class="code">W</code> and returns the divergence in terms of the
+output coordinates <code class="code">cord_ot</code>. The function <code class="code">dg_metric</code> must be
+called before calling <code class="code">dg_diverg</code>.
+</p></dd></dl>
+
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) dg_cords(xyz_to_cyl);
+(%o1)                                done
+(%i2) dg_metric();
+                             2         2       2    2
+                    ds2 = del (z) + del (r) + r  del (phi)
+
+                                   [ 1  0   0 ]
+                                   [          ]
+                               g = [     2    ]
+                                   [ 0  r   0 ]
+                                   [          ]
+                                   [ 0  0   1 ]
+
+(%o2)                                done
+(%i3) dg_diverg();
+                                        W_r   dW_z   dW_r   dW_phi
+(%o3)        dg_div(W_r, W_phi, W_z) := --- + ---- + ---- + ------
+                                         r     dz     dr     dphi
+</pre></div></div>
+
+
+<a class="anchor" id="dg_005flaplac"></a><dl class="first-deffn">
+<dt class="deffn" id="index-dg_005flaplac"><span class="category-def">Function: </span><span><strong class="def-name">dg_laplac</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005flaplac"> &para;</a></span></dt>
+<dd><p>This function takes no arguments. The input and output coordinates and
+the transformation functions must be defined beforehand for this
+function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
+</p>
+<p>The function <code class="code">dg_laplac</code> returns a function <code class="code">dg_lap(W)</code> that
+takes arument <code class="code">W</code> and returns the Laplacian in terms of the output
+coordinates <code class="code">cord_ot</code>. The function <code class="code">dg_metric</code> must be called
+before calling <code class="code">dg_laplac</code>.
+</p></dd></dl>
+
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) dg_cords(xyz_to_cyl);
+(%o1)                                done
+(%i2) dg_metric();
+                             2         2       2    2
+                    ds2 = del (z) + del (r) + r  del (phi)
+
+                                   [ 1  0   0 ]
+                                   [          ]
+                               g = [     2    ]
+                                   [ 0  r   0 ]
+                                   [          ]
+                                   [ 0  0   1 ]
+
+(%o2)                                done
+(%i3) dg_laplac();
+                                 2     2                 2
+                                d F   d F   2   dF      d F
+                               (--- + ---) r  + -- r + -----
+                                  2     2       dr         2
+                                dz    dr               dphi
+(%o3)             dg_lap(F) := -----------------------------
+                                             2
+                                            r
+</pre></div></div>
+
+
+<a class="anchor" id="dg_005fffc"></a><dl class="first-deffn">
+<dt class="deffn" id="index-dg_005fffc"><span class="category-def">Function: </span><span><strong class="def-name">dg_ffc</strong> <var class="def-var-arguments">(<var class="var">[constraint equations]</var>)</var><a class="copiable-link" href="#index-dg_005fffc"> &para;</a></span></dt>
+<dd><p>Compute the frame field connections. The input and output coordinates
+and the transformation functions must be defined beforehand for this
+function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
+</p>
+<p>The function <code class="code">dg_ffc</code> computes the attitude matrix <code class="code">A</code>, the
+connection coefficients in the matrix <code class="code">Omega</code>, and the dual 1-forms
+in the array <code class="code">thi</code>. Any constraint equations given are imposed after
+calculating the attitude matrix.
+</p>
+<p>The structural equations are computed by first computing the matrices
+<code class="code">TT[i,j]: thi[i] . thi[j]</code>, and <code class="code">DD[i,j]: diff(Omega[i,j])</code>,
+and then computing <code class="code">KK[i,j]</code> by solving
+<var class="var">domega(i,j) = K th(i) * thi(j)</var>.
+</p></dd></dl>
+
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) dg_cords(xyz_to_cyl);
+(%o1)                                done
+(%i2) dg_ffc([r = 1]);
+(%o2)                                done
+(%i3) A;
+                          [  cos(phi)   sin(phi)  0 ]
+                          [                         ]
+(%o3)                     [ - sin(phi)  cos(phi)  0 ]
+                          [                         ]
+                          [     0          0      1 ]
+(%i4) Omega;
+                          [     0       del(phi)  0 ]
+                          [                         ]
+(%o4)                     [ - del(phi)     0      0 ]
+                          [                         ]
+                          [     0          0      0 ]
+(%i5) thi;
+                                [   del(r)   ]
+                                [            ]
+(%o5)                           [ r del(phi) ]
+                                [            ]
+                                [   del(z)   ]
+</pre></div></div>
+
+
+<ul class="mini-toc">
+<li><a href="#SubsectionName" accesskey="1">SubsectionName</a></li>
+<li><a href="#SubsectionName-1" accesskey="2">SubsectionName</a></li>
+</ul>
+<div class="subsection-level-extent" id="SubsectionName">
+<h4 class="subsection"><span>1.2.1 SubsectionName<a class="copiable-link" href="#SubsectionName"> &para;</a></span></h4>
+
+<p>blah blah blah
+</p>
+</div>
+<div class="subsection-level-extent" id="SubsectionName-1">
+<h4 class="subsection"><span>1.2.2 SubsectionName<a class="copiable-link" href="#SubsectionName-1"> &para;</a></span></h4>
+
+<p>blah blah blah
+</p>
+
+</div>
+</div>
+</div>
+</div>
+<hr>
+<div class="nav-panel">
+<p>
+Next: <a href="#Introduction-to-package-dgeom" accesskey="n" rel="next">Introduction to package dgeom</a>, Previous: <a href="../dir_html/index.html" accesskey="p" rel="prev">(dir)</a>, Up: <a href="../dir_html/index.html" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="Function-and-Variable-Index.html" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

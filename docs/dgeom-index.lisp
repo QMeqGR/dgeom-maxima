@@ -1,0 +1,22 @@
+(in-package :cl-info)
+(let (
+(deffn-defvr-pairs '(
+; CONTENT: (<INDEX TOPIC> . (<FILENAME> <BYTE OFFSET> <LENGTH IN CHARACTERS> <NODE NAME>))
+("cord_in" . ("dgeom.info" 2378 92 "Functions and Variables for dgeom"))
+("cord_ot" . ("dgeom.info" 2475 93 "Functions and Variables for dgeom"))
+("cord_tr" . ("dgeom.info" 2573 181 "Functions and Variables for dgeom"))
+("dg_cords" . ("dgeom.info" 4257 255 "Functions and Variables for dgeom"))
+("dg_derivs" . ("dgeom.info" 4533 1427 "Functions and Variables for dgeom"))
+("dg_diverg" . ("dgeom.info" 7237 1310 "Functions and Variables for dgeom"))
+("dg_ffc" . ("dgeom.info" 10186 1795 "Functions and Variables for dgeom"))
+("dg_laplac" . ("dgeom.info" 8572 1589 "Functions and Variables for dgeom"))
+("dg_metric" . ("dgeom.info" 5985 1235 "Functions and Variables for dgeom"))
+("dg_minkowski" . ("dgeom.info" 2763 1287 "Functions and Variables for dgeom"))
+("show_cords" . ("dgeom.info" 4071 165 "Functions and Variables for dgeom"))
+))
+(section-pairs '(
+; CONTENT: (<NODE NAME> . (<FILENAME> <BYTE OFFSET> <LENGTH IN CHARACTERS>))
+("Functions and Variables for dgeom" . ("dgeom.info" 2302 9634))
+("Introduction to package dgeom" . ("dgeom.info" 753 1387))
+)))
+(load-info-hashtables (maxima::maxima-load-pathname-directory) deffn-defvr-pairs section-pairs))

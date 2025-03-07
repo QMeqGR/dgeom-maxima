@@ -1,0 +1,313 @@
+/*
+;;  This program is free software; you can redistribute it and/or modify 
+;;  it under the terms of the GNU General Public License as published by         
+;;  the Free Software Foundation; either version 2 of the License, or            
+;;  (at your option) any later version.                                  
+                                                                                 
+;;  This program is distributed in the hope that it will be useful,              
+;;  but WITHOUT ANY WARRANTY; without even the implied warranty of               
+;;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                
+;;  GNU General Public License for more details.         
+
+;; DESCRIPTION package for Maxima.
+*/
+
+if get('dgeom,'dgeom_version)#false then error("Package dgeom already loaded!")$
+put('dgeom,'0.1,'dgeom_version)$
+
+load("dgeom.lisp") $
+/* load the documentation */
+load("dgeom-index.lisp")$
+load("dgeom-index-html.lisp")$
+
+/************************************/
+/* Global variables */
+dg_minkowski:1;
+scrootg:0;
+cords_ot:0;
+
+/************************************/
+/* tellsimp rules */
+/* The following rule institutes dd=0, so that diff(del(X))=0 */
+matchdeclare(X,true,Y,true)$
+tellsimpafter(Y*'diff(del(X),X,1)*del(X),0)$
+
+/************************************/
+/*
+Always call dg_coords first!!!
+
+cords_in is coordinates IN
+cords_tr is the transformation
+cords_ot is coordinates OUT
+
+*/
+dg_cords(crds):=block(
+  dg_minkowski:1, /* set to 1 for all coordinate systems by default */
+  if crds='xyz then
+   ( cords_in:[x,y,z],
+     cords_tr:[x,y,z],
+     cords_ot:[x,y,z] )
+  else if crds='xyz_to_spher then
+   ( cords_in:[x,y,z],
+     cords_tr:[r*sin(theta)*cos(phi),r*sin(theta)*sin(phi),r*cos(theta)],
+     cords_ot:[r,theta,phi],
+     assume(r>0,theta>0,theta<%pi) )
+  else if crds='xyz_to_spher2 then
+   ( cords_in:[x,y,z],
+     cords_tr:[r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)],
+     cords_ot:[r,theta,phi],
+     assume(r>0,phi>0,phi<%pi) )
+  else if crds='txyz_to_spher then
+   ( dg_minkowski: -1,
+     cords_in:[t,x,y,z],
+     cords_tr:[t,r*sin(theta)*cos(phi),r*sin(theta)*sin(phi),r*cos(theta)],
+     cords_ot:[t,r,theta,phi],
+     assume(r>0,theta>0,theta<%pi) )
+   else if crds='xyz_to_cyl then
+   ( cords_in:[x,y,z],
+     cords_tr:[r*cos(phi),r*sin(phi),z],
+     cords_ot:[r,phi,z],
+     assume(r>0) )
+   else if crds='xy_to_polar then
+   ( cords_in:[x,y],
+     cords_tr:[r*cos(theta),r*sin(theta)],
+     cords_ot:[r,theta],
+     assume(r>0) )
+   else if crds='rindler then
+   ( dg_minkowski: -1,
+     cords_in:[t,x],
+     cords_tr:[rho*sinh(omega),rho*cosh(omega)],
+     cords_ot:[omega,rho],
+     assume(rho>0) )
+   else
+   ( print("The following predefined coordinate systems are available:"),
+     print("  xyz, xyz_to_spher, xyz_to_spher2 txyz_to_spher"),    
+     print("  xyz_to_cyl, xy_to_polar, rindler") ),
+   done
+)$
+
+/*********************************/
+run_checks():=block(
+  if(length(cords_in)=0) then print("Must set cords_in !!"),
+  if(length(cords_tr)=0) then print("Must set cords_tr !!"),
+  if(length(cords_ot)=0) then print("Must set cords_ot !!")
+);
+
+/*********************************/
+show_cords():=block(
+  run_checks(),
+  display(cords_in),
+  display(cords_tr),
+  display(cords_ot),
+  display(dg_minkowski)
+);
+
+/* function to return the magnitude of a row
+of a matrix */
+rowmag(M,n):=block([dim:length(M),i,j,mgsq:0],
+    for i: 1 thru dim do
+        mgsq: mgsq + M[n,i]^2,
+    mgsq: trigsimp(mgsq),
+    sqrt(mgsq)
+);
+
+/* Normalize the rows of a matrix */
+row_norm(M):=block([dim,rmag,R],
+  dim:length(M),
+  rmag:zeromatrix(1,dim),
+  R:zeromatrix(dim,dim),
+
+  for i: 1 thru dim do /* compute the row magnitudes */
+    rmag[1,i]:rowmag(M,i),
+    
+  /* Normalize the row lengths */
+  for i:1 thru dim do
+    for j: 1 thru dim do
+      if rmag[1,i]#0 then R[i,j]:M[i,j]/rmag[1,i],
+  R
+);
+
+dg_jacobian():=block([N],
+  run_checks(),
+  N:length(cords_in),
+  J:zeromatrix(N,N),
+  Jinv:zeromatrix(N,N),
+  
+  /* construct the Jacobian matrix */
+  for i: 1 thru N do
+    for j: 1 thru N do
+      J[i,j]: diff( cords_tr[i] , cords_ot[j] ),
+
+  /* compute the inverse and transpose of J */
+    Jinv: trigsimp( invert(J) ),
+    Jt: trigsimp( transpose(J) ),
+  done
+);
+
+/************************************/
+/*
+Call dg_derivs to compute the partial derivatives
+in the new coordinates.
+
+Invoke the derivatives by...
+d_dx( ev(d_dx(r),diff) ),diff;
+
+*/
+dg_derivs():=block([N],
+  run_checks(),
+  N:length(cords_in),
+  dg_jacobian(),
+  
+  /* construct the differential operators */
+  for i: 1 thru N do
+    block([tmp],
+      block([ffin:0,F],
+        for j: 1 thru N do
+        ffin: ffin + J[j,i] * 'diff(F,cords_ot[j]),
+        ffin: trigsimp(ffin),
+        tmp: cords_in[i],
+        tmp: concat(d_d,tmp),
+        /* display(tmp),
+        display(ff), */
+        define( funmake(tmp,[F]) , ffin) ),
+      block([ffot:0,F],
+        for j: 1 thru N do
+        ffot: ffot + Jinv[j,i] * 'diff(F,cords_in[j]),
+        ffot: trigsimp(ffot),
+        tmp: cords_ot[i],
+        tmp: concat(d_d,tmp),
+        /* display(tmp),
+        display(ff), */
+        define( funmake(tmp,[F]) , ffot) )
+     )
+);
+
+/***********************************************/
+/* dg_grad compute the gradient in new coords  */
+dg_grad():=block([N,F],
+  run_checks(),
+  N:length(cords_in),
+  dg_jacobian(),
+  for i: 1 thru N do 
+
+);
+
+
+/********************************************/
+/*
+dg_metric computes the metric in the new coordinates
+*/
+dg_metric():=block([N,tolist:cords_ot,cords_tmp],
+  N: length(tolist),
+
+  /* show the input metric */
+  ds2_in:0,
+  ds2_in: dg_minkowski * diff(cords_in[1])^2, /* in case minkowski */
+  for i: 2 thru N do ds2_in: ds2_in + diff(cords_in[i])^2,
+  ds2_in: trigsimp(ds2_in),
+  
+  cords_tmp: cords_tr, /* assign the coordinate transformation */
+
+  ds2:0,
+  ds2: dg_minkowski * diff(cords_tmp[1])^2, /* in case minkowski */
+  for i: 2 thru N do ds2: ds2 + diff(cords_tmp[i])^2,
+  ds2: trigsimp(ds2),
+  g: zeromatrix(N,N),
+  for i: 1 thru N do
+    for j: 1 thru N do
+      g[i,j]: coeff( ds2 , del(args(tolist)[i]) * del(args(tolist)[j]) ),
+      g: trigsimp(g),
+      detg: prod(g[i,i],i,1,N),
+      scrootg: sqrt( detg ),
+      display(ds2),
+      display(g)
+);
+
+/*************************************/
+/* Divergence in the new coordinates */
+/* Need to call dg_metric(); first for this to work */
+dg_diverg():=block([W,N,tolist:cords_ot,tmp],
+  if scrootg=0 then dg_metric(),
+  N:length(tolist),
+  for i: 1 thru N do ( W[i]: concat(W_, args(tolist)[i]),
+    depends(W[i],tolist) ),
+  Wlist: makelist( W[i],i,N),
+  tmp: sum( diff(W[i],args(tolist)[i]) +
+    diff(scrootg, args(tolist)[i]) / scrootg *W[i],i,1,N ),
+  define( funmake(dg_div,Wlist), tmp )
+);
+
+
+/************************************/
+/* Laplacian in the new coordinates */
+/* Need to call dg_metric(); first for this to work */
+dg_laplac():=block([F,N,tolist:cords_ot,tmp,M],
+  if scrootg=0 then dg_metric(),
+  N:length(tolist),
+  depends(F,tolist),
+  M: zeromatrix(N,N),
+  ginv: invert(g),
+  for i: 1 thru N do
+    for j: 1 thru N do
+        M[i,j]: diff( scrootg * ginv[i,j] * diff(F, args(tolist)[j] ) ,
+        args(tolist)[i] ) / scrootg,
+      M: ratsimp(M),
+      L: sum( sum( M[i,j], i, 1, N) , j, 1, N),
+      L: trigsimp(L),
+      L: ev(L, collectterms, ratsimp),
+  define( funmake(dg_lap,[F]) , L )
+);
+
+
+/*
+This function takes three arguments:
+    1. cfunc: Euclidean coordinate functions in terms of
+        curvilinear coordinates or other coordinates.
+    2. coords: A list of the new coordinates, e.g. r,theta,phi
+    3. constraint equation(s) imposed after calculating
+        the attitude matrix, e.g. [r=1]
+The function ffc outputs:
+    1. The attitude matrix in 'A'
+    2. The connection coefficients in 'omega'
+    3. The dual 1-forms in 'th'
+*/
+
+/* The rows of the matrix A are, e.g.:
+d/dr=  dr/dx, dr/dy, dr/dz
+d/dth= dth/dx, dth/dy, dth/dz,...
+These need to be normalized to get the correct
+connection coefficients. */
+
+dg_ffc([seq]):=block([cfunc:cords_tr,coords:cords_ot,i,j,dA,rmag,dx,dim,Ktmp],
+    dim:length(coords),
+    A:zeromatrix(dim,dim),
+    dA:zeromatrix(dim,dim),
+    rmag:zeromatrix(1,dim),
+    dx:zeromatrix(dim,1),
+    TT:zeromatrix(dim,dim),
+    DD:zeromatrix(dim,dim),
+    KK:zeromatrix(dim,dim),
+    
+    for i: 1 thru dim do  /* compute the coordinate differentials */
+        dx[i,1]: diff(cfunc[i]),
+    
+    for i: 1 thru dim do /* construct the attitude matrix */
+        for j: 1 thru dim do
+            A[i,j]: diff(cfunc[j],coords[i]),
+    
+    A:subst(seq,A), /* put in any restrictions here, e.g. r=1 */
+    
+    A:row_norm(A), /* normalize the rows */
+    dA: matrixmap(diff,A),
+    thi: trigsimp( A . dx ), /* these are the theta_i dual forms */
+    Omega: trigsimp( dA . transpose(A) ),
+    
+    /* Compute the structural equations */
+    for i: 1 thru dim do
+      for j: 1 thru i do
+        ( TT[i,j]:TT[j,i]:thi[i].thi[j],
+          DD[i,j]:DD[j,i]:expand(diff(Omega[i,j])),
+          KK[i,j]:KK[j,i]:rhs( solve(DD[i,j]=Ktmp*TT[i,j],Ktmp)[1]) ),
+
+    done
+)$
