@@ -20,21 +20,22 @@ load("dgeom.lisp") $
 load("dgeom-index.lisp")$
 load("dgeom-index-html.lisp")$
 
-/************************************/
+/********************/
 /* Global variables */
+/********************/
 dg_minkowski:1;
 scrootg:0;
 cords_ot:0;
 
-/************************************/
-/* tellsimp rules */
+/*******************/
+/* tellsimp rules  */
+/*******************/
 /* The following rule institutes dd=0, so that diff(del(X))=0 */
 matchdeclare(X,true,Y,true)$
 tellsimpafter(Y*'diff(del(X),X,1)*del(X),0)$
 
 /************************************/
-/*
-Always call dg_coords first!!!
+/* NOTE: Always call dg_coords first!!!
 
 cords_in is coordinates IN
 cords_tr is the transformation
@@ -86,14 +87,18 @@ dg_cords(crds):=block(
    done
 )$
 
-/*********************************/
+/****************/
+/* run_checks() */
+/****************/
 run_checks():=block(
   if(length(cords_in)=0) then print("Must set cords_in !!"),
   if(length(cords_tr)=0) then print("Must set cords_tr !!"),
   if(length(cords_ot)=0) then print("Must set cords_ot !!")
 );
 
-/*********************************/
+/*****************/
+/* show_cords()  */
+/*****************/
 show_cords():=block(
   run_checks(),
   display(cords_in),
@@ -102,6 +107,9 @@ show_cords():=block(
   display(dg_minkowski)
 );
 
+/************/
+/* rowmag() */
+/************/
 /* function to return the magnitude of a row
 of a matrix */
 rowmag(M,n):=block([dim:length(M),i,j,mgsq:0],
@@ -111,6 +119,9 @@ rowmag(M,n):=block([dim:length(M),i,j,mgsq:0],
     sqrt(mgsq)
 );
 
+/**************/
+/* row_norm() */
+/**************/
 /* Normalize the rows of a matrix */
 row_norm(M):=block([dim,rmag,R],
   dim:length(M),
@@ -119,7 +130,6 @@ row_norm(M):=block([dim,rmag,R],
 
   for i: 1 thru dim do /* compute the row magnitudes */
     rmag[1,i]:rowmag(M,i),
-    
   /* Normalize the row lengths */
   for i:1 thru dim do
     for j: 1 thru dim do
@@ -127,6 +137,9 @@ row_norm(M):=block([dim,rmag,R],
   R
 );
 
+/*****************/
+/* dg_jacobian() */
+/*****************/
 dg_jacobian():=block([N],
   run_checks(),
   N:length(cords_in),
@@ -144,7 +157,9 @@ dg_jacobian():=block([N],
   done
 );
 
-/************************************/
+/***************/
+/* dg_derivs() */
+/***************/
 /*
 Call dg_derivs to compute the partial derivatives
 in the new coordinates.
@@ -182,21 +197,37 @@ dg_derivs():=block([N],
      )
 );
 
-/***********************************************/
-/* dg_grad compute the gradient in new coords  */
-dg_grad():=block([N,F],
+/*************/
+/* dg_grad() */
+/*************/
+/* compute the gradient in new coords  */
+dg_grad():=block([N,F,diffmx,T1,T2,hats],
   run_checks(),
   N:length(cords_in),
+  diffmx:makelist( 'diff(F,cords_ot[i]),i,N),
+  hats:makelist( concat(e_,cords_ot[i]),i,N),
+  T1:makelist(0,i,N),
   dg_jacobian(),
-  for i: 1 thru N do 
-
+  Jitn: transpose( row_norm(Jinv) ),
+  for i: 1 thru N do
+    for j:1 thru N do
+      T1[i]:T1[i]+diffmx[j]*Jinv[j,i],
+  T2:makelist(0,i,N),
+  for i:1 thru N do
+    for j:1 thru N do
+      T2[i]:T2[i]+hats[j]*Jitn[i,j],
+  /* display(T1,T2,hats), */
+  gra: sum(T1[i]*T2[i],i,1,N),
+  gra:trigsimp(gra),
+  gra:expand(gra),
+  display(gra)
 );
 
 
-/********************************************/
-/*
-dg_metric computes the metric in the new coordinates
-*/
+/***************/
+/* dg_metric() */
+/***************/
+/*computes the metric in the new coordinates */
 dg_metric():=block([N,tolist:cords_ot,cords_tmp],
   N: length(tolist),
 
@@ -219,11 +250,12 @@ dg_metric():=block([N,tolist:cords_ot,cords_tmp],
       g: trigsimp(g),
       detg: prod(g[i,i],i,1,N),
       scrootg: sqrt( detg ),
-      display(ds2),
-      display(g)
+      display(ds2)
 );
 
-/*************************************/
+/****************/
+/* dg_diverg()  */
+/****************/
 /* Divergence in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
 dg_diverg():=block([W,N,tolist:cords_ot,tmp],
@@ -238,7 +270,9 @@ dg_diverg():=block([W,N,tolist:cords_ot,tmp],
 );
 
 
-/************************************/
+/****************/
+/* dg_laplac()  */
+/****************/
 /* Laplacian in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
 dg_laplac():=block([F,N,tolist:cords_ot,tmp,M],
@@ -259,6 +293,9 @@ dg_laplac():=block([F,N,tolist:cords_ot,tmp,M],
 );
 
 
+/************/
+/* dg_ffc() */
+/************/
 /*
 This function takes three arguments:
     1. cfunc: Euclidean coordinate functions in terms of
