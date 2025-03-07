@@ -72,11 +72,6 @@ one should consider setting the ranges manually.
                                     2           2    2
                            ds2 = del (rho) - rho  del (omega)
 
-                                        [      2    ]
-                                    g = [ - rho   0 ]
-                                        [           ]
-                                        [   0     1 ]
-
      (%o3)                                done
 
  -- Function: show_cords ( )
@@ -112,9 +107,9 @@ one should consider setting the ranges manually.
      (%i2) dg_derivs();
      (%o2)                                done
      (%i3) fundef(d_dx);
-                                    dg203            dg203
-     (%o3)            d_dx(g203) := ----- sin(phi) + ----- cos(phi)
-                                    dphi              dr
+                                     dF             dF
+     (%o3)               d_dx(F) := ---- sin(phi) + -- cos(phi)
+                                    dphi            dr
 
  -- Function: dg_metric ( )
      This function takes no arguments, but the input and output
@@ -133,13 +128,23 @@ one should consider setting the ranges manually.
                        2    2             2       2    2           2
                 ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
 
-                                  [ 1  0         0        ]
-                                  [                       ]
-                                  [     2                 ]
-                              g = [ 0  r         0        ]
-                                  [                       ]
-                                  [         2    2        ]
-                                  [ 0  0   r  sin (theta) ]
+     (%o2)                                done
+
+ -- Function: dg_grad ( )
+     This function takes no arguments.  The input and output coordinates
+     and the transformation functions must be defined beforehand for
+     this function to work.  See the function *note dg_cords::.  The
+     function ‘dg_grad’ returns an expression for the gradient of a
+     function ‘F’ in the output coordinates ‘cord_ot’.
+
+     (%i1) dg_cords(xyz_to_spher);
+     (%o1)                                done
+     (%i2) dg_grad();
+                              dF             dF
+                             ---- e_phi    ------ e_theta
+                             dphi          dtheta           dF
+                      gra = ------------ + -------------- + -- e_r
+                            r sin(theta)         r          dr
 
      (%o2)                                done
 
@@ -158,13 +163,6 @@ one should consider setting the ranges manually.
      (%i2) dg_metric();
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
-
-                                        [ 1  0   0 ]
-                                        [          ]
-                                    g = [     2    ]
-                                        [ 0  r   0 ]
-                                        [          ]
-                                        [ 0  0   1 ]
 
      (%o2)                                done
      (%i3) dg_diverg();
@@ -187,13 +185,6 @@ one should consider setting the ranges manually.
      (%i2) dg_metric();
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
-
-                                        [ 1  0   0 ]
-                                        [          ]
-                                    g = [     2    ]
-                                        [ 0  r   0 ]
-                                        [          ]
-                                        [ 0  0   1 ]
 
      (%o2)                                done
      (%i3) dg_laplac();
@@ -261,19 +252,21 @@ Appendix A Function and Variable index
 * Menu:
 
 * dg_cords:                              Functions and Variables for dgeom.
-                                                              (line  85)
+                                                              (line  80)
 * dg_derivs:                             Functions and Variables for dgeom.
-                                                              (line  90)
+                                                              (line  85)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 145)
+                                                              (line 150)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 208)
+                                                              (line 199)
+* dg_grad:                               Functions and Variables for dgeom.
+                                                              (line 132)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 174)
+                                                              (line 172)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 118)
+                                                              (line 113)
 * show_cords:                            Functions and Variables for dgeom.
-                                                              (line  81)
+                                                              (line  76)
 
 * Menu:
 

@@ -19,8 +19,6 @@ done $
 dg_metric() ;
 ds2 = del(rho)^2-rho^2*del(omega)^2
 
-g = matrix([-rho^2,0],[0,1])
-
 done $
 
 dg_cords(xyz_to_cyl) ;
@@ -30,7 +28,7 @@ dg_derivs() ;
 done $
 
 fundef(d_dx) ;
-d_dx(g267):='diff(g267,phi,1)*sin(phi)+'diff(g267,r,1)*cos(phi) $
+d_dx(F):='diff(F,phi,1)*sin(phi)+'diff(F,r,1)*cos(phi) $
 
 dg_cords(xyz_to_spher) ;
 done $
@@ -38,7 +36,14 @@ done $
 dg_metric() ;
 ds2 = r^2*del(theta)^2+del(r)^2+r^2*sin(theta)^2*del(phi)^2
 
-g = matrix([1,0,0],[0,r^2,0],[0,0,r^2*sin(theta)^2])
+done $
+
+dg_cords(xyz_to_spher) ;
+done $
+
+dg_grad() ;
+gra = ('diff(F,phi,1)*e_phi)/(r*sin(theta))
+    +('diff(F,theta,1)*e_theta)/r+'diff(F,r,1)*e_r
 
 done $
 
@@ -47,8 +52,6 @@ done $
 
 dg_metric() ;
 ds2 = del(z)^2+del(r)^2+r^2*del(phi)^2
-
-g = matrix([1,0,0],[0,r^2,0],[0,0,1])
 
 done $
 
@@ -61,8 +64,6 @@ done $
 
 dg_metric() ;
 ds2 = del(z)^2+del(r)^2+r^2*del(phi)^2
-
-g = matrix([1,0,0],[0,r^2,0],[0,0,1])
 
 done $
 

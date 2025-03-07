@@ -104,11 +104,6 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
                                     2           2    2
                            ds2 = del (rho) - rho  del (omega)
 
-                                        [      2    ]
-                                    g = [ - rho   0 ]
-                                        [           ]
-                                        [   0     1 ]
-
      (%o3)                                done
 
  -- Function: show_cords ( )
@@ -144,9 +139,9 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
      (%i2) dg_derivs();
      (%o2)                                done
      (%i3) fundef(d_dx);
-                                    dg203            dg203
-     (%o3)            d_dx(g203) := ----- sin(phi) + ----- cos(phi)
-                                    dphi              dr
+                                     dF             dF
+     (%o3)               d_dx(F) := ---- sin(phi) + -- cos(phi)
+                                    dphi            dr
 
  -- Function: dg_metric ( )
      This function takes no arguments, but the input and output
@@ -165,13 +160,23 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
                        2    2             2       2    2           2
                 ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
 
-                                  [ 1  0         0        ]
-                                  [                       ]
-                                  [     2                 ]
-                              g = [ 0  r         0        ]
-                                  [                       ]
-                                  [         2    2        ]
-                                  [ 0  0   r  sin (theta) ]
+     (%o2)                                done
+
+ -- Function: dg_grad ( )
+     This function takes no arguments.  The input and output coordinates
+     and the transformation functions must be defined beforehand for
+     this function to work.  See the function *note dg_cords::.  The
+     function ‘dg_grad’ returns an expression for the gradient of a
+     function ‘F’ in the output coordinates ‘cord_ot’.
+
+     (%i1) dg_cords(xyz_to_spher);
+     (%o1)                                done
+     (%i2) dg_grad();
+                              dF             dF
+                             ---- e_phi    ------ e_theta
+                             dphi          dtheta           dF
+                      gra = ------------ + -------------- + -- e_r
+                            r sin(theta)         r          dr
 
      (%o2)                                done
 
@@ -190,13 +195,6 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
      (%i2) dg_metric();
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
-
-                                        [ 1  0   0 ]
-                                        [          ]
-                                    g = [     2    ]
-                                        [ 0  r   0 ]
-                                        [          ]
-                                        [ 0  0   1 ]
 
      (%o2)                                done
      (%i3) dg_diverg();
@@ -219,13 +217,6 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
      (%i2) dg_metric();
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
-
-                                        [ 1  0   0 ]
-                                        [          ]
-                                    g = [     2    ]
-                                        [ 0  r   0 ]
-                                        [          ]
-                                        [ 0  0   1 ]
 
      (%o2)                                done
      (%i3) dg_laplac();
@@ -297,19 +288,21 @@ Appendix A Function and Variable index
 * Menu:
 
 * dg_cords:                              Functions and Variables for dgeom.
-                                                              (line  53)
+                                                              (line  48)
 * dg_derivs:                             Functions and Variables for dgeom.
-                                                              (line  58)
+                                                              (line  53)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 113)
+                                                              (line 118)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 176)
+                                                              (line 167)
+* dg_grad:                               Functions and Variables for dgeom.
+                                                              (line 100)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 142)
+                                                              (line 140)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line  86)
+                                                              (line  81)
 * show_cords:                            Functions and Variables for dgeom.
-                                                              (line  49)
+                                                              (line  44)
 
  [index ]
 * Menu:
@@ -329,14 +322,15 @@ Tag Table:
 Node: Top283
 Node: Introduction to package dgeom631
 Node: Functions and Variables for dgeom2192
-Ref: show_cords4072
-Ref: dg_cords4258
-Ref: dg_derivs4534
-Ref: dg_metric5986
-Ref: dg_diverg7238
-Ref: dg_laplac8573
-Ref: dg_ffc10187
-Node: Function and Variable Index12128
+Ref: show_cords3855
+Ref: dg_cords4041
+Ref: dg_derivs4317
+Ref: dg_metric5759
+Ref: dg_grad6590
+Ref: dg_diverg7415
+Ref: dg_laplac8431
+Ref: dg_ffc9726
+Node: Function and Variable Index11667
 
 End Tag Table
 
