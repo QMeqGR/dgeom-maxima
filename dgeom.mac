@@ -74,6 +74,15 @@ dg_cords(crds):=block(
      cords_tr:[r*cos(theta),r*sin(theta)],
      cords_ot:[r,theta],
      assume(r>0) )
+   else if crds='xy_to_exp1 then
+   ( cords_in:[x,y],
+     cords_tr:[s*exp(t),s*exp(-t)],
+     cords_ot:[s,t],
+     assume(t>0) )
+   else if crds='xy_to_uv2 then
+   ( cords_in:[x,y],
+     cords_tr:[u,v^2],
+     cords_ot:[u,v] )
    else if crds='rindler then
    ( dg_minkowski: -1,
      cords_in:[t,x],
@@ -83,7 +92,7 @@ dg_cords(crds):=block(
    else
    ( print("The following predefined coordinate systems are available:"),
      print("  xyz, xyz_to_spher, xyz_to_spher2 txyz_to_spher"),    
-     print("  xyz_to_cyl, xy_to_polar, rindler") ),
+     print("  xyz_to_cyl, xy_to_polar, xy_to_exp1, xy_to_uv2, rindler") ),
    done
 )$
 
@@ -246,7 +255,7 @@ dg_metric():=block([N,tolist:cords_ot,cords_tmp],
   g: zeromatrix(N,N),
   for i: 1 thru N do
     for j: 1 thru N do
-      g[i,j]: coeff( ds2 , del(args(tolist)[i]) * del(args(tolist)[j]) ),
+      g[i,j]: coeff( expand( ds2 ) , del(args(tolist)[i]) * del(args(tolist)[j]) ),
       g: trigsimp(g),
       detg: prod(g[i,i],i,1,N),
       scrootg: sqrt( detg ),
