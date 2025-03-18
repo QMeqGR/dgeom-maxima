@@ -118,7 +118,7 @@ timelike coordinate must be the first element in the list for both
 @anchor{show_cords}
 @deffn {Function} show_cords ( )
 The function @code{show_cords} takes no arguments. It displays the
-variables @code{cord_in}, @code{cord_tr}, @code{cord,ot}, and
+variables @code{cord_in}, @code{cord_tr}, @code{cord_ot}, and
 @code{dg_minkowski}.
 @end deffn
 

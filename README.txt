@@ -76,7 +76,7 @@ one should consider setting the ranges manually.
 
  -- Function: show_cords ( )
      The function ‘show_cords’ takes no arguments.  It displays the
-     variables ‘cord_in’, ‘cord_tr’, ‘cord,ot’, and ‘dg_minkowski’.
+     variables ‘cord_in’, ‘cord_tr’, ‘cord_ot’, and ‘dg_minkowski’.
 
  -- Function: dg_cords (<coordinate system>)
      The function ‘dg_cords’ takes a predefined coordinate system name

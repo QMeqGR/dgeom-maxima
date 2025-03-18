@@ -1,4 +1,4 @@
-This is dgeom.info, produced by makeinfo version 7.1 from dgeom.texi.
+This is dgeom.info, produced by makeinfo version 7.1.1 from dgeom.texi.
 
 INFO-DIR-SECTION Mathematics/Maxima
 START-INFO-DIR-ENTRY
@@ -108,7 +108,7 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
 
  -- Function: show_cords ( )
      The function ‘show_cords’ takes no arguments.  It displays the
-     variables ‘cord_in’, ‘cord_tr’, ‘cord,ot’, and ‘dg_minkowski’.
+     variables ‘cord_in’, ‘cord_tr’, ‘cord_ot’, and ‘dg_minkowski’.
 
  -- Function: dg_cords (<coordinate system>)
      The function ‘dg_cords’ takes a predefined coordinate system name
@@ -319,18 +319,18 @@ Appendix A Function and Variable index
 
 
 Tag Table:
-Node: Top283
-Node: Introduction to package dgeom631
-Node: Functions and Variables for dgeom2192
-Ref: show_cords3855
-Ref: dg_cords4041
-Ref: dg_derivs4317
-Ref: dg_metric5759
-Ref: dg_grad6590
-Ref: dg_diverg7415
-Ref: dg_laplac8431
-Ref: dg_ffc9726
-Node: Function and Variable Index11667
+Node: Top285
+Node: Introduction to package dgeom633
+Node: Functions and Variables for dgeom2194
+Ref: show_cords3857
+Ref: dg_cords4043
+Ref: dg_derivs4319
+Ref: dg_metric5761
+Ref: dg_grad6592
+Ref: dg_diverg7417
+Ref: dg_laplac8433
+Ref: dg_ffc9728
+Node: Function and Variable Index11669
 
 End Tag Table
 
