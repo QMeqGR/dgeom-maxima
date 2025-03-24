@@ -33,6 +33,9 @@ coordinate ranges.  For example, if studying the sphere one should use
 automatically in the package, but for coordinate systems input by hand
 one should consider setting the ranges manually.
 
+   The ‘dgeom’ package is compatible with the ‘ctensor’ package.  See
+the function ‘set_ctensor_vars’ for more information.
+
 1.2 Functions and Variables for dgeom
 =====================================
 
@@ -236,15 +239,10 @@ one should consider setting the ranges manually.
                                      [            ]
                                      [   del(z)   ]
 
-1.2.1 SubsectionName
---------------------
-
-blah blah blah
-
-1.2.2 SubsectionName
---------------------
-
-blah blah blah
+ -- Function: set_ctensor_vars ( )
+     The function ‘set_ctensor_vars’ sets the following ‘ctensor’
+     variables: ‘cframe_flage:false’, ‘dim’, and calls ‘ct_coordsys()’.
+     The ‘ctensor’ package must be loaded for this command to work.
 
 Appendix A Function and Variable index
 **************************************
@@ -252,30 +250,32 @@ Appendix A Function and Variable index
 * Menu:
 
 * dg_cords:                              Functions and Variables for dgeom.
-                                                              (line  80)
+                                                              (line  83)
 * dg_derivs:                             Functions and Variables for dgeom.
-                                                              (line  85)
+                                                              (line  88)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 150)
+                                                              (line 153)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 199)
+                                                              (line 202)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 132)
+                                                              (line 135)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 172)
+                                                              (line 175)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 113)
+                                                              (line 116)
+* set_ctensor_vars:                      Functions and Variables for dgeom.
+                                                              (line 241)
 * show_cords:                            Functions and Variables for dgeom.
-                                                              (line  76)
+                                                              (line  79)
 
 * Menu:
 
 * cord_in:                               Functions and Variables for dgeom.
-                                                               (line 38)
-* cord_ot:                               Functions and Variables for dgeom.
                                                                (line 41)
-* cord_tr:                               Functions and Variables for dgeom.
+* cord_ot:                               Functions and Variables for dgeom.
                                                                (line 44)
+* cord_tr:                               Functions and Variables for dgeom.
+                                                               (line 47)
 * dg_minkowski:                          Functions and Variables for dgeom.
-                                                               (line 49)
+                                                               (line 52)
 

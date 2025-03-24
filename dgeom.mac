@@ -28,6 +28,7 @@ scrootg:0;
 cords_ot:0;
 lg:0; /* for compatibility with ctensor */
 g:0;
+dim:0;
 
 /*******************/
 /* tellsimp rules  */
@@ -112,6 +113,22 @@ run_checks():=block(
   if listp( cords_tr )=false then (print("Must set cords_tr !!"), return(false)),
   if listp( cords_ot )=false then (print("Must set cords_ot !!"), return(false)),
   true
+);
+
+/*********************/
+/*  set_ctensor vars */
+/*********************/
+set_ctensor_vars():=block([],
+  run_checks(),
+  cframe_flag:false,
+  dim:length(cords_ot),
+  ctlist:makelist(cords_tr[i],i,dim),
+  ctlist:append(ctlist,[cords_ot]),
+  dg_metric(),
+  ct_coordsys(ctlist),
+  /* ct_coordsys constructs lg but doesn't simplify it */
+  lg:trigsimp(lg),
+  display(ctlist)
 );
 
 /*****************/
@@ -265,8 +282,9 @@ dg_metric():=block([N,tolist:cords_ot,cords_tmp],
   for i: 1 thru N do
     for j: 1 thru N do
       g[i,j]: coeff( expand( ds2 ) , del(args(tolist)[i]) * del(args(tolist)[j]) ),
-      lg: g: trigsimp(g),
-      detg: prod(g[i,i],i,1,N),
+      g: trigsimp(g),
+      detg: determinant(g),
+      if detg#0 then ug: g^^(-1) else error("g is singular!"),
       scrootg: sqrt( detg ),
       display(ds2)
 );

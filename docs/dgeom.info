@@ -62,6 +62,9 @@ coordinate ranges.  For example, if studying the sphere one should use
 automatically in the package, but for coordinate systems input by hand
 one should consider setting the ranges manually.
 
+   The ‘dgeom’ package is compatible with the ‘ctensor’ package.  See
+the function ‘set_ctensor_vars’ for more information.
+
 
 File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction to package dgeom,  Up: Top
 
@@ -268,15 +271,10 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
                                      [            ]
                                      [   del(z)   ]
 
-1.2.1 SubsectionName
---------------------
-
-blah blah blah
-
-1.2.2 SubsectionName
---------------------
-
-blah blah blah
+ -- Function: set_ctensor_vars ( )
+     The function ‘set_ctensor_vars’ sets the following ‘ctensor’
+     variables: ‘cframe_flage:false’, ‘dim’, and calls ‘ct_coordsys()’.
+     The ‘ctensor’ package must be loaded for this command to work.
 
 
 File: dgeom.info,  Node: Function and Variable Index,  Prev: Top,  Up: Top
@@ -301,6 +299,8 @@ Appendix A Function and Variable index
                                                               (line 140)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line  81)
+* set_ctensor_vars:                      Functions and Variables for dgeom.
+                                                              (line 206)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line  44)
 
@@ -321,16 +321,17 @@ Appendix A Function and Variable index
 Tag Table:
 Node: Top285
 Node: Introduction to package dgeom633
-Node: Functions and Variables for dgeom2194
-Ref: show_cords3857
-Ref: dg_cords4043
-Ref: dg_derivs4319
-Ref: dg_metric5761
-Ref: dg_grad6592
-Ref: dg_diverg7417
-Ref: dg_laplac8433
-Ref: dg_ffc9728
-Node: Function and Variable Index11669
+Node: Functions and Variables for dgeom2331
+Ref: show_cords3994
+Ref: dg_cords4180
+Ref: dg_derivs4456
+Ref: dg_metric5898
+Ref: dg_grad6729
+Ref: dg_diverg7554
+Ref: dg_laplac8570
+Ref: dg_ffc9865
+Ref: set_ctensor_vars11688
+Node: Function and Variable Index11954
 
 End Tag Table
 

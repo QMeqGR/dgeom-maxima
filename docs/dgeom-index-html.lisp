@@ -18,6 +18,9 @@
          ("show_cords"
           "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
           "index-show_005fcords")
+         ("set_ctensor_vars"
+          "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
+          "index-set_005fctensor_005fvars")
          ("dg_metric"
           "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
           "index-dg_005fmetric")

@@ -67,6 +67,9 @@ coordinate ranges. For example, if studying the sphere one should use
 automatically in the package, but for coordinate systems input by hand
 one should consider setting the ranges manually.
 
+The @code{dgeom} package is compatible with the @code{ctensor} package. See
+the function @code{set_ctensor_vars} for more information.
+
 @node Functions and Variables for dgeom, , Introduction to package dgeom, Top
 @section Functions and Variables for dgeom
 
@@ -319,13 +322,13 @@ and then computing @code{KK[i,j]} by solving
 @end example
 
 
-@subsection SubsectionName
-
-blah blah blah
-
-@subsection SubsectionName
-
-blah blah blah
+@anchor{set_ctensor_vars}
+@deffn {Function} set_ctensor_vars ( )
+The function @code{set_ctensor_vars} sets the following @code{ctensor}
+variables: @code{cframe_flage:false}, @code{dim}, and calls
+@code{ct_coordsys()}. The @code{ctensor} package must be loaded
+for this command to work.
+@end deffn
 
 
 @node Function and Variable Index, , Top, Top
