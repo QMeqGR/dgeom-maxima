@@ -115,9 +115,9 @@ run_checks():=block(
   true
 );
 
-/*********************/
-/*  set_ctensor vars */
-/*********************/
+/**********************/
+/*  set_ctensor_vars  */
+/**********************/
 set_ctensor_vars():=block([],
   run_checks(),
   cframe_flag:false,
@@ -282,7 +282,7 @@ dg_metric():=block([N,tolist:cords_ot,cords_tmp],
   for i: 1 thru N do
     for j: 1 thru N do
       g[i,j]: coeff( expand( ds2 ) , del(args(tolist)[i]) * del(args(tolist)[j]) ),
-      g: trigsimp(g),
+      g: trigsimp(g), lg:g,
       detg: determinant(g),
       if detg#0 then ug: g^^(-1) else error("g is singular!"),
       scrootg: sqrt( detg ),

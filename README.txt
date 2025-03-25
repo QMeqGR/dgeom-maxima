@@ -240,9 +240,36 @@ the function ‘set_ctensor_vars’ for more information.
                                      [   del(z)   ]
 
  -- Function: set_ctensor_vars ( )
-     The function ‘set_ctensor_vars’ sets the following ‘ctensor’
-     variables: ‘cframe_flage:false’, ‘dim’, and calls ‘ct_coordsys()’.
-     The ‘ctensor’ package must be loaded for this command to work.
+     This command is used to set up the calculation of the Christoffel
+     symbols using the ‘ctensor’ package.  The Christoffel symbols are
+     the connections in the coordinate frame, as opposed to the
+     frame-field connection coefficients computed using the function
+     ‘dg_ffc’.  The function ‘set_ctensor_vars’ sets the following
+     ‘ctensor’ variables: ‘cframe_flage:false’, ‘dim’, and calls
+     ‘ct_coordsys()’.  The ‘ctensor’ package must be loaded for this
+     command to work.
+
+   Example: Compute the Christoffel symbols for flat space in polar
+coordinates.
+
+     (%i1) load(ctensor)$
+     (%i2) dg_cords(xy_to_polar)$
+     (%i3) set_ctensor_vars();
+                                    2    2             2
+                             ds2 = r  del (theta) + del (r)
+
+                    ctlist = [r cos(theta), r sin(theta), [r, theta]]
+
+     (%o3)                                done
+     (%i4) christof(mcs);
+                                                  1
+     (%t4)                           mcs        = ─
+                                        1, 2, 2   r
+
+     (%t5)                          mcs        = - r
+                                       2, 2, 1
+
+     (%o5)                                done
 
 Appendix A Function and Variable index
 **************************************

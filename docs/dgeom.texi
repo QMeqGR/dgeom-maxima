@@ -324,12 +324,41 @@ and then computing @code{KK[i,j]} by solving
 
 @anchor{set_ctensor_vars}
 @deffn {Function} set_ctensor_vars ( )
-The function @code{set_ctensor_vars} sets the following @code{ctensor}
+This command is used to set up the calculation of the Christoffel
+symbols using the @code{ctensor} package. The Christoffel symbols are
+the connections in the coordinate frame, as opposed to the frame-field
+connection coefficients computed using the function @code{dg_ffc}. The
+function @code{set_ctensor_vars} sets the following @code{ctensor}
 variables: @code{cframe_flage:false}, @code{dim}, and calls
-@code{ct_coordsys()}. The @code{ctensor} package must be loaded
-for this command to work.
+@code{ct_coordsys()}. The @code{ctensor} package must be loaded for this
+command to work.
 @end deffn
 
+Example: Compute the Christoffel symbols for flat space in polar
+coordinates.
+
+@example
+@group
+(%i1) load(ctensor)$
+(%i2) dg_cords(xy_to_polar)$
+(%i3) set_ctensor_vars();
+                               2    2             2
+                        ds2 = r  del (theta) + del (r)
+
+               ctlist = [r cos(theta), r sin(theta), [r, theta]]
+
+(%o3)                                done
+(%i4) christof(mcs);
+                                             1
+(%t4)                           mcs        = ─
+                                   1, 2, 2   r
+
+(%t5)                          mcs        = - r
+                                  2, 2, 1
+
+(%o5)                                done
+@end group
+@end example
 
 @node Function and Variable Index, , Top, Top
 @appendix Function and Variable index

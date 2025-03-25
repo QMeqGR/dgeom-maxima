@@ -340,12 +340,39 @@ and then computing <code class="code">KK[i,j]</code> by solving
 
 <a class="anchor" id="set_005fctensor_005fvars"></a><dl class="first-deffn">
 <dt class="deffn" id="index-set_005fctensor_005fvars"><span class="category-def">Function: </span><span><strong class="def-name">set_ctensor_vars</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-set_005fctensor_005fvars"> &para;</a></span></dt>
-<dd><p>The function <code class="code">set_ctensor_vars</code> sets the following <code class="code">ctensor</code>
+<dd><p>This command is used to set up the calculation of the Christoffel
+symbols using the <code class="code">ctensor</code> package. The Christoffel symbols are
+the connections in the coordinate frame, as opposed to the frame-field
+connection coefficients computed using the function <code class="code">dg_ffc</code>. The
+function <code class="code">set_ctensor_vars</code> sets the following <code class="code">ctensor</code>
 variables: <code class="code">cframe_flage:false</code>, <code class="code">dim</code>, and calls
-<code class="code">ct_coordsys()</code>. The <code class="code">ctensor</code> package must be loaded
-for this command to work.
+<code class="code">ct_coordsys()</code>. The <code class="code">ctensor</code> package must be loaded for this
+command to work.
 </p></dd></dl>
 
+<p>Example: Compute the Christoffel symbols for flat space in polar
+coordinates.
+</p>
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) load(ctensor)$
+(%i2) dg_cords(xy_to_polar)$
+(%i3) set_ctensor_vars();
+                               2    2             2
+                        ds2 = r  del (theta) + del (r)
+
+               ctlist = [r cos(theta), r sin(theta), [r, theta]]
+
+(%o3)                                done
+(%i4) christof(mcs);
+                                             1
+(%t4)                           mcs        = ─
+                                   1, 2, 2   r
+
+(%t5)                          mcs        = - r
+                                  2, 2, 1
+
+(%o5)                                done
+</pre></div></div>
 
 </div>
 </div>

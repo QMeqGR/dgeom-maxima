@@ -85,4 +85,24 @@ Omega ;
 matrix([0,del(phi),0],[-del(phi),0,0],[0,0,0]) $
 
 thi ;
-matrix([del(r)],[r*del(phi)],[del(z)])  $
+matrix([del(r)],[r*del(phi)],[del(z)]) $
+
+load(ctensor) ;
+$
+
+dg_cords(xy_to_polar) ;
+$
+
+set_ctensor_vars() ;
+ds2 = r^2*del(theta)^2+del(r)^2
+
+ctlist = [r*cos(theta),r*sin(theta),[r,theta]]
+
+done $
+
+christof(mcs) ;
+(%t27) mcs[1,2,2] = 1/r
+
+(%t28) mcs[2,2,1] = -r
+
+done  $
