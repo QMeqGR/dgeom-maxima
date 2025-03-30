@@ -136,8 +136,10 @@ set_ctensor_vars():=block([],
 /**********************/
 get_ctensor_vars():=block([],
   cords_ot:ct_coords,
+  disp(cords_ot),
   lg:trigsimp(lg),
-  g:lg
+  g:lg,
+  print("done")
 );
 
 
@@ -406,4 +408,4 @@ dg_kill():=block([mu,nu,sg,dim:length(cords_ot)],
             killeq[mu,nu]: sum(g[mu,sg]*'diff(xi[sg],cords_ot[nu]),sg,1,dim)+
             sum(g[sg,nu]*'diff(xi[sg],cords_ot[mu]),sg,1,dim)+
             sum(xi[sg]*diff(g[mu,nu],cords_ot[sg]),sg,1,dim)
-);
+)$
