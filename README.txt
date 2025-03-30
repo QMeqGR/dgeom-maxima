@@ -271,6 +271,12 @@ coordinates.
 
      (%o5)                                done
 
+ -- Function: get_ctensor_vars ( )
+     This command sets the coordinate variable ‘cord_ot’ to the ctensor
+     variable ‘ct_cords’.  Then sets the lower indexed metric ‘lg’ to
+     the metric ‘g’.  The ‘ctensor’ package must be loaded and the
+     metric computed for this command to work.
+
  -- Function: dg_kill ( )
      The function ‘dg_kill’ computes the Killing equations.  The metric
      must be computed with ‘dg_metric’ before this function is called.
@@ -309,11 +315,13 @@ Appendix A Function and Variable index
 * dg_grad:                               Functions and Variables for dgeom.
                                                               (line 135)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 273)
+                                                              (line 279)
 * dg_laplac:                             Functions and Variables for dgeom.
                                                               (line 175)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 116)
+* get_ctensor_vars:                      Functions and Variables for dgeom.
+                                                              (line 273)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
                                                               (line 241)
 * show_cords:                            Functions and Variables for dgeom.

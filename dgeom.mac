@@ -131,6 +131,16 @@ set_ctensor_vars():=block([],
   display(ctlist)
 );
 
+/**********************/
+/*  get_ctensor_vars  */
+/**********************/
+get_ctensor_vars():=block([],
+  cords_ot:ct_coords,
+  lg:trigsimp(lg),
+  g:lg
+);
+
+
 /*****************/
 /* show_cords()  */
 /*****************/

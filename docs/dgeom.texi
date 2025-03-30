@@ -360,6 +360,14 @@ coordinates.
 @end group
 @end example
 
+@anchor{get_ctensor_vars}
+@deffn {Function} get_ctensor_vars ( )
+This command sets the coordinate variable @code{cord_ot} to the ctensor
+variable @code{ct_cords}. Then sets the lower indexed metric @code{lg}
+to the metric @code{g}. The @code{ctensor} package must be loaded and
+the metric computed for this command to work.
+@end deffn
+
 @anchor{dg_kill}
 @deffn {Function} dg_kill ( )
 The function @code{dg_kill} computes the Killing equations. The metric

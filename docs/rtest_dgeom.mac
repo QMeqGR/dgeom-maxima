@@ -88,7 +88,7 @@ thi ;
 matrix([del(r)],[r*del(phi)],[del(z)]) $
 
 load(ctensor) ;
-"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1816_g77c04201b/share/tensor/ctensor.mac" $
+"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1828_g324e0fe51/share/tensor/ctensor.mac" $
 
 dg_cords(xy_to_polar) ;
 done $
