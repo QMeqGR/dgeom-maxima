@@ -88,10 +88,10 @@ thi ;
 matrix([del(r)],[r*del(phi)],[del(z)]) $
 
 load(ctensor) ;
-$
+"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1816_g77c04201b/share/tensor/ctensor.mac" $
 
 dg_cords(xy_to_polar) ;
-$
+done $
 
 set_ctensor_vars() ;
 ds2 = r^2*del(theta)^2+del(r)^2
@@ -105,4 +105,19 @@ christof(mcs) ;
 
 (%t28) mcs[2,2,1] = -r
 
-done  $
+done $
+
+dg_cords(xy_to_polar) ;
+done $
+
+dg_metric() ;
+ds2 = r^2*del(theta)^2+del(r)^2
+
+done $
+
+dg_kill() ;
+done $
+
+killeq ;
+matrix([2*'diff(xi[1],r,1),'diff(xi[2],r,1)*r^2+'diff(xi[1],theta,1)],               ['diff(xi[2],r,1)*r^2+'diff(xi[1],theta,1),
+               2*'diff(xi[2],theta,1)*r^2+2*xi[1]*r])

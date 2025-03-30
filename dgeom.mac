@@ -384,3 +384,16 @@ dg_ffc([seq]):=block([cfunc:cords_tr,coords:cords_ot,i,j,dA,rmag,dx,dim,Ktmp],
 
     done
 )$
+
+/*********************/
+/*  dg_kill();       */
+/*********************/
+/* Compute the killing equations */
+dg_kill():=block([mu,nu,sg,dim:length(cords_ot)],
+    killeq:zeromatrix(dim,dim),
+    for mu: 1 thru dim do
+        for nu: 1 thru dim do
+            killeq[mu,nu]: sum(g[mu,sg]*'diff(xi[sg],cords_ot[nu]),sg,1,dim)+
+            sum(g[sg,nu]*'diff(xi[sg],cords_ot[mu]),sg,1,dim)+
+            sum(xi[sg]*diff(g[mu,nu],cords_ot[sg]),sg,1,dim)
+);

@@ -252,8 +252,8 @@ the function ‘set_ctensor_vars’ for more information.
    Example: Compute the Christoffel symbols for flat space in polar
 coordinates.
 
-     (%i1) load(ctensor)$
-     (%i2) dg_cords(xy_to_polar)$
+     (%i1) load(ctensor);
+     (%i2) dg_cords(xy_to_polar);
      (%i3) set_ctensor_vars();
                                     2    2             2
                              ds2 = r  del (theta) + del (r)
@@ -263,13 +263,35 @@ coordinates.
      (%o3)                                done
      (%i4) christof(mcs);
                                                   1
-     (%t4)                           mcs        = ─
+     (%t4)                           mcs        = -
                                         1, 2, 2   r
 
      (%t5)                          mcs        = - r
                                        2, 2, 1
 
      (%o5)                                done
+
+ -- Function: dg_kill ( )
+     The function ‘dg_kill’ computes the Killing equations.  The metric
+     must be computed with ‘dg_metric’ before this function is called.
+
+     (%i1) dg_cords(xy_to_polar);
+     (%o1)                                done
+     (%i2) dg_metric();
+                                    2    2             2
+                             ds2 = r  del (theta) + del (r)
+
+     (%o2)                                done
+     (%i3) dg_kill();
+     (%o3)                                done
+     (%i4) killeq;
+             [            d                   d          2     d           ]
+             [         2 (-- (xi ))          (-- (xi )) r  + ------ (xi )  ]
+             [            dr    1             dr    2        dtheta    1   ]
+     (%o4)   [                                                             ]
+             [  d          2     d                d            2           ]
+             [ (-- (xi )) r  + ------ (xi )  2 (------ (xi )) r  + 2 xi  r ]
+             [  dr    2        dtheta    1      dtheta    2            1   ]
 
 Appendix A Function and Variable index
 **************************************
@@ -286,6 +308,8 @@ Appendix A Function and Variable index
                                                               (line 202)
 * dg_grad:                               Functions and Variables for dgeom.
                                                               (line 135)
+* dg_kill:                               Functions and Variables for dgeom.
+                                                              (line 273)
 * dg_laplac:                             Functions and Variables for dgeom.
                                                               (line 175)
 * dg_metric:                             Functions and Variables for dgeom.

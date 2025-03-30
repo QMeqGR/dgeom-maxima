@@ -27,6 +27,9 @@
          ("dg_laplac"
           "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
           "index-dg_005flaplac")
+         ("dg_kill"
+          "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
+          "index-dg_005fkill")
          ("dg_grad"
           "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
           "index-dg_005fgrad")

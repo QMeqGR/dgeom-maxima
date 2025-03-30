@@ -354,8 +354,8 @@ command to work.
 coordinates.
 </p>
 <div class="example">
-<div class="group"><pre class="example-preformatted">(%i1) load(ctensor)$
-(%i2) dg_cords(xy_to_polar)$
+<div class="group"><pre class="example-preformatted">(%i1) load(ctensor);
+(%i2) dg_cords(xy_to_polar);
 (%i3) set_ctensor_vars();
                                2    2             2
                         ds2 = r  del (theta) + del (r)
@@ -365,13 +365,39 @@ coordinates.
 (%o3)                                done
 (%i4) christof(mcs);
                                              1
-(%t4)                           mcs        = ─
+(%t4)                           mcs        = -
                                    1, 2, 2   r
 
 (%t5)                          mcs        = - r
                                   2, 2, 1
 
 (%o5)                                done
+</pre></div></div>
+
+<a class="anchor" id="dg_005fkill"></a><dl class="first-deffn">
+<dt class="deffn" id="index-dg_005fkill"><span class="category-def">Function: </span><span><strong class="def-name">dg_kill</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005fkill"> &para;</a></span></dt>
+<dd><p>The function <code class="code">dg_kill</code> computes the Killing equations. The metric
+must be computed with <code class="code">dg_metric</code> before this function is called.
+</p></dd></dl>
+
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) dg_cords(xy_to_polar);
+(%o1)                                done
+(%i2) dg_metric();
+                               2    2             2
+                        ds2 = r  del (theta) + del (r)
+
+(%o2)                                done
+(%i3) dg_kill();
+(%o3)                                done
+(%i4) killeq;
+        [            d                   d          2     d           ]
+        [         2 (-- (xi ))          (-- (xi )) r  + ------ (xi )  ]
+        [            dr    1             dr    2        dtheta    1   ]
+(%o4)   [                                                             ]
+        [  d          2     d                d            2           ]
+        [ (-- (xi )) r  + ------ (xi )  2 (------ (xi )) r  + 2 xi  r ]
+        [  dr    2        dtheta    1      dtheta    2            1   ]
 </pre></div></div>
 
 </div>
