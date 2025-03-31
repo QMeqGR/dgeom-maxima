@@ -88,7 +88,7 @@ thi ;
 matrix([del(r)],[r*del(phi)],[del(z)]) $
 
 load(ctensor) ;
-"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1828_g324e0fe51/share/tensor/ctensor.mac" $
+"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1832_g5efbeba61/share/tensor/ctensor.mac" $
 
 dg_cords(xy_to_polar) ;
 done $
@@ -115,8 +115,8 @@ ds2 = r^2*del(theta)^2+del(r)^2
 
 done $
 
-dg_kill() ;
-done $
+dg_kill(none) ;
+false $
 
 killeq ;
 matrix([2*'diff(xi[1],r,1),'diff(xi[2],r,1)*r^2+'diff(xi[1],theta,1)],               ['diff(xi[2],r,1)*r^2+'diff(xi[1],theta,1),

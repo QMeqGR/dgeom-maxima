@@ -10,7 +10,7 @@
 ("dg_diverg" . ("dgeom.info" 7553 991 "Functions and Variables for dgeom"))
 ("dg_ffc" . ("dgeom.info" 9864 1794 "Functions and Variables for dgeom"))
 ("dg_grad" . ("dgeom.info" 6728 812 "Functions and Variables for dgeom"))
-("dg_kill" . ("dgeom.info" 13306 1069 "Functions and Variables for dgeom"))
+("dg_kill" . ("dgeom.info" 13306 1215 "Functions and Variables for dgeom"))
 ("dg_laplac" . ("dgeom.info" 8569 1270 "Functions and Variables for dgeom"))
 ("dg_metric" . ("dgeom.info" 5897 814 "Functions and Variables for dgeom"))
 ("dg_minkowski" . ("dgeom.info" 2902 1070 "Functions and Variables for dgeom"))
@@ -20,7 +20,7 @@
 ))
 (section-pairs '(
 ; CONTENT: (<NODE NAME> . (<FILENAME> <BYTE OFFSET> <LENGTH IN CHARACTERS>))
-("Functions and Variables for dgeom" . ("dgeom.info" 2441 11678))
+("Functions and Variables for dgeom" . ("dgeom.info" 2441 11824))
 ("Introduction to package dgeom" . ("dgeom.info" 755 1512))
 )))
 (load-info-hashtables (maxima::maxima-load-pathname-directory) deffn-defvr-pairs section-pairs))

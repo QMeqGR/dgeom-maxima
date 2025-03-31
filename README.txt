@@ -277,9 +277,11 @@ coordinates.
      the metric ‘g’.  The ‘ctensor’ package must be loaded and the
      metric computed for this command to work.
 
- -- Function: dg_kill ( )
+ -- Function: dg_kill ([none,show])
      The function ‘dg_kill’ computes the Killing equations.  The metric
      must be computed with ‘dg_metric’ before this function is called.
+     If called with ‘dis=show’ then the killing equations will be shown,
+     otherwise they can be accessed in the array ‘killeq’.
 
      (%i1) dg_cords(xy_to_polar);
      (%o1)                                done
@@ -288,7 +290,7 @@ coordinates.
                              ds2 = r  del (theta) + del (r)
 
      (%o2)                                done
-     (%i3) dg_kill();
+     (%i3) dg_kill(none);
      (%o3)                                done
      (%i4) killeq;
              [            d                   d          2     d           ]

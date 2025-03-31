@@ -383,9 +383,11 @@ the metric computed for this command to work.
 </p></dd></dl>
 
 <a class="anchor" id="dg_005fkill"></a><dl class="first-deffn">
-<dt class="deffn" id="index-dg_005fkill"><span class="category-def">Function: </span><span><strong class="def-name">dg_kill</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005fkill"> &para;</a></span></dt>
+<dt class="deffn" id="index-dg_005fkill"><span class="category-def">Function: </span><span><strong class="def-name">dg_kill</strong> <var class="def-var-arguments">([none,show])</var><a class="copiable-link" href="#index-dg_005fkill"> &para;</a></span></dt>
 <dd><p>The function <code class="code">dg_kill</code> computes the Killing equations. The metric
 must be computed with <code class="code">dg_metric</code> before this function is called.
+If called with <code class="code">dis=show</code> then the killing equations will be shown,
+otherwise they can be accessed in the array <code class="code">killeq</code>.
 </p></dd></dl>
 
 <div class="example">
@@ -396,7 +398,7 @@ must be computed with <code class="code">dg_metric</code> before this function i
                         ds2 = r  del (theta) + del (r)
 
 (%o2)                                done
-(%i3) dg_kill();
+(%i3) dg_kill(none);
 (%o3)                                done
 (%i4) killeq;
         [            d                   d          2     d           ]
