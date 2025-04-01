@@ -149,7 +149,7 @@ set_ctensor_vars():=block([],
 /*  get_ctensor_vars  */
 /**********************/
 get_ctensor_vars():=block([],
-  cords_ot:ct_coords,
+  cords_ot:ct_coords, cords_in:ct_coords, cords_tr:ct_coords,
   disp(cords_ot),
   lg:trigsimp(lg),
   g:lg,
