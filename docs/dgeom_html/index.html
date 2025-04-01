@@ -355,7 +355,10 @@ coordinates.
 </p>
 <div class="example">
 <div class="group"><pre class="example-preformatted">(%i1) load(ctensor);
+(%o1) /home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branc\
+h_5_47_base_1835_gd1ae51241/share/tensor/ctensor.mac
 (%i2) dg_cords(xy_to_polar);
+(%o2)                                done
 (%i3) set_ctensor_vars();
                                2    2             2
                         ds2 = r  del (theta) + del (r)
@@ -391,23 +394,27 @@ otherwise they can be accessed in the array <code class="code">killeq</code>.
 </p></dd></dl>
 
 <div class="example">
-<div class="group"><pre class="example-preformatted">(%i1) dg_cords(xy_to_polar);
+<div class="group"><pre class="example-preformatted">(%i1) dg_cords(mink2d);
 (%o1)                                done
 (%i2) dg_metric();
-                               2    2             2
-                        ds2 = r  del (theta) + del (r)
+                                     2         2
+                            ds2 = del (x) - del (t)
 
 (%o2)                                done
-(%i3) dg_kill(none);
+(%i3) dg_kill(show);
+                                            d     t
+                          killeq     = - 2 (-- (xi ))
+                                1, 1        dt
+
+                                    d     x    d     t
+                       killeq     = -- (xi ) - -- (xi )
+                             1, 2   dt         dx
+
+                                           d     x
+                           killeq     = 2 (-- (xi ))
+                                 2, 2      dx
+
 (%o3)                                done
-(%i4) killeq;
-        [            d                   d          2     d           ]
-        [         2 (-- (xi ))          (-- (xi )) r  + ------ (xi )  ]
-        [            dr    1             dr    2        dtheta    1   ]
-(%o4)   [                                                             ]
-        [  d          2     d                d            2           ]
-        [ (-- (xi )) r  + ------ (xi )  2 (------ (xi )) r  + 2 xi  r ]
-        [  dr    2        dtheta    1      dtheta    2            1   ]
 </pre></div></div>
 
 </div>

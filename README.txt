@@ -253,7 +253,10 @@ the function ‘set_ctensor_vars’ for more information.
 coordinates.
 
      (%i1) load(ctensor);
+     (%o1) /home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branc\
+     h_5_47_base_1835_gd1ae51241/share/tensor/ctensor.mac
      (%i2) dg_cords(xy_to_polar);
+     (%o2)                                done
      (%i3) set_ctensor_vars();
                                     2    2             2
                              ds2 = r  del (theta) + del (r)
@@ -283,23 +286,27 @@ coordinates.
      If called with ‘dis=show’ then the killing equations will be shown,
      otherwise they can be accessed in the array ‘killeq’.
 
-     (%i1) dg_cords(xy_to_polar);
+     (%i1) dg_cords(mink2d);
      (%o1)                                done
      (%i2) dg_metric();
-                                    2    2             2
-                             ds2 = r  del (theta) + del (r)
+                                          2         2
+                                 ds2 = del (x) - del (t)
 
      (%o2)                                done
-     (%i3) dg_kill(none);
+     (%i3) dg_kill(show);
+                                                 d     t
+                               killeq     = - 2 (-- (xi ))
+                                     1, 1        dt
+
+                                         d     x    d     t
+                            killeq     = -- (xi ) - -- (xi )
+                                  1, 2   dt         dx
+
+                                                d     x
+                                killeq     = 2 (-- (xi ))
+                                      2, 2      dx
+
      (%o3)                                done
-     (%i4) killeq;
-             [            d                   d          2     d           ]
-             [         2 (-- (xi ))          (-- (xi )) r  + ------ (xi )  ]
-             [            dr    1             dr    2        dtheta    1   ]
-     (%o4)   [                                                             ]
-             [  d          2     d                d            2           ]
-             [ (-- (xi )) r  + ------ (xi )  2 (------ (xi )) r  + 2 xi  r ]
-             [  dr    2        dtheta    1      dtheta    2            1   ]
 
 Appendix A Function and Variable index
 **************************************
@@ -317,13 +324,13 @@ Appendix A Function and Variable index
 * dg_grad:                               Functions and Variables for dgeom.
                                                               (line 135)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 279)
+                                                              (line 282)
 * dg_laplac:                             Functions and Variables for dgeom.
                                                               (line 175)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 116)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 273)
+                                                              (line 276)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
                                                               (line 241)
 * show_cords:                            Functions and Variables for dgeom.
