@@ -3,7 +3,7 @@
 ;;  it under the terms of the GNU General Public License as published by         
 ;;  the Free Software Foundation; either version 2 of the License, or            
 ;;  (at your option) any later version.                                  
-                                                                                 
+
 ;;  This program is distributed in the hope that it will be useful,              
 ;;  but WITHOUT ANY WARRANTY; without even the implied warranty of               
 ;;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                
@@ -47,7 +47,11 @@ cords_ot is coordinates OUT
 */
 dg_cords(crds):=block(
   dg_minkowski:1, /* set to 1 for all coordinate systems by default */
-  if crds='xyz then
+  if crds='cart2d then
+   ( cords_in:[x,y],
+     cords_tr:[x,y],
+     cords_ot:[x,y] )
+  else if crds='cart3d then
    ( cords_in:[x,y,z],
      cords_tr:[x,y,z],
      cords_ot:[x,y,z] )
@@ -92,6 +96,16 @@ dg_cords(crds):=block(
    ( cords_in:[x,y],
      cords_tr:[u,v^2],
      cords_ot:[u,v] )
+   else if crds='mink2d then
+   ( dg_minkowski: -1,
+     cords_in:[t,x],
+     cords_tr:[t,x],
+     cords_ot:[t,x] )
+   else if crds='mink4d then
+   ( dg_minkowski: -1,
+     cords_in:[t,x,y,z],
+     cords_tr:[t,x,y,z],
+     cords_ot:[t,x,y,z] )
    else if crds='rindler then
    ( dg_minkowski: -1,
      cords_in:[t,x],
@@ -100,8 +114,8 @@ dg_cords(crds):=block(
      assume(rho>0) )
    else
    ( print("The following predefined coordinate systems are available:"),
-     print("  xyz, xyz_to_spher, xyz_to_pro_spher, xyz_to_spher2 txyz_to_spher"),    
-     print("  xyz_to_cyl, xy_to_polar, xy_to_exp1, xy_to_uv2, rindler") ),
+     print("  cart2d, cart3d, xyz_to_spher, xyz_to_pro_spher, xyz_to_spher2 txyz_to_spher"),    
+     print("  xyz_to_cyl, xy_to_polar, xy_to_exp1, xy_to_uv2, mink2d, mink4d, rindler") ),
    done
 )$
 
