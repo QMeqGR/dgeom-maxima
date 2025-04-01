@@ -239,47 +239,6 @@ the function ‘set_ctensor_vars’ for more information.
                                      [            ]
                                      [   del(z)   ]
 
- -- Function: set_ctensor_vars ( )
-     This command is used to set up the calculation of the Christoffel
-     symbols using the ‘ctensor’ package.  The Christoffel symbols are
-     the connections in the coordinate frame, as opposed to the
-     frame-field connection coefficients computed using the function
-     ‘dg_ffc’.  The function ‘set_ctensor_vars’ sets the following
-     ‘ctensor’ variables: ‘cframe_flage:false’, ‘dim’, and calls
-     ‘ct_coordsys()’.  The ‘ctensor’ package must be loaded for this
-     command to work.
-
-   Example: Compute the Christoffel symbols for flat space in polar
-coordinates.
-
-     (%i1) load(ctensor);
-     (%o1) /home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branc\
-     h_5_47_base_1835_gd1ae51241/share/tensor/ctensor.mac
-     (%i2) dg_cords(xy_to_polar);
-     (%o2)                                done
-     (%i3) set_ctensor_vars();
-                                    2    2             2
-                             ds2 = r  del (theta) + del (r)
-
-                    ctlist = [r cos(theta), r sin(theta), [r, theta]]
-
-     (%o3)                                done
-     (%i4) christof(mcs);
-                                                  1
-     (%t4)                           mcs        = -
-                                        1, 2, 2   r
-
-     (%t5)                          mcs        = - r
-                                       2, 2, 1
-
-     (%o5)                                done
-
- -- Function: get_ctensor_vars ( )
-     This command sets the coordinate variable ‘cord_ot’ to the ctensor
-     variable ‘ct_cords’.  Then sets the lower indexed metric ‘lg’ to
-     the metric ‘g’.  The ‘ctensor’ package must be loaded and the
-     metric computed for this command to work.
-
  -- Function: dg_kill ([none,show])
      The function ‘dg_kill’ computes the Killing equations.  The metric
      must be computed with ‘dg_metric’ before this function is called.
@@ -308,6 +267,48 @@ coordinates.
 
      (%o3)                                done
 
+ -- Function: get_ctensor_vars ( )
+     This command is used to set the ‘dgeom’ coordinate variables from
+     those defined in the ‘ctensor’ package.  This command sets the
+     ‘dgeom’ coordinate variable ‘cord_ot’ to the ctensor variable
+     ‘ct_cords’.  Then sets the lower indexed metric ‘lg’ to the metric
+     ‘g’.  The ‘ctensor’ package must be loaded and the metric computed
+     for this command to work.
+
+ -- Function: set_ctensor_vars ( )
+     This command is used to set up the calculation of the Christoffel
+     symbols using the ‘ctensor’ package using the coordinates and
+     transformation functions from the ‘dgeom’ package.  The Christoffel
+     symbols are the connections in the coordinate frame, as opposed to
+     the frame-field connection coefficients computed using the function
+     ‘dg_ffc’.  The function ‘set_ctensor_vars’ sets the following
+     ‘ctensor’ variables: ‘cframe_flage:false’, ‘dim’, and calls
+     ‘ct_coordsys()’.  The ‘ctensor’ package must be loaded for this
+     command to work.
+
+   Example: Compute the Christoffel symbols for flat space in polar
+coordinates.
+
+     (%i1) load(ctensor);
+     (%i2) dg_cords(xy_to_polar);
+     (%o2)                                done
+     (%i3) set_ctensor_vars();
+                                    2    2             2
+                             ds2 = r  del (theta) + del (r)
+
+                    ctlist = [r cos(theta), r sin(theta), [r, theta]]
+
+     (%o3)                                done
+     (%i4) christof(mcs);
+                                                  1
+     (%t4)                           mcs        = -
+                                        1, 2, 2   r
+
+     (%t5)                          mcs        = - r
+                                       2, 2, 1
+
+     (%o5)                                done
+
 Appendix A Function and Variable index
 **************************************
 
@@ -324,15 +325,15 @@ Appendix A Function and Variable index
 * dg_grad:                               Functions and Variables for dgeom.
                                                               (line 135)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 282)
+                                                              (line 241)
 * dg_laplac:                             Functions and Variables for dgeom.
                                                               (line 175)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 116)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 276)
+                                                              (line 269)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 241)
+                                                              (line 277)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line  79)
 

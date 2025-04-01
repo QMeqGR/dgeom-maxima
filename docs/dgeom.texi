@@ -321,56 +321,6 @@ and then computing @code{KK[i,j]} by solving
 @end group
 @end example
 
-
-@anchor{set_ctensor_vars}
-@deffn {Function} set_ctensor_vars ( )
-This command is used to set up the calculation of the Christoffel
-symbols using the @code{ctensor} package. The Christoffel symbols are
-the connections in the coordinate frame, as opposed to the frame-field
-connection coefficients computed using the function @code{dg_ffc}. The
-function @code{set_ctensor_vars} sets the following @code{ctensor}
-variables: @code{cframe_flage:false}, @code{dim}, and calls
-@code{ct_coordsys()}. The @code{ctensor} package must be loaded for this
-command to work.
-@end deffn
-
-Example: Compute the Christoffel symbols for flat space in polar
-coordinates.
-
-@example
-@group
-(%i1) load(ctensor);
-(%o1) /home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branc\
-h_5_47_base_1835_gd1ae51241/share/tensor/ctensor.mac
-(%i2) dg_cords(xy_to_polar);
-(%o2)                                done
-(%i3) set_ctensor_vars();
-                               2    2             2
-                        ds2 = r  del (theta) + del (r)
-
-               ctlist = [r cos(theta), r sin(theta), [r, theta]]
-
-(%o3)                                done
-(%i4) christof(mcs);
-                                             1
-(%t4)                           mcs        = -
-                                   1, 2, 2   r
-
-(%t5)                          mcs        = - r
-                                  2, 2, 1
-
-(%o5)                                done
-@end group
-@end example
-
-@anchor{get_ctensor_vars}
-@deffn {Function} get_ctensor_vars ( )
-This command sets the coordinate variable @code{cord_ot} to the ctensor
-variable @code{ct_cords}. Then sets the lower indexed metric @code{lg}
-to the metric @code{g}. The @code{ctensor} package must be loaded and
-the metric computed for this command to work.
-@end deffn
-
 @anchor{dg_kill}
 @deffn {Function} dg_kill ([none,show])
 The function @code{dg_kill} computes the Killing equations. The metric
@@ -404,6 +354,58 @@ otherwise they can be accessed in the array @code{killeq}.
 (%o3)                                done
 @end group
 @end example
+
+
+@anchor{get_ctensor_vars}
+@deffn {Function} get_ctensor_vars ( )
+This command is used to set the @code{dgeom} coordinate variables from
+those defined in the @code{ctensor} package.  This command sets the
+@code{dgeom} coordinate variable @code{cord_ot} to the ctensor variable
+@code{ct_cords}. Then sets the lower indexed metric @code{lg} to the
+metric @code{g}. The @code{ctensor} package must be loaded and the
+metric computed for this command to work.
+@end deffn
+
+@anchor{set_ctensor_vars}
+@deffn {Function} set_ctensor_vars ( )
+This command is used to set up the calculation of the Christoffel
+symbols using the @code{ctensor} package using the coordinates and
+transformation functions from the @code{dgeom} package. The Christoffel
+symbols are the connections in the coordinate frame, as opposed to the
+frame-field connection coefficients computed using the function
+@code{dg_ffc}. The function @code{set_ctensor_vars} sets the following
+@code{ctensor} variables: @code{cframe_flage:false}, @code{dim}, and
+calls @code{ct_coordsys()}. The @code{ctensor} package must be loaded
+for this command to work.
+@end deffn
+
+Example: Compute the Christoffel symbols for flat space in polar
+coordinates.
+
+@example
+@group
+(%i1) load(ctensor);
+(%i2) dg_cords(xy_to_polar);
+(%o2)                                done
+(%i3) set_ctensor_vars();
+                               2    2             2
+                        ds2 = r  del (theta) + del (r)
+
+               ctlist = [r cos(theta), r sin(theta), [r, theta]]
+
+(%o3)                                done
+(%i4) christof(mcs);
+                                             1
+(%t4)                           mcs        = -
+                                   1, 2, 2   r
+
+(%t5)                          mcs        = - r
+                                  2, 2, 1
+
+(%o5)                                done
+@end group
+@end example
+
 
 @node Function and Variable Index, , Top, Top
 @appendix Function and Variable index

@@ -87,26 +87,6 @@ matrix([0,del(phi),0],[-del(phi),0,0],[0,0,0]) $
 thi ;
 matrix([del(r)],[r*del(phi)],[del(z)]) $
 
-load(ctensor) ;
-"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1835_gd1ae51241/share/tensor/ctensor.mac" $
-
-dg_cords(xy_to_polar) ;
-done $
-
-set_ctensor_vars() ;
-ds2 = r^2*del(theta)^2+del(r)^2
-
-ctlist = [r*cos(theta),r*sin(theta),[r,theta]]
-
-done $
-
-christof(mcs) ;
-(%t27) mcs[1,2,2] = 1/r
-
-(%t28) mcs[2,2,1] = -r
-
-done $
-
 dg_cords(mink2d) ;
 done $
 
@@ -121,5 +101,25 @@ killeq[1,1] = -(2*'diff(xi[t],t,1))
 killeq[1,2] = 'diff(xi[x],t,1)-'diff(xi[t],x,1)
 
 killeq[2,2] = 2*'diff(xi[x],x,1)
+
+done $
+
+load(ctensor) ;
+"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1835_gd1ae51241/share/tensor/ctensor.mac" $
+
+dg_cords(xy_to_polar) ;
+done $
+
+set_ctensor_vars() ;
+ds2 = r^2*del(theta)^2+del(r)^2
+
+ctlist = [r*cos(theta),r*sin(theta),[r,theta]]
+
+done $
+
+christof(mcs) ;
+(%t30) mcs[1,2,2] = 1/r
+
+(%t31) mcs[2,2,1] = -r
 
 done  $
