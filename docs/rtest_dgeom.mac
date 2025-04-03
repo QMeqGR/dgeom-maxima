@@ -51,9 +51,6 @@ cords_ot:[t,xi] ;
 cords_tr:[t/2,2*sqrt(xi)] ;
 [t/2,2*sqrt(xi)] $
 
-dg_minkowski:-1 ;
--1 $
-
 lg_in:matrix([-rho^2,0],[0,1]) ;
 matrix([-rho^2,0],[0,1]) $
 
@@ -137,7 +134,7 @@ killeq[2,2] = 2*'diff(xi[x],x,1)
 done $
 
 load(ctensor) ;
-"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1849_g2f047687a/share/tensor/ctensor.mac" $
+"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1850_g68e48659b/share/tensor/ctensor.mac" $
 
 dg_cords(xy_to_polar) ;
 done $
@@ -152,8 +149,8 @@ ctlist = [r*cos(theta),r*sin(theta),[r,theta]]
 done $
 
 christof(mcs) ;
-(%t36) mcs[1,2,2] = 1/r
+(%t35) mcs[1,2,2] = 1/r
 
-(%t37) mcs[2,2,1] = -r
+(%t36) mcs[2,2,1] = -r
 
 done  $

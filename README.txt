@@ -11,10 +11,10 @@ The ‘dgeom’ package provides some basic functions useful for exploring
 metrics and manifolds.  In particular coordinate transformations that
 allow one to define embedded manifolds in flat space.  But the package
 provides more general tools for computing metrics after a coordinate
-transformation.
-
-   The ‘dgeom’ package computes the frame field connections for an
-embedded surface using frames defined by the attitude matrix.
+transformation.  This package was designed to be compatible with the
+‘ctensor’ package included with Maxima.  The ‘dgeom’ package computes
+the frame field connections for an embedded surface using frames defined
+by the attitude matrix.
 
    The basic use of the package begins by defining the coordinates in
 the variables ‘cords_in’, ‘cords_tr’, and ‘cords_ot’.  This can be done
@@ -22,10 +22,19 @@ manually or by using the built-in function ‘dg_cords’.
 
    In a typical session, one should first call ‘dg_cords(all)’ to see
 the available coordinate systems and then choose one, or set up the
-coordinates by hand.  Second, call ‘dg_metric()’ to compute the metric.
-Then one can call the divergence or Laplace functions ‘dg_diverg()’ or
-‘dg_laplac()’ if desired.  If the frame field connections are desired,
-call ‘dg_ffc()’.
+coordinates by hand.  Second, call ‘dg_metric()’ to compute the metric
+in the new coordinates.  ‘dgeom’ can calculate the divergence, gradient,
+and Laplacian in any coordinate system you can define.  It also defines
+them as functions you can then call if you want to use them in a
+computation.  These computations are available in the functions
+‘dg_diverg()’, ‘dg_grad()’, and ‘dg_laplac()’.
+
+   If the frame field connections are desired, call ‘dg_ffc()’.  Note
+that ‘dgeom’ can also compute a new metric from an old metric where the
+old metric is not \delta (identity) or \eta (Minkowski).
+
+   The ‘dgeom’ package can also compute the Killing vector equations
+from the metric.
 
    Note: It helps to simplify the resulting formulas by restricting
 coordinate ranges.  For example, if studying the sphere one should use
@@ -33,8 +42,10 @@ coordinate ranges.  For example, if studying the sphere one should use
 automatically in the package, but for coordinate systems input by hand
 one should consider setting the ranges manually.
 
-   The ‘dgeom’ package is compatible with the ‘ctensor’ package.  See
-the function ‘set_ctensor_vars’ for more information.
+   The ‘dgeom’ package is compatible with the ‘ctensor’ package.
+Coordinates defined in ‘dgeom’ can be used for computations in the
+‘ctensor’ package such as the Christoffel symbols, the Riemann tensor
+and so forth.  See the function ‘set_ctensor_vars’ for more information.
 
 1.2 Functions and Variables for dgeom
 =====================================
@@ -58,6 +69,14 @@ the function ‘set_ctensor_vars’ for more information.
      coordinates in Minkowski signature without using the function
      ‘dg_cords’, the timelike coordinate must be the first element in
      the list for both ‘cords_in’ and ‘cords_ot’.
+
+ -- Function: dg_cords (<coordinate system>)
+     The function ‘dg_cords’ takes a predefined coordinate system name
+     and sets the variables ‘cords_in’, ‘cords_tr’, ‘cords_ot’.
+     ‘cords_in’ are the input coordinates, ‘cords_tr’ are the
+     transformation functions to the new or output coordinates, and
+     ‘cords_ot’ are the output coordinates.  To see the available
+     predefined coordinate systems use ‘dg_cords(all)’.
 
      (%i1) dg_cords(rindler);
      (%o1)                                done
@@ -83,11 +102,6 @@ the function ‘set_ctensor_vars’ for more information.
  -- Function: show_cords ( )
      The function ‘show_cords’ takes no arguments.  It displays the
      variables ‘cord_in’, ‘cord_tr’, ‘cord_ot’, and ‘dg_minkowski’.
-
- -- Function: dg_cords (<coordinate system>)
-     The function ‘dg_cords’ takes a predefined coordinate system name
-     and sets the variables ‘cord_in’, ‘cord_tr’, ‘cord,ot’.  To see the
-     available predefined coordinate systems use ‘dg_cords(all)’.
 
  -- Function: dg_derivs ( )
      This function takes no arguments, but the input and output
@@ -155,14 +169,12 @@ metric to new coordinates that mimic the Schwarzschild metric.
                                       t
      (%o3)                           [-, 2 sqrt(xi)]
                                       2
-     (%i4) dg_minkowski:-1;
-     (%o4)                                 - 1
-     (%i5) lg_in:matrix([-rho^2,0],[0,1]);
+     (%i4) lg_in:matrix([-rho^2,0],[0,1]);
                                       [      2    ]
-     (%o5)                            [ - rho   0 ]
+     (%o4)                            [ - rho   0 ]
                                       [           ]
                                       [   0     1 ]
-     (%i6) dg_metric(cnvrt);
+     (%i5) dg_metric(cnvrt);
                                       2           2    2
                           ds2_in = del (rho) - rho  del (omega)
 
@@ -171,7 +183,7 @@ metric to new coordinates that mimic the Schwarzschild metric.
                                ds2 = -------- - xi del (t)
                                         xi
 
-     (%o6)                                done
+     (%o5)                                done
 
  -- Function: dg_grad ( )
      This function takes no arguments.  The input and output coordinates
@@ -340,7 +352,7 @@ coordinates.
 
      (%i1) load(ctensor);
      (%o1) /home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branc\
-     h_5_47_base_1849_g2f047687a/share/tensor/ctensor.mac
+     h_5_47_base_1850_g68e48659b/share/tensor/ctensor.mac
      (%i2) dg_cords(xy_to_polar);
      (%o2)                                done
      (%i3) set_ctensor_vars();
@@ -369,36 +381,36 @@ Appendix A Function and Variable index
 * Menu:
 
 * dg_cords:                              Functions and Variables for dgeom.
-                                                              (line  86)
+                                                              (line  72)
 * dg_derivs:                             Functions and Variables for dgeom.
-                                                              (line  91)
+                                                              (line 105)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 193)
+                                                              (line 205)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 248)
+                                                              (line 260)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 175)
+                                                              (line 187)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 287)
+                                                              (line 299)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 218)
+                                                              (line 230)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 119)
+                                                              (line 133)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 318)
+                                                              (line 330)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 326)
+                                                              (line 338)
 * show_cords:                            Functions and Variables for dgeom.
-                                                              (line  82)
+                                                              (line 101)
 
 * Menu:
 
 * cord_in:                               Functions and Variables for dgeom.
-                                                               (line 41)
-* cord_ot:                               Functions and Variables for dgeom.
-                                                               (line 44)
-* cord_tr:                               Functions and Variables for dgeom.
-                                                               (line 47)
-* dg_minkowski:                          Functions and Variables for dgeom.
                                                                (line 52)
+* cord_ot:                               Functions and Variables for dgeom.
+                                                               (line 55)
+* cord_tr:                               Functions and Variables for dgeom.
+                                                               (line 58)
+* dg_minkowski:                          Functions and Variables for dgeom.
+                                                               (line 63)
 
