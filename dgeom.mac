@@ -138,7 +138,7 @@ set_ctensor_vars():=block([],
   dim:length(cords_ot),
   ctlist:makelist(cords_tr[i],i,dim),
   ctlist:append(ctlist,[cords_ot]),
-  dg_metric(),
+  dg_metric(init),
   ct_coordsys(ctlist),
   /* ct_coordsys constructs lg but doesn't simplify it */
   lg:trigsimp(lg),
@@ -289,31 +289,40 @@ dg_grad():=block([N,F,diffmx,T1,T2,hats],
 /* dg_metric() */
 /***************/
 /*computes the metric in the new coordinates */
-dg_metric():=block([N,tolist:cords_ot,cords_tmp],
-  N: length(tolist),
+dg_metric(trn):=block([N],
+  N: length(cords_in),
 
-  /* show the input metric */
+  /* if trn = init, assume the metric is trivial */
+  if trn='init then block(
   ds2_in:0,
   ds2_in: dg_minkowski * diff(cords_in[1])^2, /* in case minkowski */
   for i: 2 thru N do ds2_in: ds2_in + diff(cords_in[i])^2,
-  ds2_in: trigsimp(ds2_in),
+  ds2_in: trigsimp(ds2_in)
+  )
+  else if trn='cnvrt then
+  ds2_in: sum( sum( lg_in[i,j] * del(cords_in[i]) * del(cords_in[j]), i, 1, N ), j, 1, N)
+  else print("argument must be init or cnvrt"),
+  display(ds2_in),
   
-  cords_tmp: cords_tr, /* assign the coordinate transformation */
-
   ds2:0,
-  ds2: dg_minkowski * diff(cords_tmp[1])^2, /* in case minkowski */
-  for i: 2 thru N do ds2: ds2 + diff(cords_tmp[i])^2,
-  ds2: trigsimp(ds2),
+  if trn='init then block(
+    ds2: dg_minkowski * diff(cords_tr[1])^2, /* in case minkowski */
+    for i: 2 thru N do ds2: ds2 + diff(cords_tr[i])^2 )
+  else if trn='cnvrt then block(
+    ds2_in: sum( sum( lg_in[i,j] * diff(cords_tr[i]) * diff(cords_tr[j]), i, 1, N ), j, 1, N),
+    ds2: subst(map("=",cords_in,cords_tr),ds2_in)
+  ),
+  ds2: trigsimp(ds2), ds2: expand(ds2),
   g: zeromatrix(N,N),
   for i: 1 thru N do
     for j: 1 thru N do
-      g[i,j]: coeff( expand( ds2 ) , del(args(tolist)[i]) * del(args(tolist)[j]) ),
+      g[i,j]: coeff( expand( ds2 ) , del(args(cords_ot)[i]) * del(args(cords_ot)[j]) ),
       g: trigsimp(g), lg:g,
       detg: determinant(g),
       if detg#0 then ug: g^^(-1) else error("g is singular!"),
       scrootg: sqrt( detg ),
       display(ds2)
-);
+)$
 
 /****************/
 /* dg_diverg()  */
@@ -321,7 +330,7 @@ dg_metric():=block([N,tolist:cords_ot,cords_tmp],
 /* Divergence in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
 dg_diverg():=block([W,N,tolist:cords_ot,tmp],
-  if scrootg=0 then dg_metric(),
+  if scrootg=0 then dg_metric(init),
   N:length(tolist),
   for i: 1 thru N do ( W[i]: concat(W_, args(tolist)[i]),
     depends(W[i],tolist) ),
@@ -338,7 +347,7 @@ dg_diverg():=block([W,N,tolist:cords_ot,tmp],
 /* Laplacian in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
 dg_laplac():=block([F,N,tolist:cords_ot,tmp,M],
-  if scrootg=0 then dg_metric(),
+  if scrootg=0 then dg_metric(init),
   N:length(tolist),
   depends(F,tolist),
   M: zeromatrix(N,N),

@@ -71,7 +71,10 @@ the function ‘set_ctensor_vars’ for more information.
                                    dg_minkowski = - 1
 
      (%o2)                                done
-     (%i3) dg_metric();
+     (%i3) dg_metric(init);
+                                           2         2
+                               ds2_in = del (x) - del (t)
+
                                     2           2    2
                            ds2 = del (rho) - rho  del (omega)
 
@@ -114,24 +117,52 @@ the function ‘set_ctensor_vars’ for more information.
      (%o3)               d_dx(F) := ---- sin(phi) + -- cos(phi)
                                     dphi            dr
 
- -- Function: dg_metric ( )
-     This function takes no arguments, but the input and output
-     coordinates and the transformation functions must be defined
+ -- Function: dg_metric ([init,cnvrt])
+     This function takes an argument <init> or <cnvrt>.  The input and
+     output coordinates and the transformation functions must be defined
      beforehand for this function to work.  See the function *note
      dg_cords::.
 
      The function ‘dg_metric’ computes the metric in terms of the output
-     coordinates ‘cords_ot’.  This function assumes the input
-     coordinates are flat.  This function returns the line element
-     <ds^{2}> in the variable ‘ds2’, and the metric in the matrix ‘g’.
+     coordinates ‘cords_ot’.  If ‘dg_metric’ is called with the argument
+     <init> then the function assumes the input metric is diagonal with
+     unit entries, although ‘dg_minkowski’ may be set to -1 for the time
+     component.  If ‘dg_metric’ is called with the argument <cnvrt>,
+     then the function assumes there is an initial metric given in the
+     matrix ‘lg_in’ with the ordering of the entries in accordance with
+     the ordering of the variables in ‘cords_in’.  ‘dg_metric’ returns
+     the line element <ds^{2}> in the variable ‘ds2’, and the metric in
+     the matrix ‘g’.
 
      (%i1) dg_cords(xyz_to_spher);
      (%o1)                                done
-     (%i2) dg_metric();
+     (%i2) dg_metric(init);
+                                      2         2         2
+                          ds2_in = del (z) + del (y) + del (x)
+
                        2    2             2       2    2           2
                 ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
 
      (%o2)                                done
+
+   The following example illustrates the conversion of the Rindler
+metric to new coordinates that mimic the Schwarzschild metric.
+
+     (%i1) cords_in:[omega,rho];
+     (%i2) cords_ot:[t,xi];
+     (%i3) cords_tr:[t/2,2*sqrt(xi)];
+     (%i4) dg_minkowski:-1;
+     (%i5) lg_in:matrix([-rho^2,0],[0,1]);
+     (%i6) dg_metric(cnvrt);
+                                      2           2    2
+                          ds2_in = del (rho) - rho  del (omega)
+
+                                        2
+                                     del (xi)         2
+                               ds2 = -------- - xi del (t)
+                                        xi
+
+     (%o6)                                done
 
  -- Function: dg_grad ( )
      This function takes no arguments.  The input and output coordinates
@@ -163,7 +194,10 @@ the function ‘set_ctensor_vars’ for more information.
 
      (%i1) dg_cords(xyz_to_cyl);
      (%o1)                                done
-     (%i2) dg_metric();
+     (%i2) dg_metric(init);
+                                      2         2         2
+                          ds2_in = del (z) + del (y) + del (x)
+
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
 
@@ -185,7 +219,10 @@ the function ‘set_ctensor_vars’ for more information.
 
      (%i1) dg_cords(xyz_to_cyl);
      (%o1)                                done
-     (%i2) dg_metric();
+     (%i2) dg_metric(init);
+                                      2         2         2
+                          ds2_in = del (z) + del (y) + del (x)
+
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
 
@@ -247,7 +284,10 @@ the function ‘set_ctensor_vars’ for more information.
 
      (%i1) dg_cords(mink2d);
      (%o1)                                done
-     (%i2) dg_metric();
+     (%i2) dg_metric(init);
+                                           2         2
+                               ds2_in = del (x) - del (t)
+
                                           2         2
                                  ds2 = del (x) - del (t)
 
@@ -290,9 +330,14 @@ the function ‘set_ctensor_vars’ for more information.
 coordinates.
 
      (%i1) load(ctensor);
+     (%o1) /home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branc\
+     h_5_47_base_1849_g2f047687a/share/tensor/ctensor.mac
      (%i2) dg_cords(xy_to_polar);
      (%o2)                                done
      (%i3) set_ctensor_vars();
+                                           2         2
+                               ds2_in = del (y) + del (x)
+
                                     2    2             2
                              ds2 = r  del (theta) + del (r)
 
@@ -315,27 +360,27 @@ Appendix A Function and Variable index
 * Menu:
 
 * dg_cords:                              Functions and Variables for dgeom.
-                                                              (line  83)
+                                                              (line  86)
 * dg_derivs:                             Functions and Variables for dgeom.
-                                                              (line  88)
+                                                              (line  91)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 153)
+                                                              (line 184)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 202)
+                                                              (line 239)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 135)
+                                                              (line 166)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 241)
+                                                              (line 278)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 175)
+                                                              (line 209)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 116)
+                                                              (line 119)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 269)
+                                                              (line 309)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 277)
+                                                              (line 317)
 * show_cords:                            Functions and Variables for dgeom.
-                                                              (line  79)
+                                                              (line  82)
 
 * Menu:
 

@@ -16,7 +16,9 @@ dg_minkowski = -1
 
 done $
 
-dg_metric() ;
+dg_metric(init) ;
+ds2_in = del(x)^2-del(t)^2
+
 ds2 = del(rho)^2-rho^2*del(omega)^2
 
 done $
@@ -33,8 +35,32 @@ d_dx(F):='diff(F,phi,1)*sin(phi)+'diff(F,r,1)*cos(phi) $
 dg_cords(xyz_to_spher) ;
 done $
 
-dg_metric() ;
+dg_metric(init) ;
+ds2_in = del(z)^2+del(y)^2+del(x)^2
+
 ds2 = r^2*del(theta)^2+del(r)^2+r^2*sin(theta)^2*del(phi)^2
+
+done $
+
+cords_in:[omega,rho] ;
+[omega,rho] $
+
+cords_ot:[t,xi] ;
+[t,xi] $
+
+cords_tr:[t/2,2*sqrt(xi)] ;
+[t/2,2*sqrt(xi)] $
+
+dg_minkowski:-1 ;
+-1 $
+
+lg_in:matrix([-rho^2,0],[0,1]) ;
+matrix([-rho^2,0],[0,1]) $
+
+dg_metric(cnvrt) ;
+ds2_in = del(rho)^2-rho^2*del(omega)^2
+
+ds2 = del(xi)^2/xi-xi*del(t)^2
 
 done $
 
@@ -50,7 +76,9 @@ done $
 dg_cords(xyz_to_cyl) ;
 done $
 
-dg_metric() ;
+dg_metric(init) ;
+ds2_in = del(z)^2+del(y)^2+del(x)^2
+
 ds2 = del(z)^2+del(r)^2+r^2*del(phi)^2
 
 done $
@@ -62,7 +90,9 @@ $
 dg_cords(xyz_to_cyl) ;
 done $
 
-dg_metric() ;
+dg_metric(init) ;
+ds2_in = del(z)^2+del(y)^2+del(x)^2
+
 ds2 = del(z)^2+del(r)^2+r^2*del(phi)^2
 
 done $
@@ -90,7 +120,9 @@ matrix([del(r)],[r*del(phi)],[del(z)]) $
 dg_cords(mink2d) ;
 done $
 
-dg_metric() ;
+dg_metric(init) ;
+ds2_in = del(x)^2-del(t)^2
+
 ds2 = del(x)^2-del(t)^2
 
 done $
@@ -105,12 +137,14 @@ killeq[2,2] = 2*'diff(xi[x],x,1)
 done $
 
 load(ctensor) ;
-"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1835_gd1ae51241/share/tensor/ctensor.mac" $
+"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1849_g2f047687a/share/tensor/ctensor.mac" $
 
 dg_cords(xy_to_polar) ;
 done $
 
 set_ctensor_vars() ;
+ds2_in = del(y)^2+del(x)^2
+
 ds2 = r^2*del(theta)^2+del(r)^2
 
 ctlist = [r*cos(theta),r*sin(theta),[r,theta]]
@@ -118,8 +152,8 @@ ctlist = [r*cos(theta),r*sin(theta),[r,theta]]
 done $
 
 christof(mcs) ;
-(%t30) mcs[1,2,2] = 1/r
+(%t36) mcs[1,2,2] = 1/r
 
-(%t31) mcs[2,2,1] = -r
+(%t37) mcs[2,2,1] = -r
 
 done  $
