@@ -312,7 +312,11 @@ dg_metric(trn):=block([N],
     ds2_in: sum( sum( lg_in[i,j] * diff(cords_tr[i]) * diff(cords_tr[j]), i, 1, N ), j, 1, N),
     ds2: subst(map("=",cords_in,cords_tr),ds2_in)
   ),
-  ds2: trigsimp(ds2), ds2: expand(ds2),
+  ds2:expand(ds2),
+  for i:1 thru N do ds2:collectterms(ds2,del( args(cords_ot)[i] ) ),
+  for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i),
+  for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i), /* yes, do this twice */
+  
   g: zeromatrix(N,N),
   for i: 1 thru N do
     for j: 1 thru N do
@@ -321,7 +325,8 @@ dg_metric(trn):=block([N],
       detg: determinant(g),
       if detg#0 then ug: g^^(-1) else error("g is singular!"),
       scrootg: sqrt( detg ),
-      display(ds2)
+
+  display( ds2 )
 )$
 
 /****************/
