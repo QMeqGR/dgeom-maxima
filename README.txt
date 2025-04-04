@@ -195,13 +195,11 @@ metric to new coordinates that mimic the Schwarzschild metric.
      (%i1) dg_cords(xyz_to_spher);
      (%o1)                                done
      (%i2) dg_grad();
-                              dF             dF
-                             ---- e_phi    ------ e_theta
-                             dphi          dtheta           dF
-                      gra = ------------ + -------------- + -- e_r
-                            r sin(theta)         r          dr
-
-     (%o2)                                done
+                                  dF             dF
+                                 ---- e_phi    ------ e_theta
+                                 dphi          dtheta           dF
+     (%o2)         dg_gra(F) := ------------ + -------------- + -- e_r
+                                r sin(theta)         r          dr
 
  -- Function: dg_diverg ( )
      This function takes no arguments.  The input and output coordinates
@@ -352,7 +350,7 @@ coordinates.
 
      (%i1) load(ctensor);
      (%o1) /home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branc\
-     h_5_47_base_1850_g68e48659b/share/tensor/ctensor.mac
+     h_5_47_base_1862_g59a9da743/share/tensor/ctensor.mac
      (%i2) dg_cords(xy_to_polar);
      (%o2)                                done
      (%i3) set_ctensor_vars();
@@ -385,21 +383,21 @@ Appendix A Function and Variable index
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 105)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 205)
+                                                              (line 203)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 260)
+                                                              (line 258)
 * dg_grad:                               Functions and Variables for dgeom.
                                                               (line 187)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 299)
+                                                              (line 297)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 230)
+                                                              (line 228)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 133)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 330)
+                                                              (line 328)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 338)
+                                                              (line 336)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 101)
 

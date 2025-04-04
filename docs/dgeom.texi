@@ -262,13 +262,11 @@ function to work. See the function @ref{dg_cords}. The function
 (%i1) dg_cords(xyz_to_spher);
 (%o1)                                done
 (%i2) dg_grad();
-                         dF             dF
-                        ---- e_phi    ------ e_theta
-                        dphi          dtheta           dF
-                 gra = ------------ + -------------- + -- e_r
-                       r sin(theta)         r          dr
-
-(%o2)                                done
+                             dF             dF
+                            ---- e_phi    ------ e_theta
+                            dphi          dtheta           dF
+(%o2)         dg_gra(F) := ------------ + -------------- + -- e_r
+                           r sin(theta)         r          dr
 @end group
 @end example
 
@@ -453,7 +451,7 @@ coordinates.
 @group
 (%i1) load(ctensor);
 (%o1) /home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branc\
-h_5_47_base_1850_g68e48659b/share/tensor/ctensor.mac
+h_5_47_base_1862_g59a9da743/share/tensor/ctensor.mac
 (%i2) dg_cords(xy_to_polar);
 (%o2)                                done
 (%i3) set_ctensor_vars();

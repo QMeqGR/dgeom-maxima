@@ -281,7 +281,7 @@ dg_grad():=block([N,F,diffmx,T1,T2,hats],
   gra: sum(T1[i]*T2[i],i,1,N),
   gra:trigsimp(gra),
   gra:expand(gra),
-  display(gra)
+  define( funmake(dg_gra,[F]) , gra )
 );
 
 

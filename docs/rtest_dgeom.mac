@@ -65,10 +65,9 @@ dg_cords(xyz_to_spher) ;
 done $
 
 dg_grad() ;
-gra = ('diff(F,phi,1)*e_phi)/(r*sin(theta))
-    +('diff(F,theta,1)*e_theta)/r+'diff(F,r,1)*e_r
-
-done $
+dg_gra(F):=('diff(F,phi,1)*e_phi)/(r*sin(theta))+('diff(F,theta,1)                                                         *e_theta)
+                                                        /r+'diff(F,r,1)*e_r
+$
 
 dg_cords(xyz_to_cyl) ;
 done $
@@ -134,7 +133,7 @@ killeq[2,2] = 2*'diff(xi[x],x,1)
 done $
 
 load(ctensor) ;
-"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1850_g68e48659b/share/tensor/ctensor.mac" $
+"/home/packages/SOURCE/maxima-code/sbcl_install_master/share/maxima/branch_5_47_base_1862_g59a9da743/share/tensor/ctensor.mac" $
 
 dg_cords(xy_to_polar) ;
 done $
