@@ -138,6 +138,7 @@ set_ctensor_vars(trn):=block([],
   dim:length(cords_ot),
   ctlist:makelist(cords_tr[i],i,dim),
   ctlist:append(ctlist,[cords_ot]),
+  if get('ctensor,'version)=false then load(ctensor),
   ct_coordsys(ctlist),
   /* ct_coodsys calls cmetric() which is equivalent to our dg_metric(init),
      so we have to call dg_metric() again if trn='cnvrt to get the correct
