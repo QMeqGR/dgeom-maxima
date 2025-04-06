@@ -444,16 +444,20 @@ metric computed for this command to work.
 </p></dd></dl>
 
 <a class="anchor" id="set_005fctensor_005fvars"></a><dl class="first-deffn">
-<dt class="deffn" id="index-set_005fctensor_005fvars"><span class="category-def">Function: </span><span><strong class="def-name">set_ctensor_vars</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-set_005fctensor_005fvars"> &para;</a></span></dt>
-<dd><p>This command is used to set up the calculation of the Christoffel
-symbols using the <code class="code">ctensor</code> package using the coordinates and
-transformation functions from the <code class="code">dgeom</code> package. The Christoffel
-symbols are the connections in the coordinate frame, as opposed to the
-frame-field connection coefficients computed using the function
-<code class="code">dg_ffc</code>. The function <code class="code">set_ctensor_vars</code> sets the following
-<code class="code">ctensor</code> variables: <code class="code">cframe_flage:false</code>, <code class="code">dim</code>, and
-calls <code class="code">ct_coordsys()</code>. The <code class="code">ctensor</code> package must be loaded
-for this command to work.
+<dt class="deffn" id="index-set_005fctensor_005fvars"><span class="category-def">Function: </span><span><strong class="def-name">set_ctensor_vars</strong> <var class="def-var-arguments">([init,cnvrt])</var><a class="copiable-link" href="#index-set_005fctensor_005fvars"> &para;</a></span></dt>
+<dd><p>This function takes as argument <var class="var">init</var> or <var class="var">cnvrt</var>. The input and
+output coordinates and the transformation functions must be defined
+beforehand for this function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
+See <a class="ref" href="#dg_005fmetric">dg_metric</a> for a description of the options <var class="var">init</var> and
+<var class="var">cnvrt</var>.  This command is used to set up the calculation of the
+Christoffel symbols using the <code class="code">ctensor</code> package using the
+coordinates and transformation functions from the <code class="code">dgeom</code>
+package. The Christoffel symbols are the connections in the coordinate
+frame, as opposed to the frame-field connection coefficients computed
+using the function <code class="code">dg_ffc</code>. The function <code class="code">set_ctensor_vars</code>
+sets the following <code class="code">ctensor</code> variables: <code class="code">cframe_flage:false</code>,
+<code class="code">dim</code>, and calls <code class="code">ct_coordsys()</code>. The <code class="code">ctensor</code> package
+must be loaded for this command to work.
 </p></dd></dl>
 
 <p>Example: Compute the Christoffel symbols for flat space in polar

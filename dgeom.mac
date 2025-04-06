@@ -132,15 +132,17 @@ run_checks():=block(
 /**********************/
 /*  set_ctensor_vars  */
 /**********************/
-set_ctensor_vars():=block([],
+set_ctensor_vars(trn):=block([],
   run_checks(),
   cframe_flag:false,
   dim:length(cords_ot),
   ctlist:makelist(cords_tr[i],i,dim),
   ctlist:append(ctlist,[cords_ot]),
-  dg_metric(init),
   ct_coordsys(ctlist),
-  /* ct_coordsys constructs lg but doesn't simplify it */
+  /* ct_coodsys calls cmetric() which is equivalent to our dg_metric(init),
+     so we have to call dg_metric() again if trn='cnvrt to get the correct
+     metric. */
+  dg_metric(trn),
   lg:trigsimp(lg),
   display(ctlist)
 );

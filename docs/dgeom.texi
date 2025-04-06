@@ -432,16 +432,20 @@ metric computed for this command to work.
 @end deffn
 
 @anchor{set_ctensor_vars}
-@deffn {Function} set_ctensor_vars ( )
-This command is used to set up the calculation of the Christoffel
-symbols using the @code{ctensor} package using the coordinates and
-transformation functions from the @code{dgeom} package. The Christoffel
-symbols are the connections in the coordinate frame, as opposed to the
-frame-field connection coefficients computed using the function
-@code{dg_ffc}. The function @code{set_ctensor_vars} sets the following
-@code{ctensor} variables: @code{cframe_flage:false}, @code{dim}, and
-calls @code{ct_coordsys()}. The @code{ctensor} package must be loaded
-for this command to work.
+@deffn {Function} set_ctensor_vars ([init,cnvrt])
+This function takes as argument @var{init} or @var{cnvrt}. The input and
+output coordinates and the transformation functions must be defined
+beforehand for this function to work. See the function @ref{dg_cords}.
+See @ref{dg_metric} for a description of the options @var{init} and
+@var{cnvrt}.  This command is used to set up the calculation of the
+Christoffel symbols using the @code{ctensor} package using the
+coordinates and transformation functions from the @code{dgeom}
+package. The Christoffel symbols are the connections in the coordinate
+frame, as opposed to the frame-field connection coefficients computed
+using the function @code{dg_ffc}. The function @code{set_ctensor_vars}
+sets the following @code{ctensor} variables: @code{cframe_flage:false},
+@code{dim}, and calls @code{ct_coordsys()}. The @code{ctensor} package
+must be loaded for this command to work.
 @end deffn
 
 Example: Compute the Christoffel symbols for flat space in polar

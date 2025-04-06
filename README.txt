@@ -334,16 +334,20 @@ metric to new coordinates that mimic the Schwarzschild metric.
      ‘g’.  The ‘ctensor’ package must be loaded and the metric computed
      for this command to work.
 
- -- Function: set_ctensor_vars ( )
-     This command is used to set up the calculation of the Christoffel
-     symbols using the ‘ctensor’ package using the coordinates and
-     transformation functions from the ‘dgeom’ package.  The Christoffel
-     symbols are the connections in the coordinate frame, as opposed to
-     the frame-field connection coefficients computed using the function
-     ‘dg_ffc’.  The function ‘set_ctensor_vars’ sets the following
-     ‘ctensor’ variables: ‘cframe_flage:false’, ‘dim’, and calls
-     ‘ct_coordsys()’.  The ‘ctensor’ package must be loaded for this
-     command to work.
+ -- Function: set_ctensor_vars ([init,cnvrt])
+     This function takes as argument <init> or <cnvrt>.  The input and
+     output coordinates and the transformation functions must be defined
+     beforehand for this function to work.  See the function *note
+     dg_cords::.  See *note dg_metric:: for a description of the options
+     <init> and <cnvrt>.  This command is used to set up the calculation
+     of the Christoffel symbols using the ‘ctensor’ package using the
+     coordinates and transformation functions from the ‘dgeom’ package.
+     The Christoffel symbols are the connections in the coordinate
+     frame, as opposed to the frame-field connection coefficients
+     computed using the function ‘dg_ffc’.  The function
+     ‘set_ctensor_vars’ sets the following ‘ctensor’ variables:
+     ‘cframe_flage:false’, ‘dim’, and calls ‘ct_coordsys()’.  The
+     ‘ctensor’ package must be loaded for this command to work.
 
    Example: Compute the Christoffel symbols for flat space in polar
 coordinates.
