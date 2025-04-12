@@ -29,6 +29,7 @@ cords_ot:0;
 lg:0; /* for compatibility with ctensor */
 g:0;
 dim:0;
+declare_index_properties(mcs,[postsubscript,postsubscript,postsuperscript]);
 
 /*******************/
 /* tellsimp rules  */
