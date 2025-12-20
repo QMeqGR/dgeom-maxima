@@ -106,15 +106,15 @@ and so forth.  See the function ‘set_ctensor_vars’ for more information.
  -- Function: dg_derivs ( )
      This function takes no arguments, but the input and output
      coordinates and the transformation functions must be defined
-     beforehand for this function to work.  See the function *note
-     dg_cords::.  The function ‘dg_derivs’ computes the partial
-     derivative functions of the output coordinates in terms of the
-     input coordinates using the transformation functions.  For example,
-     for input coordinates ‘[x,y,z]’, and output coordinates
-     ‘[r,phi,z]’, and using the predefined cylindrical coordinate
-     transformation ‘xyz_to_cyl’, one obtains the partial derivatives
-     with respect to <(x,y,z)> in terms of the partial derivatives with
-     respect to the variables <(r,phi,z)>.
+     beforehand for this function to work.  See the function dg_cords.
+     The function ‘dg_derivs’ computes the partial derivative functions
+     of the output coordinates in terms of the input coordinates using
+     the transformation functions.  For example, for input coordinates
+     ‘[x,y,z]’, and output coordinates ‘[r,phi,z]’, and using the
+     predefined cylindrical coordinate transformation ‘xyz_to_cyl’, one
+     obtains the partial derivatives with respect to <(x,y,z)> in terms
+     of the partial derivatives with respect to the variables
+     <(r,phi,z)>.
 
      The resulting partial derivative functions are named according to
      the input variable names, in the following notation.  The partial
@@ -134,18 +134,18 @@ and so forth.  See the function ‘set_ctensor_vars’ for more information.
  -- Function: dg_metric ([init,cnvrt])
      This function takes as argument <init> or <cnvrt>.  The input and
      output coordinates and the transformation functions must be defined
-     beforehand for this function to work.  See the function *note
-     dg_cords::.  The function ‘dg_metric’ computes the metric in terms
-     of the output coordinates ‘cords_ot’.  If ‘dg_metric’ is called
-     with the argument <init> then the function assumes the input metric
-     is diagonal with unit entries, although ‘dg_minkowski’ may be set
-     to -1 for the time component.  If ‘dg_metric’ is called with the
-     argument <cnvrt>, then the function assumes there is an initial
-     metric given in the matrix ‘lg_in’ with the ordering of the entries
-     in accordance with the ordering of the variables in ‘cords_in’.
-     The value of ‘dg_minkowski’ is ignored for this case.  ‘dg_metric’
-     returns the line element <ds^{2}> in the variable ‘ds2’, and the
-     metric in the matrix ‘g’.
+     beforehand for this function to work.  See the function dg_cords.
+     The function ‘dg_metric’ computes the metric in terms of the output
+     coordinates ‘cords_ot’.  If ‘dg_metric’ is called with the argument
+     <init> then the function assumes the input metric is diagonal with
+     unit entries, although ‘dg_minkowski’ may be set to -1 for the time
+     component.  If ‘dg_metric’ is called with the argument <cnvrt>,
+     then the function assumes there is an initial metric given in the
+     matrix ‘lg_in’ with the ordering of the entries in accordance with
+     the ordering of the variables in ‘cords_in’.  The value of
+     ‘dg_minkowski’ is ignored for this case.  ‘dg_metric’ returns the
+     line element <ds^{2}> in the variable ‘ds2’, and the metric in the
+     matrix ‘g’.
 
      (%i1) dg_cords(xyz_to_spher);
      (%o1)                                done
@@ -188,9 +188,9 @@ metric to new coordinates that mimic the Schwarzschild metric.
  -- Function: dg_grad ( )
      This function takes no arguments.  The input and output coordinates
      and the transformation functions must be defined beforehand for
-     this function to work.  See the function *note dg_cords::.  The
-     function ‘dg_grad’ returns an expression for the gradient of a
-     function ‘F’ in the output coordinates ‘cord_ot’.
+     this function to work.  See the function dg_cords.  The function
+     ‘dg_grad’ returns an expression for the gradient of a function ‘F’
+     in the output coordinates ‘cord_ot’.
 
      (%i1) dg_cords(xyz_to_spher);
      (%o1)                                done
@@ -204,7 +204,7 @@ metric to new coordinates that mimic the Schwarzschild metric.
  -- Function: dg_diverg ( )
      This function takes no arguments.  The input and output coordinates
      and the transformation functions must be defined beforehand for
-     this function to work.  See the function *note dg_cords::.
+     this function to work.  See the function dg_cords.
 
      The function ‘dg_diverg’ returns a function ‘dg_div(W)’ that takes
      arument ‘W’ and returns the divergence in terms of the output
@@ -229,7 +229,7 @@ metric to new coordinates that mimic the Schwarzschild metric.
  -- Function: dg_laplac ( )
      This function takes no arguments.  The input and output coordinates
      and the transformation functions must be defined beforehand for
-     this function to work.  See the function *note dg_cords::.
+     this function to work.  See the function dg_cords.
 
      The function ‘dg_laplac’ returns a function ‘dg_lap(W)’ that takes
      arument ‘W’ and returns the Laplacian in terms of the output
@@ -259,8 +259,7 @@ metric to new coordinates that mimic the Schwarzschild metric.
  -- Function: dg_ffc (<[constraint equations]>)
      Compute the frame field connections.  The input and output
      coordinates and the transformation functions must be defined
-     beforehand for this function to work.  See the function *note
-     dg_cords::.
+     beforehand for this function to work.  See the function dg_cords.
 
      The function ‘dg_ffc’ computes the attitude matrix ‘A’, the
      connection coefficients in the matrix ‘Omega’, and the dual 1-forms
@@ -337,17 +336,17 @@ metric to new coordinates that mimic the Schwarzschild metric.
  -- Function: set_ctensor_vars ([init,cnvrt])
      This function takes as argument <init> or <cnvrt>.  The input and
      output coordinates and the transformation functions must be defined
-     beforehand for this function to work.  See the function *note
-     dg_cords::.  See *note dg_metric:: for a description of the options
-     <init> and <cnvrt>.  This command is used to set up the calculation
-     of the Christoffel symbols using the ‘ctensor’ package using the
-     coordinates and transformation functions from the ‘dgeom’ package.
-     The Christoffel symbols are the connections in the coordinate
-     frame, as opposed to the frame-field connection coefficients
-     computed using the function ‘dg_ffc’.  The function
-     ‘set_ctensor_vars’ sets the following ‘ctensor’ variables:
-     ‘cframe_flage:false’, ‘dim’, and calls ‘ct_coordsys()’.  The
-     ‘ctensor’ package must be loaded for this command to work.
+     beforehand for this function to work.  See the function dg_cords.
+     See dg_metric for a description of the options <init> and <cnvrt>.
+     This command is used to set up the calculation of the Christoffel
+     symbols using the ‘ctensor’ package using the coordinates and
+     transformation functions from the ‘dgeom’ package.  The Christoffel
+     symbols are the connections in the coordinate frame, as opposed to
+     the frame-field connection coefficients computed using the function
+     ‘dg_ffc’.  The function ‘set_ctensor_vars’ sets the following
+     ‘ctensor’ variables: ‘cframe_flage:false’, ‘dim’, and calls
+     ‘ct_coordsys()’.  The ‘ctensor’ package must be loaded for this
+     command to work.
 
    Example: Compute the Christoffel symbols for flat space in polar
 coordinates.
@@ -393,15 +392,15 @@ Appendix A Function and Variable index
 * dg_grad:                               Functions and Variables for dgeom.
                                                               (line 187)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 297)
+                                                              (line 296)
 * dg_laplac:                             Functions and Variables for dgeom.
                                                               (line 228)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 133)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 328)
+                                                              (line 327)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 336)
+                                                              (line 335)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 101)
 

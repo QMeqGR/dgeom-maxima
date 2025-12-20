@@ -1,4 +1,4 @@
-This is dgeom.info, produced by makeinfo version 7.1.1 from dgeom.texi.
+This is dgeom.info, produced by makeinfo version 7.2 from dgeom.texi.
 
 INFO-DIR-SECTION Mathematics/Maxima
 START-INFO-DIR-ENTRY
@@ -9,7 +9,6 @@ END-INFO-DIR-ENTRY
 
 * Introduction to package dgeom::
 * Functions and Variables for dgeom::
-
 
 File: dgeom.info,  Node: Top,  Next: Introduction to package dgeom,  Prev: (dir),  Up: (dir)
 
@@ -25,7 +24,6 @@ Package dgeom
 
 * Introduction to package dgeom::
 * Functions and Variables for dgeom::
-
 
 1 Package dgeom
 ***************
@@ -453,24 +451,23 @@ Appendix A Function and Variable index
 * dg_minkowski:                          Functions and Variables for dgeom.
                                                                (line 17)
 
-
 
 Tag Table:
-Node: Top285
-Node: Introduction to package dgeom633
-Node: Functions and Variables for dgeom3048
-Ref: dg_cords4135
-Ref: show_cords5294
-Ref: dg_derivs5480
-Ref: dg_metric6922
-Ref: dg_grad9496
-Ref: dg_diverg10293
-Ref: dg_laplac11437
-Ref: dg_ffc12860
-Ref: dg_kill14683
-Ref: get_ctensor_vars15974
-Ref: set_ctensor_vars16423
-Node: Function and Variable Index18434
+Node: Top282
+Node: Introduction to package dgeom629
+Node: Functions and Variables for dgeom3044
+Ref: dg_cords4131
+Ref: show_cords5290
+Ref: dg_derivs5476
+Ref: dg_metric6918
+Ref: dg_grad9492
+Ref: dg_diverg10289
+Ref: dg_laplac11433
+Ref: dg_ffc12856
+Ref: dg_kill14679
+Ref: get_ctensor_vars15970
+Ref: set_ctensor_vars16419
+Node: Function and Variable Index18430
 
 End Tag Table
 
