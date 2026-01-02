@@ -45,6 +45,9 @@
          ("dg_derivs"
           "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
           "index-dg_005fderivs")
+         ("dg_curl"
+          "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
+          "index-dg_005fcurl")
          ("dg_cords"
           "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
           "index-dg_005fcords"))))

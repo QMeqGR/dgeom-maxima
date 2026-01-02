@@ -16,6 +16,7 @@ if get('dgeom,'dgeom_version)#false then error("Package dgeom already loaded!")$
 put('dgeom,'0.1,'dgeom_version)$
 
 load("dgeom.lisp") $
+load("dg_defs.mac")$
 /* load the documentation */
 load("dgeom-index.lisp")$
 load("dgeom-index-html.lisp")$
@@ -332,6 +333,31 @@ dg_metric(trn):=block([N],
 
   display( ds2 )
 )$
+
+/****************/
+/* dg_curl()    */
+/****************/
+/* this code uses the 'scale factor' which is h_i = sqrt(g[i,i]).
+You have to transform the coordinates before differentiating, and also
+the whole component of the curl afterwards. This is shown in both factors
+of h_i below in curcomp. */
+curcomp(i):=block([tmp],
+  tmp: -sum( sum(lc(i,j,k)*diff( sqrt(g[j,j])*W[j], args(tolist)[k] ),j,1,N), k,1,N),
+  sqrt(g[i,i])*tmp/scrootg
+  )$
+/* Curl in the new coordinates */
+/* Need to call dg_metric(); first for this to work */
+dg_curl():=block([W,N,tolist:cords_ot,tmp],
+  dg_metric(init),
+  N:length(tolist),
+  if N#3 then return(print("Curl limited to d=3")),
+  for i: 1 thru N do ( W[i]: concat(W_, args(tolist)[i]),
+    depends(W[i],tolist)),
+  Wlist: makelist( W[i],i,N),
+  tmp: [curcomp(1),curcomp(2),curcomp(3)],
+  tmp: expand( tmp ),
+  define( funmake(dg_cur,Wlist), tmp )
+);
 
 /****************/
 /* dg_diverg()  */

@@ -1,0 +1,10 @@
+lc(i,j,k):= block(
+         if i=1 and j=2 and k=3 then return(1)
+    else if i=1 and j=3 and k=2 then return(-1)
+    else if i=2 and j=3 and k=1 then return(1)
+    else if i=2 and j=1 and k=3 then return(-1)
+    else if i=3 and j=1 and k=2 then return(1)
+    else if i=3 and j=2 and k=1 then return(-1)
+    else return(0)
+    )$
+
