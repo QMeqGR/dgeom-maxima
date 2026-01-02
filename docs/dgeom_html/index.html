@@ -23,6 +23,7 @@ a.copiable-link {visibility: hidden; text-decoration: none; line-height: 0em}
 div.example {margin-left: 3.2em}
 span:hover a.copiable-link {visibility: visible}
 strong.def-name {font-family: monospace; font-weight: bold; font-size: larger}
+ul.mark-bullet {list-style-type: disc}
 -->
 </style>
 
@@ -61,15 +62,33 @@ Next: <a href="#Functions-and-Variables-for-dgeom" accesskey="n" rel="next">Func
 </div>
 <h3 class="section" id="Introduction-to-package-dgeom-1"><span>1.1 Introduction to package dgeom<a class="copiable-link" href="#Introduction-to-package-dgeom-1"> &para;</a></span></h3>
 
+<p><em class="emph">Note: This package does not contain support for differential
+forms. The &rsquo;cartan&rsquo; package in core Maxima provides some basic support
+for forms. This package should be considered an add-on to the &rsquo;ctensor&rsquo;
+package in core Maxima, providing further functionality for some tensor
+calculations, as well as some standard differential geometry tools.</em>
+</p>
+<p>&nbsp;</p>
 <p>The <code class="code">dgeom</code> package provides some basic functions useful for
 exploring metrics and manifolds. In particular coordinate
 transformations that allow one to define embedded manifolds in flat
-space. But the package provides more general tools for computing metrics
-after a coordinate transformation. This package was designed to be
-compatible with the <code class="code">ctensor</code> package included with Maxima.
-The <code class="code">dgeom</code> package computes the frame field connections for an
-embedded surface using frames defined by the attitude matrix.
+space. The package also provides more general tools for computing
+metrics after a coordinate transformation. This package was designed to
+be compatible with the <code class="code">ctensor</code> package included with core Maxima.
 </p>
+<p>Major capabilities of <code class="code">dgeom</code> include:
+</p><ul class="itemize mark-bullet">
+<li>The <code class="code">dgeom</code> package computes the frame field connections for an
+embedded surface using frames defined by the attitude matrix. See the
+function <code class="code">dg_ffc()</code>.
+</li><li>Computation a new metric from an old metric where the old metric is not
+<em class="math">\delta</em> (identity) or <em class="math">\eta</em> (Minkowski). This is especially
+useful for stringing together several coordinate transformations when
+studying a metric.
+</li><li>Computation of the Killing vector equations from the metric using
+<code class="code">dg_kill()</code>.
+</li></ul>
+
 <p>The basic use of the package begins by defining the coordinates in the
 variables <code class="code">cords_in</code>, <code class="code">cords_tr</code>, and <code class="code">cords_ot</code>. This
 can be done manually or by using the built-in function <code class="code">dg_cords</code>.
@@ -78,18 +97,11 @@ can be done manually or by using the built-in function <code class="code">dg_cor
 the available coordinate systems and then choose one, or set up the
 coordinates by hand. Second, call <code class="code">dg_metric()</code> to compute the
 metric in the new coordinates.  <code class="code">dgeom</code> can calculate the
-divergence, gradient, and Laplacian in any coordinate system you can
-define. It also defines them as functions you can then call if you want
-to use them in a computation.  These computations are available in the
-functions <code class="code">dg_diverg()</code>, <code class="code">dg_grad()</code>, and <code class="code">dg_laplac()</code>.
-</p>
-<p>If the frame field connections are desired, call <code class="code">dg_ffc()</code>. Note
-that <code class="code">dgeom</code> can also compute a new metric from an old metric where
-the old metric is not <em class="math">\delta</em> (identity) or <em class="math">\eta</em>
-(Minkowski).
-</p>
-<p>The <code class="code">dgeom</code> package can also compute the Killing vector equations
-from the metric.
+divergence, gradient, curl (<code class="code">d=3</code> only), and Laplacian in any
+coordinate system you can define. It also defines them as functions you
+can then call if you want to use them in a computation.  These
+computations are available in the functions <code class="code">dg_diverg()</code>,
+<code class="code">dg_grad()</code>, <code class="code">dg_curl()</code>, and <code class="code">dg_laplac()</code>.
 </p>
 <p>Note: It helps to simplify the resulting formulas by restricting
 coordinate ranges. For example, if studying the sphere one should use
@@ -102,6 +114,10 @@ package. Coordinates defined in <code class="code">dgeom</code> can be used for
 computations in the <code class="code">ctensor</code> package such as the Christoffel
 symbols, the Riemann tensor and so forth. See the function
 <code class="code">set_ctensor_vars</code> for more information.
+</p>
+<p>version: 0.1
+</p>
+<p>Eric Majzoub, Jan 2026
 </p>
 <hr>
 </div>
@@ -294,7 +310,8 @@ function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords<
 <dt class="deffn def-line" id="index-dg_005fcurl"><span class="category-def">Function: </span><span><strong class="def-name">dg_curl</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005fcurl"> &para;</a></span></dt>
 <dd><p>This function takes no arguments. The input and output coordinates and
 the transformation functions must be defined beforehand for this
-function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
+function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>. The curl function is
+limited to <code class="code">d=3</code> dimensions.
 </p>
 <p>The function <code class="code">dg_curl</code> returns a function <code class="code">dg_cur(W)</code> that
 takes vector argument <code class="code">W</code> and returns the curl in terms of the

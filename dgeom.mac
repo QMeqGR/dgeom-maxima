@@ -9,7 +9,8 @@
 ;;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                
 ;;  GNU General Public License for more details.         
 
-;; DESCRIPTION package for Maxima.
+;;  dgeom package for Maxima.
+;;  Eric Majzoub, 2026
 */
 
 if get('dgeom,'dgeom_version)#false then error("Package dgeom already loaded!")$

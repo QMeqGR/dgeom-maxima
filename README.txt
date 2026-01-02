@@ -7,14 +7,31 @@ Package dgeom
 1.1 Introduction to package dgeom
 =================================
 
-The ‘dgeom’ package provides some basic functions useful for exploring
-metrics and manifolds.  In particular coordinate transformations that
-allow one to define embedded manifolds in flat space.  But the package
-provides more general tools for computing metrics after a coordinate
-transformation.  This package was designed to be compatible with the
-‘ctensor’ package included with Maxima.  The ‘dgeom’ package computes
-the frame field connections for an embedded surface using frames defined
-by the attitude matrix.
+_Note: This package does not contain support for differential forms.
+The 'cartan' package in core Maxima provides some basic support for
+forms.  This package should be considered an add-on to the 'ctensor'
+package in core Maxima, providing further functionality for some tensor
+calculations, as well as some standard differential geometry tools._
+
+    
+
+   The ‘dgeom’ package provides some basic functions useful for
+exploring metrics and manifolds.  In particular coordinate
+transformations that allow one to define embedded manifolds in flat
+space.  The package also provides more general tools for computing
+metrics after a coordinate transformation.  This package was designed to
+be compatible with the ‘ctensor’ package included with core Maxima.
+
+Major capabilities of ‘dgeom’ include:
+   • The ‘dgeom’ package computes the frame field connections for an
+     embedded surface using frames defined by the attitude matrix.  See
+     the function ‘dg_ffc()’.
+   • Computation a new metric from an old metric where the old metric is
+     not \delta (identity) or \eta (Minkowski).  This is especially
+     useful for stringing together several coordinate transformations
+     when studying a metric.
+   • Computation of the Killing vector equations from the metric using
+     ‘dg_kill()’.
 
    The basic use of the package begins by defining the coordinates in
 the variables ‘cords_in’, ‘cords_tr’, and ‘cords_ot’.  This can be done
@@ -24,17 +41,10 @@ manually or by using the built-in function ‘dg_cords’.
 the available coordinate systems and then choose one, or set up the
 coordinates by hand.  Second, call ‘dg_metric()’ to compute the metric
 in the new coordinates.  ‘dgeom’ can calculate the divergence, gradient,
-and Laplacian in any coordinate system you can define.  It also defines
-them as functions you can then call if you want to use them in a
-computation.  These computations are available in the functions
-‘dg_diverg()’, ‘dg_grad()’, and ‘dg_laplac()’.
-
-   If the frame field connections are desired, call ‘dg_ffc()’.  Note
-that ‘dgeom’ can also compute a new metric from an old metric where the
-old metric is not \delta (identity) or \eta (Minkowski).
-
-   The ‘dgeom’ package can also compute the Killing vector equations
-from the metric.
+curl (‘d=3’ only), and Laplacian in any coordinate system you can
+define.  It also defines them as functions you can then call if you want
+to use them in a computation.  These computations are available in the
+functions ‘dg_diverg()’, ‘dg_grad()’, ‘dg_curl()’, and ‘dg_laplac()’.
 
    Note: It helps to simplify the resulting formulas by restricting
 coordinate ranges.  For example, if studying the sphere one should use
@@ -46,6 +56,10 @@ one should consider setting the ranges manually.
 Coordinates defined in ‘dgeom’ can be used for computations in the
 ‘ctensor’ package such as the Christoffel symbols, the Riemann tensor
 and so forth.  See the function ‘set_ctensor_vars’ for more information.
+
+version: 0.1
+
+Eric Majzoub, Jan 2026
 
 1.2 Functions and Variables for dgeom
 =====================================
@@ -204,7 +218,8 @@ metric to new coordinates that mimic the Schwarzschild metric.
  -- Function: dg_curl ( )
      This function takes no arguments.  The input and output coordinates
      and the transformation functions must be defined beforehand for
-     this function to work.  See the function dg_cords.
+     this function to work.  See the function dg_cords.  The curl
+     function is limited to ‘d=3’ dimensions.
 
      The function ‘dg_curl’ returns a function ‘dg_cur(W)’ that takes
      vector argument ‘W’ and returns the curl in terms of the output
@@ -422,38 +437,38 @@ Appendix A Function and Variable index
 * Menu:
 
 * dg_cords:                              Functions and Variables for dgeom.
-                                                              (line  72)
+                                                              (line  86)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 203)
+                                                              (line 217)
 * dg_derivs:                             Functions and Variables for dgeom.
-                                                              (line 105)
+                                                              (line 119)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 244)
+                                                              (line 259)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 299)
+                                                              (line 314)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 187)
+                                                              (line 201)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 337)
+                                                              (line 352)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 269)
+                                                              (line 284)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 133)
+                                                              (line 147)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 368)
+                                                              (line 383)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 376)
+                                                              (line 391)
 * show_cords:                            Functions and Variables for dgeom.
-                                                              (line 101)
+                                                              (line 115)
 
 * Menu:
 
 * cord_in:                               Functions and Variables for dgeom.
-                                                               (line 52)
+                                                               (line 66)
 * cord_ot:                               Functions and Variables for dgeom.
-                                                               (line 55)
+                                                               (line 69)
 * cord_tr:                               Functions and Variables for dgeom.
-                                                               (line 58)
+                                                               (line 72)
 * dg_minkowski:                          Functions and Variables for dgeom.
-                                                               (line 63)
+                                                               (line 77)
 
