@@ -307,11 +307,14 @@ function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords<
 </pre></div></div>
 
 <a class="anchor" id="dg_005fcurl"></a><dl class="first-deffn def-block">
-<dt class="deffn def-line" id="index-dg_005fcurl"><span class="category-def">Function: </span><span><strong class="def-name">dg_curl</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005fcurl"> &para;</a></span></dt>
+<dt class="deffn def-line" id="index-dg_005fcurl"><span class="category-def">Function: </span><span><strong class="def-name">dg_curl</strong> <var class="def-var-arguments">(<code class="code">[1,2]</code>)</var><a class="copiable-link" href="#index-dg_005fcurl"> &para;</a></span></dt>
 <dd><p>This function takes no arguments. The input and output coordinates and
 the transformation functions must be defined beforehand for this
 function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>. The curl function is
-limited to <code class="code">d=3</code> dimensions.
+limited to <code class="code">d=3</code> dimensions. If the argument to <code class="code">dg_curl</code> is
+<code class="code">1</code>, then the curl is computed in the physical basis (found in most
+intro textbooks).  If the argument is <code class="code">2</code> the curl is computed in
+the coordinate basis using the metric tensor.
 </p>
 <p>The function <code class="code">dg_curl</code> returns a function <code class="code">dg_cur(W)</code> that
 takes vector argument <code class="code">W</code> and returns the curl in terms of the
@@ -321,25 +324,27 @@ output coordinates <code class="code">cord_ot</code>.
 <div class="example">
 <div class="group"><pre class="example-preformatted">(%i1) dg_cords(cart3d); 
 (%o1)                                done
-(%i2) dg_curl(); 
+(%i2) dg_curl(1); 
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
                                 2         2         2
                        ds2 = del (z) + del (y) + del (x)
 
+curl in physical basis 
                                  dW_z   dW_y  dW_x   dW_z  dW_y   dW_x
 (%o2)  dg_cur(W_x, W_y, W_z) := [---- - ----, ---- - ----, ---- - ----]
                                   dy     dz    dz     dx    dx     dy
 (%i3) dg_cords(xyz_to_cyl); 
 (%o3)                                done
-(%i4) dg_curl(); 
+(%i4) dg_curl(1); 
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
                              2         2       2    2
                     ds2 = del (z) + del (r) + r  del (phi)
 
+curl in physical basis 
                                   dW_z
                                   ----
                                   dphi   dW_phi  dW_r   dW_z
@@ -353,10 +358,14 @@ output coordinates <code class="code">cord_ot</code>.
 </pre></div></div>
 
 <a class="anchor" id="dg_005fdiverg"></a><dl class="first-deffn def-block">
-<dt class="deffn def-line" id="index-dg_005fdiverg"><span class="category-def">Function: </span><span><strong class="def-name">dg_diverg</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005fdiverg"> &para;</a></span></dt>
+<dt class="deffn def-line" id="index-dg_005fdiverg"><span class="category-def">Function: </span><span><strong class="def-name">dg_diverg</strong> <var class="def-var-arguments">(<code class="code">[1,2]</code>)</var><a class="copiable-link" href="#index-dg_005fdiverg"> &para;</a></span></dt>
 <dd><p>This function takes no arguments. The input and output coordinates and
 the transformation functions must be defined beforehand for this
-function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
+function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>. If the argument to
+<code class="code">dg_diverg</code> is <code class="code">1</code>, then the divergence is computed in the
+physical basis (found in most intro textbooks).  If the argument is
+<code class="code">2</code> the divergence is computed in the coordinate basis using the
+metric tensor.
 </p>
 <p>The function <code class="code">dg_diverg</code> returns a function <code class="code">dg_div(W)</code> that
 takes argument <code class="code">W</code> and returns the divergence in terms of the
@@ -375,10 +384,13 @@ called before calling <code class="code">dg_diverg</code>.
                     ds2 = del (z) + del (r) + r  del (phi)
 
 (%o2)                                done
-(%i3) dg_diverg(); 
-                                        W_r   dW_z   dW_r   dW_phi
-(%o3)        dg_div(W_r, W_phi, W_z) := --- + ---- + ---- + ------
-                                         r     dz     dr     dphi
+(%i3) dg_diverg(1); 
+divergence in physical basis 
+                                              dW_phi
+                                              ------
+                                        W_r    dphi    dW_z   dW_r
+(%o3)        dg_div(W_r, W_phi, W_z) := --- + ------ + ---- + ----
+                                         r      r       dz     dr
 </pre></div></div>
 
 

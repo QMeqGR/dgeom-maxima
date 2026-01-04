@@ -338,24 +338,43 @@ dg_metric(trn):=block([N],
 /****************/
 /* dg_curl()    */
 /****************/
-/* this code uses the 'scale factor' which is h_i = sqrt(g[i,i]).
-You have to transform the coordinates before differentiating, and also
-the whole component of the curl afterwards. This is shown in both factors
-of h_i below in curcomp. */
-curcomp(i):=block([tmp],
-  tmp: -sum( sum(lc(i,j,k)*diff( sqrt(g[j,j])*W[j], args(tolist)[k] ),j,1,N), k,1,N),
-  sqrt(g[i,i])*tmp/scrootg
-  )$
+/* this code computes the curl two different ways. (1) "physical
+basis", the way vector calc textbooks do it. the 'scale factor' which
+is h_i = sqrt(g[i,i]).  You have to transform the coordinates before
+differentiating, and also the whole component of the curl
+afterwards. This is shown in both factors of h_i below in curcomp.
+(2) the "coordinate basis" using tensors */
+
+curcomp(i):=block([tmp], tmp: -sum( sum(lc(i,j,k)*diff(
+sqrt(g[j,j])*W[j], args(tolist)[k] ),j,1,N), k,1,N),
+sqrt(g[i,i])*tmp/scrootg )$
+
+cont2cov(k):=sum(g[k,l]*W[l],l,1,N) $
+covdiff(j,k):=diff(W[j],args(tolist)[k])-sum(mcs[i,j,k]*cont2cov(k),k,1,N) $
+curcomp2(i):=block(
+  sum( sum( lc(i,j,k)*covdiff(j,k) ,k,1,N) /scrootg ,j,1,N)
+)$
+
 /* Curl in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
-dg_curl():=block([W,N,tolist:cords_ot,tmp],
+dg_curl(ff):=block([W,N,tolist:cords_ot,tmp],
+    if ff#1 and ff#2 then return(print("(1) physical basis or (2) coordinate basis")),
   dg_metric(init),
   N:length(tolist),
   if N#3 then return(print("Curl limited to d=3")),
   for i: 1 thru N do ( W[i]: concat(W_, args(tolist)[i]),
     depends(W[i],tolist)),
   Wlist: makelist( W[i],i,N),
-  tmp: [curcomp(1),curcomp(2),curcomp(3)],
+  if ff=1 then block(
+    tmp: [curcomp(1),curcomp(2),curcomp(3)]
+    )
+  else if ff=2 then block(
+    if get('ctensor,'version)=false then load(ctensor),
+    set_ctensor_vars(init), christof(false),
+    tmp: -[curcomp2(1),curcomp2(2),curcomp2(3)]
+    ),
+  if ff=1 then print("curl in physical basis"),
+  if ff=2 then print("curl in coordinate basis"),
   tmp: expand( tmp ),
   define( funmake(dg_cur,Wlist), tmp )
 );
@@ -365,15 +384,18 @@ dg_curl():=block([W,N,tolist:cords_ot,tmp],
 /****************/
 /* Divergence in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
-dg_diverg():=block([W,N,tolist:cords_ot,tmp],
+dg_diverg(ff):=block([W,N,tolist:cords_ot,tmp],
+  if ff=1 then print("divergence in physical basis"),
+  if ff=2 then print("divergence in coordinate basis"),
+  if ff#1 and ff#2 then return(print("(1) physical basis or (2) coordinate basis")),
   if scrootg=0 then dg_metric(init),
   N:length(tolist),
   for i: 1 thru N do ( W[i]: concat(W_, args(tolist)[i]),
     depends(W[i],tolist) ),
   Wlist: makelist( W[i],i,N),
-  tmp: sum( diff(W[i],args(tolist)[i]) +
-    diff(scrootg, args(tolist)[i]) / scrootg *W[i],i,1,N ),
-  define( funmake(dg_div,Wlist), tmp )
+  if ff=1 then tmp: sum( diff( scrootg* W[i]/sqrt(g[i,i]),args(tolist)[i]), i,1,N)/scrootg
+  else if ff=2 then tmp: sum( diff( scrootg* W[i],args(tolist)[i]), i,1,N)/scrootg,
+  define( funmake(dg_div,Wlist), expand(tmp) )
 );
 
 

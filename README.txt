@@ -215,11 +215,14 @@ metric to new coordinates that mimic the Schwarzschild metric.
      (%o2)         dg_gra(F) := ------------ + -------------- + -- e_r
                                 r sin(theta)         r          dr
 
- -- Function: dg_curl ( )
+ -- Function: dg_curl ([1,2])
      This function takes no arguments.  The input and output coordinates
      and the transformation functions must be defined beforehand for
      this function to work.  See the function dg_cords.  The curl
-     function is limited to ‘d=3’ dimensions.
+     function is limited to ‘d=3’ dimensions.  If the argument to
+     ‘dg_curl’ is ‘1’, then the curl is computed in the physical basis
+     (found in most intro textbooks).  If the argument is ‘2’ the curl
+     is computed in the coordinate basis using the metric tensor.
 
      The function ‘dg_curl’ returns a function ‘dg_cur(W)’ that takes
      vector argument ‘W’ and returns the curl in terms of the output
@@ -227,25 +230,27 @@ metric to new coordinates that mimic the Schwarzschild metric.
 
      (%i1) dg_cords(cart3d);
      (%o1)                                done
-     (%i2) dg_curl();
+     (%i2) dg_curl(1);
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
 
                                      2         2         2
                             ds2 = del (z) + del (y) + del (x)
 
+     curl in physical basis
                                       dW_z   dW_y  dW_x   dW_z  dW_y   dW_x
      (%o2)  dg_cur(W_x, W_y, W_z) := [---- - ----, ---- - ----, ---- - ----]
                                        dy     dz    dz     dx    dx     dy
      (%i3) dg_cords(xyz_to_cyl);
      (%o3)                                done
-     (%i4) dg_curl();
+     (%i4) dg_curl(1);
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
 
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
 
+     curl in physical basis
                                        dW_z
                                        ----
                                        dphi   dW_phi  dW_r   dW_z
@@ -257,10 +262,14 @@ metric to new coordinates that mimic the Schwarzschild metric.
                                                             - ---- + ----- + ------]
                                                                r       r       dr
 
- -- Function: dg_diverg ( )
+ -- Function: dg_diverg ([1,2])
      This function takes no arguments.  The input and output coordinates
      and the transformation functions must be defined beforehand for
-     this function to work.  See the function dg_cords.
+     this function to work.  See the function dg_cords.  If the argument
+     to ‘dg_diverg’ is ‘1’, then the divergence is computed in the
+     physical basis (found in most intro textbooks).  If the argument is
+     ‘2’ the divergence is computed in the coordinate basis using the
+     metric tensor.
 
      The function ‘dg_diverg’ returns a function ‘dg_div(W)’ that takes
      argument ‘W’ and returns the divergence in terms of the output
@@ -277,10 +286,13 @@ metric to new coordinates that mimic the Schwarzschild metric.
                          ds2 = del (z) + del (r) + r  del (phi)
 
      (%o2)                                done
-     (%i3) dg_diverg();
-                                             W_r   dW_z   dW_r   dW_phi
-     (%o3)        dg_div(W_r, W_phi, W_z) := --- + ---- + ---- + ------
-                                              r     dz     dr     dphi
+     (%i3) dg_diverg(1);
+     divergence in physical basis
+                                                   dW_phi
+                                                   ------
+                                             W_r    dphi    dW_z   dW_r
+     (%o3)        dg_div(W_r, W_phi, W_z) := --- + ------ + ---- + ----
+                                              r      r       dz     dr
 
  -- Function: dg_laplac ( )
      This function takes no arguments.  The input and output coordinates
@@ -443,21 +455,21 @@ Appendix A Function and Variable index
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 119)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 259)
+                                                              (line 264)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 314)
+                                                              (line 326)
 * dg_grad:                               Functions and Variables for dgeom.
                                                               (line 201)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 352)
+                                                              (line 364)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 284)
+                                                              (line 296)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 147)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 383)
+                                                              (line 395)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 391)
+                                                              (line 403)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 115)
 
