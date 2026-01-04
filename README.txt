@@ -213,6 +213,13 @@ metric to new coordinates that mimic the Schwarzschild metric.
      (%i1) dg_cords(xyz_to_spher);
      (%o1)                                done
      (%i2) dg_grad(1);
+                                      2         2         2
+                          ds2_in = del (z) + del (y) + del (x)
+
+                       2    2             2       2    2           2
+                ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
+
+     gradient in physical basis
                                   dF             dF
                                  ---- e_phi    ------ e_theta
                                  dphi          dtheta           dF
@@ -319,14 +326,14 @@ metric to new coordinates that mimic the Schwarzschild metric.
 
      (%o2)                                done
      (%i3) dg_laplac();
-                                      2     2                 2
-                                     d F   d F   2   dF      d F
-                                    (--- + ---) r  + -- r + -----
-                                       2     2       dr         2
-                                     dz    dr               dphi
-     (%o3)             dg_lap(F) := -----------------------------
-                                                  2
-                                                 r
+                                               2
+                                              d F
+                                        dF   -----
+                                        --       2    2     2
+                                        dr   dphi    d F   d F
+     (%o3)                 dg_lap(F) := -- + ----- + --- + ---
+                                        r      2       2     2
+                                              r      dz    dr
 
  -- Function: dg_ffc (<[constraint equations]>)
      Compute the frame field connections.  The input and output
@@ -455,25 +462,25 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line  86)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 221)
+                                                              (line 228)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 119)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 268)
+                                                              (line 275)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 330)
+                                                              (line 337)
 * dg_grad:                               Functions and Variables for dgeom.
                                                               (line 201)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 368)
+                                                              (line 375)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 300)
+                                                              (line 307)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 147)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 399)
+                                                              (line 406)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 407)
+                                                              (line 414)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 115)
 

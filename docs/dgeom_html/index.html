@@ -303,6 +303,13 @@ argument is <code class="code">2</code> the gradient is computed in the coordina
 <div class="group"><pre class="example-preformatted">(%i1) dg_cords(xyz_to_spher); 
 (%o1)                                done
 (%i2) dg_grad(1); 
+                                 2         2         2
+                     ds2_in = del (z) + del (y) + del (x)
+
+                  2    2             2       2    2           2
+           ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
+
+gradient in physical basis 
                              dF             dF
                             ---- e_phi    ------ e_theta
                             dphi          dtheta           dF
@@ -422,14 +429,14 @@ before calling <code class="code">dg_laplac</code>.
 
 (%o2)                                done
 (%i3) dg_laplac(); 
-                                 2     2                 2
-                                d F   d F   2   dF      d F
-                               (--- + ---) r  + -- r + -----
-                                  2     2       dr         2
-                                dz    dr               dphi
-(%o3)             dg_lap(F) := -----------------------------
-                                             2
-                                            r
+                                          2
+                                         d F
+                                   dF   -----
+                                   --       2    2     2
+                                   dr   dphi    d F   d F
+(%o3)                 dg_lap(F) := -- + ----- + --- + ---
+                                   r      2       2     2
+                                         r      dz    dr
 </pre></div></div>
 
 

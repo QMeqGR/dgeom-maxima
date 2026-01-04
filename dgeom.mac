@@ -376,10 +376,10 @@ dg_diverg(ff):=block([W,N,tolist:cords_ot,tmp],
 /* dg_grad() */
 /*************/
 dg_grad(ff):=block([N,F,tolist:cords_ot,tmp],
+  if scrootg=0 then dg_metric(init),
   if ff=1 then print("gradient in physical basis"),
   if ff=2 then print("gradient in coordinate basis"),
   if ff#1 and ff#2 then return(print("(1) physical basis or (2) coordinate basis")),
-  if scrootg=0 then dg_metric(init),
   N:length(tolist),
   depends(F,tolist),
   hats:makelist( concat(e_,cords_ot[i]),i,N),
