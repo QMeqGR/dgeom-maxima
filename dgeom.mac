@@ -264,32 +264,6 @@ dg_derivs():=block([N],
      )
 );
 
-/*************/
-/* dg_grad() */
-/*************/
-/* compute the gradient in new coords  */
-dg_grad():=block([N,F,diffmx,T1,T2,hats],
-  run_checks(),
-  N:length(cords_in),
-  diffmx:makelist( 'diff(F,cords_ot[i]),i,N),
-  hats:makelist( concat(e_,cords_ot[i]),i,N),
-  T1:makelist(0,i,N),
-  dg_jacobian(),
-  Jitn: transpose( row_norm(Jinv) ),
-  for i: 1 thru N do
-    for j:1 thru N do
-      T1[i]:T1[i]+diffmx[j]*Jinv[j,i],
-  T2:makelist(0,i,N),
-  for i:1 thru N do
-    for j:1 thru N do
-      T2[i]:T2[i]+hats[j]*Jitn[i,j],
-  /* display(T1,T2,hats), */
-  gra: sum(T1[i]*T2[i],i,1,N),
-  gra:trigsimp(gra),
-  gra:expand(gra),
-  define( funmake(dg_gra,[F]) , gra )
-);
-
 
 /***************/
 /* dg_metric() */
@@ -398,6 +372,45 @@ dg_diverg(ff):=block([W,N,tolist:cords_ot,tmp],
   define( funmake(dg_div,Wlist), expand(tmp) )
 );
 
+/*************/
+/* dg_grad() */
+/*************/
+dg_grad(ff):=block([N,F,tolist:cords_ot,tmp],
+  if ff=1 then print("gradient in physical basis"),
+  if ff=2 then print("gradient in coordinate basis"),
+  if ff#1 and ff#2 then return(print("(1) physical basis or (2) coordinate basis")),
+  if scrootg=0 then dg_metric(init),
+  N:length(tolist),
+  depends(F,tolist),
+  hats:makelist( concat(e_,cords_ot[i]),i,N),
+  if ff=1 then tmp: sum( diff( F/sqrt(g[i,i]),args(tolist)[i])*hats[i], i,1,N)
+  else if ff=2 then tmp: sum( diff( F,args(tolist)[i])*hats[i], i,1,N),
+  define( funmake(dg_gra,[F]), expand(trigsimp(tmp) ) )
+)$
+/* compute the gradient in new coords  */
+/*
+dg_grad_old():=block([N,F,diffmx,T1,T2,hats],
+  run_checks(),
+  N:length(cords_in),
+  diffmx:makelist( 'diff(F,cords_ot[i]),i,N),
+  hats:makelist( concat(e_,cords_ot[i]),i,N),
+  T1:makelist(0,i,N),
+  dg_jacobian(),
+  Jitn: transpose( row_norm(Jinv) ),
+  for i: 1 thru N do
+    for j:1 thru N do
+      T1[i]:T1[i]+diffmx[j]*Jinv[j,i],
+  T2:makelist(0,i,N),
+  for i:1 thru N do
+    for j:1 thru N do
+      T2[i]:T2[i]+hats[j]*Jitn[i,j],
+  /* display(T1,T2,hats), */
+  gra: sum(T1[i]*T2[i],i,1,N),
+  gra:trigsimp(gra),
+  gra:expand(gra),
+  define( funmake(dg_gra,[F]) , gra )
+);
+*/
 
 /****************/
 /* dg_laplac()  */
@@ -418,7 +431,7 @@ dg_laplac():=block([F,N,tolist:cords_ot,tmp,M],
       L: sum( sum( M[i,j], i, 1, N) , j, 1, N),
       L: trigsimp(L),
       L: ev(L, collectterms, ratsimp),
-  define( funmake(dg_lap,[F]) , L )
+  define( funmake(dg_lap,[F]) , expand(L) )
 );
 
 

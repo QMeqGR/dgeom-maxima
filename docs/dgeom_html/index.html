@@ -287,18 +287,22 @@ to new coordinates that mimic the Schwarzschild metric.
 </pre></div></div>
 
 <a class="anchor" id="dg_005fgrad"></a><dl class="first-deffn def-block">
-<dt class="deffn def-line" id="index-dg_005fgrad"><span class="category-def">Function: </span><span><strong class="def-name">dg_grad</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-dg_005fgrad"> &para;</a></span></dt>
-<dd><p>This function takes no arguments. The input and output coordinates and
+<dt class="deffn def-line" id="index-dg_005fgrad"><span class="category-def">Function: </span><span><strong class="def-name">dg_grad</strong> <var class="def-var-arguments">(<code class="code">[1,2]</code>)</var><a class="copiable-link" href="#index-dg_005fgrad"> &para;</a></span></dt>
+<dd><p>This function takes one argument. The input and output coordinates and
 the transformation functions must be defined beforehand for this
 function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>. The function
 <code class="code">dg_grad</code> returns an expression for the gradient of a function
 <code class="code">F</code> in the output coordinates <code class="code">cord_ot</code>.
+</p>
+<p>If the argument to <code class="code">dg_grad</code> is <code class="code">1</code>, then the gradient is
+computed in the physical basis (found in most intro textbooks).  If the
+argument is <code class="code">2</code> the gradient is computed in the coordinate basis.
 </p></dd></dl>
 
 <div class="example">
 <div class="group"><pre class="example-preformatted">(%i1) dg_cords(xyz_to_spher); 
 (%o1)                                done
-(%i2) dg_grad(); 
+(%i2) dg_grad(1); 
                              dF             dF
                             ---- e_phi    ------ e_theta
                             dphi          dtheta           dF
@@ -308,7 +312,7 @@ function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords<
 
 <a class="anchor" id="dg_005fcurl"></a><dl class="first-deffn def-block">
 <dt class="deffn def-line" id="index-dg_005fcurl"><span class="category-def">Function: </span><span><strong class="def-name">dg_curl</strong> <var class="def-var-arguments">(<code class="code">[1,2]</code>)</var><a class="copiable-link" href="#index-dg_005fcurl"> &para;</a></span></dt>
-<dd><p>This function takes no arguments. The input and output coordinates and
+<dd><p>This function takes one argument. The input and output coordinates and
 the transformation functions must be defined beforehand for this
 function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>. The curl function is
 limited to <code class="code">d=3</code> dimensions. If the argument to <code class="code">dg_curl</code> is
@@ -359,7 +363,7 @@ curl in physical basis
 
 <a class="anchor" id="dg_005fdiverg"></a><dl class="first-deffn def-block">
 <dt class="deffn def-line" id="index-dg_005fdiverg"><span class="category-def">Function: </span><span><strong class="def-name">dg_diverg</strong> <var class="def-var-arguments">(<code class="code">[1,2]</code>)</var><a class="copiable-link" href="#index-dg_005fdiverg"> &para;</a></span></dt>
-<dd><p>This function takes no arguments. The input and output coordinates and
+<dd><p>This function takes one argument. The input and output coordinates and
 the transformation functions must be defined beforehand for this
 function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>. If the argument to
 <code class="code">dg_diverg</code> is <code class="code">1</code>, then the divergence is computed in the

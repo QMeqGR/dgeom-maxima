@@ -271,19 +271,23 @@ to new coordinates that mimic the Schwarzschild metric.
 @end example
 
 @anchor{dg_grad}
-@deffn {Function} dg_grad ( )
-This function takes no arguments. The input and output coordinates and
+@deffn {Function} dg_grad (@code{[1,2]})
+This function takes one argument. The input and output coordinates and
 the transformation functions must be defined beforehand for this
 function to work. See the function @ref{dg_cords}. The function
 @code{dg_grad} returns an expression for the gradient of a function
 @code{F} in the output coordinates @code{cord_ot}.
+
+If the argument to @code{dg_grad} is @code{1}, then the gradient is
+computed in the physical basis (found in most intro textbooks).  If the
+argument is @code{2} the gradient is computed in the coordinate basis.
 @end deffn
 
 @example
 @group
 (%i1) dg_cords(xyz_to_spher); 
 (%o1)                                done
-(%i2) dg_grad(); 
+(%i2) dg_grad(1); 
                              dF             dF
                             ---- e_phi    ------ e_theta
                             dphi          dtheta           dF
@@ -294,7 +298,7 @@ function to work. See the function @ref{dg_cords}. The function
 
 @anchor{dg_curl}
 @deffn {Function} dg_curl (@code{[1,2]})
-This function takes no arguments. The input and output coordinates and
+This function takes one argument. The input and output coordinates and
 the transformation functions must be defined beforehand for this
 function to work. See the function @ref{dg_cords}. The curl function is
 limited to @code{d=3} dimensions. If the argument to @code{dg_curl} is
@@ -347,7 +351,7 @@ curl in physical basis
 
 @anchor{dg_diverg}
 @deffn {Function} dg_diverg (@code{[1,2]})
-This function takes no arguments. The input and output coordinates and
+This function takes one argument. The input and output coordinates and
 the transformation functions must be defined beforehand for this
 function to work. See the function @ref{dg_cords}. If the argument to
 @code{dg_diverg} is @code{1}, then the divergence is computed in the

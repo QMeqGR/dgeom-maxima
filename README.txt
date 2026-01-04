@@ -199,16 +199,20 @@ metric to new coordinates that mimic the Schwarzschild metric.
 
      (%o5)                                done
 
- -- Function: dg_grad ( )
-     This function takes no arguments.  The input and output coordinates
+ -- Function: dg_grad ([1,2])
+     This function takes one argument.  The input and output coordinates
      and the transformation functions must be defined beforehand for
      this function to work.  See the function dg_cords.  The function
      ‘dg_grad’ returns an expression for the gradient of a function ‘F’
      in the output coordinates ‘cord_ot’.
 
+     If the argument to ‘dg_grad’ is ‘1’, then the gradient is computed
+     in the physical basis (found in most intro textbooks).  If the
+     argument is ‘2’ the gradient is computed in the coordinate basis.
+
      (%i1) dg_cords(xyz_to_spher);
      (%o1)                                done
-     (%i2) dg_grad();
+     (%i2) dg_grad(1);
                                   dF             dF
                                  ---- e_phi    ------ e_theta
                                  dphi          dtheta           dF
@@ -216,7 +220,7 @@ metric to new coordinates that mimic the Schwarzschild metric.
                                 r sin(theta)         r          dr
 
  -- Function: dg_curl ([1,2])
-     This function takes no arguments.  The input and output coordinates
+     This function takes one argument.  The input and output coordinates
      and the transformation functions must be defined beforehand for
      this function to work.  See the function dg_cords.  The curl
      function is limited to ‘d=3’ dimensions.  If the argument to
@@ -263,7 +267,7 @@ metric to new coordinates that mimic the Schwarzschild metric.
                                                                r       r       dr
 
  -- Function: dg_diverg ([1,2])
-     This function takes no arguments.  The input and output coordinates
+     This function takes one argument.  The input and output coordinates
      and the transformation functions must be defined beforehand for
      this function to work.  See the function dg_cords.  If the argument
      to ‘dg_diverg’ is ‘1’, then the divergence is computed in the
@@ -451,25 +455,25 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line  86)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 217)
+                                                              (line 221)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 119)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 264)
+                                                              (line 268)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 326)
+                                                              (line 330)
 * dg_grad:                               Functions and Variables for dgeom.
                                                               (line 201)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 364)
+                                                              (line 368)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 296)
+                                                              (line 300)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 147)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 395)
+                                                              (line 399)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 403)
+                                                              (line 407)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 115)
 
