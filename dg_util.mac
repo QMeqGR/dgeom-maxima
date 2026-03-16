@@ -1,0 +1,10 @@
+ds2_to_lg(ds2,cords_in):=block([N,line,i,j],
+    line:expand(ds2),
+    N:length(cords_in),
+    lg:zeromatrix(N,N),
+    for i:1 thru N do
+        for j:1 thru N do
+            lg[i,j]:ratcoef(line,del(cords_in[i])*del(cords_in[j])),
+    lg
+)$
+

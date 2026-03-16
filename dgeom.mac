@@ -74,6 +74,11 @@ dg_cords(crds):=block(
                cosh(chi)*cos(theta)],
      cords_ot:[chi,theta,phi],
      assume(chi>0,theta>0,theta<%pi) )
+  else if crds='xyz_to_paraboloid then
+   ( cords_in:[x,y,z],
+     cords_tr:[u*v*cos(phi),u*v*sin(phi),1/2*(u^2-v^2)],
+     cords_ot:[u,v,phi],
+     assume(phi>=0) )
   else if crds='txyz_to_spher then
    ( dg_minkowski: -1,
      cords_in:[t,x,y,z],
@@ -117,8 +122,8 @@ dg_cords(crds):=block(
      assume(rho>0) )
    else
    ( print("The following predefined coordinate systems are available:"),
-     print("  cart2d, cart3d, xyz_to_spher, xyz_to_pro_spher, xyz_to_spher2 txyz_to_spher"),    
-     print("  xyz_to_cyl, xy_to_polar, xy_to_exp1, xy_to_uv2, mink2d, mink4d, rindler") ),
+     print("  cart2d, cart3d, xyz_to_spher, xyz_to_pro_spher, xyz_to_spher2, xyz_to_paraboloid"),
+     print("  txyz_to_spher, xyz_to_cyl, xy_to_polar, xy_to_exp1, xy_to_uv2, mink2d, mink4d, rindler") ),
    done
 )$
 
@@ -207,7 +212,8 @@ row_norm(M):=block([dim,rmag,R],
 /*****************/
 /* dg_jacobian() */
 /*****************/
-dg_jacobian():=block([N],
+dg_jacobian([args]):=block([N,ishow],
+  ishow: if args=[] then 0 else first(args),
   run_checks(),
   N:length(cords_in),
   J:zeromatrix(N,N),
@@ -221,7 +227,9 @@ dg_jacobian():=block([N],
   /* compute the inverse and transpose of J */
     Jinv: trigsimp( invert(J) ),
     Jt: trigsimp( transpose(J) ),
-  done
+    if ishow=1 then return(J),
+    if ishow=2 then return(Jinv),    
+    done
 );
 
 /***************/
@@ -238,7 +246,7 @@ d_dx( ev(d_dx(r),diff) ),diff;
 dg_derivs():=block([N],
   run_checks(),
   N:length(cords_in),
-  dg_jacobian(),
+  dg_jacobian(0),
   
   /* construct the differential operators */
   for i: 1 thru N do
