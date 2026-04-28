@@ -24,6 +24,9 @@
          ("get_ctensor_vars"
           "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
           "index-get_005fctensor_005fvars")
+         ("ds2_to_lg"
+          "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
+          "index-ds2_005fto_005flg")
          ("dg_metric"
           "/home/ehm/math/Maxima/share/ehm/dgeom-maxima/docs/dgeom_html/index.html"
           "index-dg_005fmetric")

@@ -205,6 +205,107 @@ metric to new coordinates that mimic the Schwarzschild metric.
 
      (%o5)                                done
 
+ -- Function: ds2_to_lg (ds^{2} line element,cords_in)
+     This function takes a line element in the form output by
+     ‘dg_metric’, and a list of coordinates and returns a metric in the
+     matrix ‘lg’.  The second argument can be either a list of
+     coordinates or the list ‘cords_in’ which is appropriate for doing
+     coordinate conversion of the metric.
+
+     (%i1) cords_in:[t,r,theta,phi]$
+     (%i2) f:1-2*m/r;
+                                             2 m
+     (%o2)                               1 - ---
+                                              r
+     (%i3) dom2:del(theta)^2+sin(theta)^2*del(phi)^2;
+                              2             2           2
+     (%o3)                 del (theta) + sin (theta) del (phi)
+     (%i4) ds2: -f*del(t)^2+del(r)^2/f+r^2*dom2;
+                                                                             2
+            2     2             2           2          2 m         2      del (r)
+     (%o4) r  (del (theta) + sin (theta) del (phi)) + (--- - 1) del (t) + -------
+                                                        r                     2 m
+                                                                          1 - ---
+                                                                               r
+     (%i5) ds2_to_lg(ds2,cords_in);
+                       [   r - 2 m                              ]
+                       [ - -------     0     0         0        ]
+                       [      r                                 ]
+                       [                                        ]
+                       [               r                        ]
+                       [     0      -------  0         0        ]
+     (%o5)             [            r - 2 m                     ]
+                       [                                        ]
+                       [                      2                 ]
+                       [     0         0     r         0        ]
+                       [                                        ]
+                       [                          2    2        ]
+                       [     0         0     0   r  sin (theta) ]
+
+1.3 Interfacing with the CTENSOR package of Maxima
+==================================================
+
+ -- Function: get_ctensor_vars ( )
+     This command is used to set the ‘dgeom’ coordinate variables from
+     those defined in the ‘ctensor’ package.  This command sets the
+     ‘dgeom’ coordinate variable ‘cord_ot’ to the ctensor variable
+     ‘ct_cords’.  Then sets the lower indexed metric ‘lg’ to the metric
+     ‘g’.  The ‘ctensor’ package must be loaded and the metric computed
+     for this command to work.
+
+ -- Function: set_ctensor_vars ([init,cnvrt])
+     This function takes as argument <init> or <cnvrt>.  The input and
+     output coordinates and the transformation functions must be defined
+     beforehand for this function to work.  See the function dg_cords.
+     See dg_metric for a description of the options <init> and <cnvrt>.
+     This command is used to set up the calculation of the Christoffel
+     symbols using the ‘ctensor’ package using the coordinates and
+     transformation functions from the ‘dgeom’ package.  The Christoffel
+     symbols are the connections in the coordinate frame, as opposed to
+     the frame-field connection coefficients computed using the function
+     ‘dg_ffc’.  The function ‘set_ctensor_vars’ sets the following
+     ‘ctensor’ variables: ‘cframe_flage:false’, ‘dim’, and calls
+     ‘ct_coordsys()’.  The ‘ctensor’ package must be loaded for this
+     command to work.
+
+   Example: Compute the Christoffel symbols for flat space in polar
+coordinates.
+
+     (%i1) load(ctensor)$
+     (%i2) dg_cords(xy_to_polar);
+     (%o2)                                done
+     (%i3) set_ctensor_vars(init);
+                                           2         2
+                               ds2_in = del (y) + del (x)
+
+                                    2    2             2
+                             ds2 = r  del (theta) + del (r)
+
+                    ctlist = [r cos(theta), r sin(theta), [r, theta]]
+
+     (%o3)                                done
+     (%i4) christof(mcs);
+                                          2      1
+     (%t4)                             mcs     = -
+                                          1, 2   r
+
+                                         1
+     (%t5)                            mcs     = - r
+                                         2, 2
+
+     (%o5)                                done
+
+1.4 Div, Grad, Curl and all that
+================================
+
+The following section contains functions for generating the formulas for
+the laplacian, gradient, curl, and divergence, for arbitrary coordinate
+systems.  There are two options for output of the formulas.  The first
+is that output is in the physical basis, this is the basis for formulas
+in most textbooks.  The second is formula output in the coordinate
+basis.  This is the basis most used in general relativity and
+differential geometry.  See AI for a description.
+
  -- Function: dg_grad ([1,2])
      This function takes one argument.  The input and output coordinates
      and the transformation functions must be defined beforehand for
@@ -341,6 +442,14 @@ metric to new coordinates that mimic the Schwarzschild metric.
                                         r      2       2     2
                                               r      dz    dr
 
+1.5 Frame field calculations, and Killing vectors
+=================================================
+
+The following section contains the commands for computing the frame
+field connections, and the killing vectors.  The command
+set_ctensor_vars also allows one to set up variables for working with
+the ctensor package.
+
  -- Function: dg_ffc (<[constraint equations]>)
      Compute the frame field connections.  The input and output
      coordinates and the transformation functions must be defined
@@ -410,56 +519,6 @@ metric to new coordinates that mimic the Schwarzschild metric.
 
      (%o3)                                done
 
- -- Function: get_ctensor_vars ( )
-     This command is used to set the ‘dgeom’ coordinate variables from
-     those defined in the ‘ctensor’ package.  This command sets the
-     ‘dgeom’ coordinate variable ‘cord_ot’ to the ctensor variable
-     ‘ct_cords’.  Then sets the lower indexed metric ‘lg’ to the metric
-     ‘g’.  The ‘ctensor’ package must be loaded and the metric computed
-     for this command to work.
-
- -- Function: set_ctensor_vars ([init,cnvrt])
-     This function takes as argument <init> or <cnvrt>.  The input and
-     output coordinates and the transformation functions must be defined
-     beforehand for this function to work.  See the function dg_cords.
-     See dg_metric for a description of the options <init> and <cnvrt>.
-     This command is used to set up the calculation of the Christoffel
-     symbols using the ‘ctensor’ package using the coordinates and
-     transformation functions from the ‘dgeom’ package.  The Christoffel
-     symbols are the connections in the coordinate frame, as opposed to
-     the frame-field connection coefficients computed using the function
-     ‘dg_ffc’.  The function ‘set_ctensor_vars’ sets the following
-     ‘ctensor’ variables: ‘cframe_flage:false’, ‘dim’, and calls
-     ‘ct_coordsys()’.  The ‘ctensor’ package must be loaded for this
-     command to work.
-
-   Example: Compute the Christoffel symbols for flat space in polar
-coordinates.
-
-     (%i1) load(ctensor)$
-     (%i2) dg_cords(xy_to_polar);
-     (%o2)                                done
-     (%i3) set_ctensor_vars(init);
-                                           2         2
-                               ds2_in = del (y) + del (x)
-
-                                    2    2             2
-                             ds2 = r  del (theta) + del (r)
-
-                    ctlist = [r cos(theta), r sin(theta), [r, theta]]
-
-     (%o3)                                done
-     (%i4) christof(mcs);
-                                          2      1
-     (%t4)                             mcs     = -
-                                          1, 2   r
-
-                                         1
-     (%t5)                            mcs     = - r
-                                         2, 2
-
-     (%o5)                                done
-
 Appendix A Function and Variable index
 **************************************
 
@@ -468,27 +527,29 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line  86)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 234)
+                                                              (line 335)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 119)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 281)
+                                                              (line 382)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 343)
+                                                              (line 452)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 207)
+                                                              (line 308)
 * dg_jacobian:                           Functions and Variables for dgeom.
                                                               (line 147)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 381)
+                                                              (line 490)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 313)
+                                                              (line 414)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 153)
+* ds2_to_lg:                             Functions and Variables for dgeom.
+                                                              (line 207)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 412)
+                                                              (line 247)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 420)
+                                                              (line 255)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 115)
 

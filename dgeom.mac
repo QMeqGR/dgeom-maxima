@@ -18,6 +18,7 @@ put('dgeom,'0.1,'dgeom_version)$
 
 load("dgeom.lisp") $
 load("dg_defs.mac")$
+load("dg_util.mac")$
 /* load the documentation */
 load("dgeom-index.lisp")$
 load("dgeom-index-html.lisp")$
@@ -340,7 +341,7 @@ curcomp2(i):=block(
 /* Curl in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
 dg_curl(ff):=block([W,N,tolist:cords_ot,tmp],
-    if ff#1 and ff#2 then return(print("(1) physical basis or (2) coordinate basis")),
+    if ff#1 and ff#2 then return(print("Arg must be (1) physical basis or (2) coordinate basis")),
   dg_metric(init),
   N:length(tolist),
   if N#3 then return(print("Curl limited to d=3")),
@@ -369,7 +370,7 @@ dg_curl(ff):=block([W,N,tolist:cords_ot,tmp],
 dg_diverg(ff):=block([W,N,tolist:cords_ot,tmp],
   if ff=1 then print("divergence in physical basis"),
   if ff=2 then print("divergence in coordinate basis"),
-  if ff#1 and ff#2 then return(print("(1) physical basis or (2) coordinate basis")),
+  if ff#1 and ff#2 then return(print("Arg must be (1) physical basis or (2) coordinate basis")),
   if scrootg=0 then dg_metric(init),
   N:length(tolist),
   for i: 1 thru N do ( W[i]: concat(W_, args(tolist)[i]),
@@ -384,10 +385,11 @@ dg_diverg(ff):=block([W,N,tolist:cords_ot,tmp],
 /* dg_grad() */
 /*************/
 dg_grad(ff):=block([N,F,tolist:cords_ot,tmp],
+
   if scrootg=0 then dg_metric(init),
   if ff=1 then print("gradient in physical basis"),
   if ff=2 then print("gradient in coordinate basis"),
-  if ff#1 and ff#2 then return(print("(1) physical basis or (2) coordinate basis")),
+  if ff#1 and ff#2 then return(print("Arg must be (1) physical basis or (2) coordinate basis")),
   N:length(tolist),
   depends(F,tolist),
   hats:makelist( concat(e_,cords_ot[i]),i,N),

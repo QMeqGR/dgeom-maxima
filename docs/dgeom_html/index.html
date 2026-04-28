@@ -53,6 +53,9 @@ Next: <a href="#Introduction-to-package-dgeom" accesskey="n" rel="next">Introduc
 <ul class="mini-toc">
 <li><a href="#Introduction-to-package-dgeom" accesskey="1">Introduction to package dgeom</a></li>
 <li><a href="#Functions-and-Variables-for-dgeom" accesskey="2">Functions and Variables for dgeom</a></li>
+<li><a href="#Interfacing-with-the-CTENSOR-package-of-Maxima" accesskey="3">Interfacing with the CTENSOR package of Maxima</a></li>
+<li><a href="#Div_002c-Grad_002c-Curl-and-all-that" accesskey="4">Div, Grad, Curl and all that</a></li>
+<li><a href="#Frame-field-calculations_002c-and-Killing-vectors" accesskey="5">Frame field calculations, and Killing vectors</a></li>
 </ul>
 <hr>
 <div class="section-level-extent" id="Introduction-to-package-dgeom">
@@ -294,6 +297,117 @@ to new coordinates that mimic the Schwarzschild metric.
 (%o5)                                done
 </pre></div></div>
 
+<a class="anchor" id="ds2_005fto_005flg"></a><dl class="first-deffn def-block">
+<dt class="deffn def-line" id="index-ds2_005fto_005flg"><span class="category-def">Function: </span><span><strong class="def-name">ds2_to_lg</strong> <var class="def-var-arguments">(<code class="code">ds<sup class="sup">2</sup> line element</code>,<code class="code">cords_in</code>)</var><a class="copiable-link" href="#index-ds2_005fto_005flg"> &para;</a></span></dt>
+<dd><p>This function takes a line element in the form output by
+<code class="code">dg_metric</code>, and a list of coordinates and returns a metric in the
+matrix <code class="code">lg</code>. The second argument can be either a list of
+coordinates or the list <code class="code">cords_in</code> which is appropriate for doing
+coordinate conversion of the metric.
+</p></dd></dl>
+
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) cords_in:[t,r,theta,phi]$ 
+(%i2) f:1-2*m/r; 
+                                        2 m
+(%o2)                               1 - ---
+                                         r
+(%i3) dom2:del(theta)^2+sin(theta)^2*del(phi)^2; 
+                         2             2           2
+(%o3)                 del (theta) + sin (theta) del (phi)
+(%i4) ds2: -f*del(t)^2+del(r)^2/f+r^2*dom2; 
+                                                                        2
+       2     2             2           2          2 m         2      del (r)
+(%o4) r  (del (theta) + sin (theta) del (phi)) + (--- - 1) del (t) + -------
+                                                   r                     2 m
+                                                                     1 - ---
+                                                                          r
+(%i5) ds2_to_lg(ds2,cords_in); 
+                  [   r - 2 m                              ]
+                  [ - -------     0     0         0        ]
+                  [      r                                 ]
+                  [                                        ]
+                  [               r                        ]
+                  [     0      -------  0         0        ]
+(%o5)             [            r - 2 m                     ]
+                  [                                        ]
+                  [                      2                 ]
+                  [     0         0     r         0        ]
+                  [                                        ]
+                  [                          2    2        ]
+                  [     0         0     0   r  sin (theta) ]
+</pre></div></div>
+
+</div>
+<div class="section-level-extent" id="Interfacing-with-the-CTENSOR-package-of-Maxima">
+<h3 class="section"><span>1.3 Interfacing with the CTENSOR package of Maxima<a class="copiable-link" href="#Interfacing-with-the-CTENSOR-package-of-Maxima"> &para;</a></span></h3>
+<a class="anchor" id="get_005fctensor_005fvars"></a><dl class="first-deffn def-block">
+<dt class="deffn def-line" id="index-get_005fctensor_005fvars"><span class="category-def">Function: </span><span><strong class="def-name">get_ctensor_vars</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-get_005fctensor_005fvars"> &para;</a></span></dt>
+<dd><p>This command is used to set the <code class="code">dgeom</code> coordinate variables from
+those defined in the <code class="code">ctensor</code> package.  This command sets the
+<code class="code">dgeom</code> coordinate variable <code class="code">cord_ot</code> to the ctensor variable
+<code class="code">ct_cords</code>. Then sets the lower indexed metric <code class="code">lg</code> to the
+metric <code class="code">g</code>. The <code class="code">ctensor</code> package must be loaded and the
+metric computed for this command to work.
+</p></dd></dl>
+
+<a class="anchor" id="set_005fctensor_005fvars"></a><dl class="first-deffn def-block">
+<dt class="deffn def-line" id="index-set_005fctensor_005fvars"><span class="category-def">Function: </span><span><strong class="def-name">set_ctensor_vars</strong> <var class="def-var-arguments">([init,cnvrt])</var><a class="copiable-link" href="#index-set_005fctensor_005fvars"> &para;</a></span></dt>
+<dd><p>This function takes as argument <var class="var">init</var> or <var class="var">cnvrt</var>. The input and
+output coordinates and the transformation functions must be defined
+beforehand for this function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
+See <a class="ref" href="#dg_005fmetric">dg_metric</a> for a description of the options <var class="var">init</var> and
+<var class="var">cnvrt</var>.  This command is used to set up the calculation of the
+Christoffel symbols using the <code class="code">ctensor</code> package using the
+coordinates and transformation functions from the <code class="code">dgeom</code>
+package. The Christoffel symbols are the connections in the coordinate
+frame, as opposed to the frame-field connection coefficients computed
+using the function <code class="code">dg_ffc</code>. The function <code class="code">set_ctensor_vars</code>
+sets the following <code class="code">ctensor</code> variables: <code class="code">cframe_flage:false</code>,
+<code class="code">dim</code>, and calls <code class="code">ct_coordsys()</code>. The <code class="code">ctensor</code> package
+must be loaded for this command to work.
+</p></dd></dl>
+
+<p>Example: Compute the Christoffel symbols for flat space in polar
+coordinates.
+</p>
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) load(ctensor)$ 
+(%i2) dg_cords(xy_to_polar); 
+(%o2)                                done
+(%i3) set_ctensor_vars(init); 
+                                      2         2
+                          ds2_in = del (y) + del (x)
+
+                               2    2             2
+                        ds2 = r  del (theta) + del (r)
+
+               ctlist = [r cos(theta), r sin(theta), [r, theta]]
+
+(%o3)                                done
+(%i4) christof(mcs); 
+                                     2      1
+(%t4)                             mcs     = -
+                                     1, 2   r
+
+                                    1
+(%t5)                            mcs     = - r
+                                    2, 2
+
+(%o5)                                done
+</pre></div></div>
+
+</div>
+<div class="section-level-extent" id="Div_002c-Grad_002c-Curl-and-all-that">
+<h3 class="section"><span>1.4 Div, Grad, Curl and all that<a class="copiable-link" href="#Div_002c-Grad_002c-Curl-and-all-that"> &para;</a></span></h3>
+<p>The following section contains functions for generating the formulas for
+the laplacian, gradient, curl, and divergence, for arbitrary coordinate
+systems. There are two options for output of the formulas. The first is
+that output is in the physical basis, this is the basis for formulas in
+most textbooks. The second is formula output in the coordinate
+basis. This is the basis most used in general relativity and
+differential geometry. See AI for a description.
+</p>
 <a class="anchor" id="dg_005fgrad"></a><dl class="first-deffn def-block">
 <dt class="deffn def-line" id="index-dg_005fgrad"><span class="category-def">Function: </span><span><strong class="def-name">dg_grad</strong> <var class="def-var-arguments">(<code class="code">[1,2]</code>)</var><a class="copiable-link" href="#index-dg_005fgrad"> &para;</a></span></dt>
 <dd><p>This function takes one argument. The input and output coordinates and
@@ -448,6 +562,14 @@ before calling <code class="code">dg_laplac</code>.
 </pre></div></div>
 
 
+</div>
+<div class="section-level-extent" id="Frame-field-calculations_002c-and-Killing-vectors">
+<h3 class="section"><span>1.5 Frame field calculations, and Killing vectors<a class="copiable-link" href="#Frame-field-calculations_002c-and-Killing-vectors"> &para;</a></span></h3>
+<p>The following section contains the commands for computing the frame
+field connections, and the killing vectors. The command set_ctensor_vars
+also allows one to set up variables for working with the ctensor
+package.
+</p>
 <a class="anchor" id="dg_005fffc"></a><dl class="first-deffn def-block">
 <dt class="deffn def-line" id="index-dg_005fffc"><span class="category-def">Function: </span><span><strong class="def-name">dg_ffc</strong> <var class="def-var-arguments">(<var class="var">[constraint equations]</var>)</var><a class="copiable-link" href="#index-dg_005fffc"> &para;</a></span></dt>
 <dd><p>Compute the frame field connections. The input and output coordinates
@@ -526,61 +648,6 @@ otherwise they can be accessed in the array <code class="code">killeq</code>.
 </pre></div></div>
 
 
-<a class="anchor" id="get_005fctensor_005fvars"></a><dl class="first-deffn def-block">
-<dt class="deffn def-line" id="index-get_005fctensor_005fvars"><span class="category-def">Function: </span><span><strong class="def-name">get_ctensor_vars</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-get_005fctensor_005fvars"> &para;</a></span></dt>
-<dd><p>This command is used to set the <code class="code">dgeom</code> coordinate variables from
-those defined in the <code class="code">ctensor</code> package.  This command sets the
-<code class="code">dgeom</code> coordinate variable <code class="code">cord_ot</code> to the ctensor variable
-<code class="code">ct_cords</code>. Then sets the lower indexed metric <code class="code">lg</code> to the
-metric <code class="code">g</code>. The <code class="code">ctensor</code> package must be loaded and the
-metric computed for this command to work.
-</p></dd></dl>
-
-<a class="anchor" id="set_005fctensor_005fvars"></a><dl class="first-deffn def-block">
-<dt class="deffn def-line" id="index-set_005fctensor_005fvars"><span class="category-def">Function: </span><span><strong class="def-name">set_ctensor_vars</strong> <var class="def-var-arguments">([init,cnvrt])</var><a class="copiable-link" href="#index-set_005fctensor_005fvars"> &para;</a></span></dt>
-<dd><p>This function takes as argument <var class="var">init</var> or <var class="var">cnvrt</var>. The input and
-output coordinates and the transformation functions must be defined
-beforehand for this function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
-See <a class="ref" href="#dg_005fmetric">dg_metric</a> for a description of the options <var class="var">init</var> and
-<var class="var">cnvrt</var>.  This command is used to set up the calculation of the
-Christoffel symbols using the <code class="code">ctensor</code> package using the
-coordinates and transformation functions from the <code class="code">dgeom</code>
-package. The Christoffel symbols are the connections in the coordinate
-frame, as opposed to the frame-field connection coefficients computed
-using the function <code class="code">dg_ffc</code>. The function <code class="code">set_ctensor_vars</code>
-sets the following <code class="code">ctensor</code> variables: <code class="code">cframe_flage:false</code>,
-<code class="code">dim</code>, and calls <code class="code">ct_coordsys()</code>. The <code class="code">ctensor</code> package
-must be loaded for this command to work.
-</p></dd></dl>
-
-<p>Example: Compute the Christoffel symbols for flat space in polar
-coordinates.
-</p>
-<div class="example">
-<div class="group"><pre class="example-preformatted">(%i1) load(ctensor)$ 
-(%i2) dg_cords(xy_to_polar); 
-(%o2)                                done
-(%i3) set_ctensor_vars(init); 
-                                      2         2
-                          ds2_in = del (y) + del (x)
-
-                               2    2             2
-                        ds2 = r  del (theta) + del (r)
-
-               ctlist = [r cos(theta), r sin(theta), [r, theta]]
-
-(%o3)                                done
-(%i4) christof(mcs); 
-                                     2      1
-(%t4)                             mcs     = -
-                                     1, 2   r
-
-                                    1
-(%t5)                            mcs     = - r
-                                    2, 2
-
-(%o5)                                done
-</pre></div></div>
 
 
 </div>
