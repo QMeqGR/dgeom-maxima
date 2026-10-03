@@ -119,6 +119,16 @@ Output coordinates are given as a list in the variable @code{cord_ot}.
 @defvr {Variable} cord_tr
 Coordinate transformations are given as a list in the variable @code{cord_tr}.
 @code{cord_tr:[r*sin(theta)*cos(phi),r*sin(theta)*sin(phi),r*cos(theta)]}.
+This implies, for example, that if you use @code{cords_in=[x,y,z]}, then
+@code{x=r*sin(theta)*cos(phi)}, @code{y=r*sin(theta)*sin(phi)}, and
+@code{z=r*cos(theta)}.
+
+If you want to use the @code{cnvrt2} option in @code{dg_metric}, then
+the use may specify the equations themselves in @code{cords_tr}, for
+example, transforming from standard Schwarzschild coordinates
+to tortoise coordinates one specifies
+@code{cords_tr:[t,R=r+2*M*G*log(r/(2*M*G)-1),theta,phi]}. See examples
+below that show this explicitly.
 @end defvr
 
 @defvr {Variable} dg_minkowski
@@ -215,7 +225,7 @@ assigned to the matrix @code{J} and the inverse is assigned to the matrix
 @end deffn
 
 @anchor{dg_metric}
-@deffn {Function} dg_metric ([init,cnvrt])
+@deffn {Function} dg_metric ([init,cnvrt,cnvrt2])
 This function takes as argument @var{init} or @var{cnvrt}. The input and
 output coordinates and the transformation functions must be defined
 beforehand for this function to work. See the function @ref{dg_cords}.
@@ -223,14 +233,24 @@ The function @code{dg_metric} computes the metric in terms of the output
 coordinates @code{cords_ot}. If @code{dg_metric} is called with the
 argument @var{init} then the function assumes the input metric is
 diagonal with unit entries, although @code{dg_minkowski} may be set to
--1 for the time component. If @code{dg_metric} is called with the
+-1 for the time component.
+
+If @code{dg_metric} is called with the
 argument @var{cnvrt}, then the function assumes there is an initial
 metric given in the matrix @code{lg_in} with the ordering of the entries
 in accordance with the ordering of the variables in @code{cords_in}. The
 value of @code{dg_minkowski} is ignored for this case. @code{dg_metric}
 returns the line element @var{ds@sup{2}} in the variable @code{ds2}, and
 the metric in the matrix @code{g}.
+
+If @code{dg_metric} is called with the argument @var{cnvrt2}, then the
+everything is the same as for argument @var{cnvrt} except that the variable
+@var{cords_tr} may contain the equation relating the 'in' and out 'ot'
+coordinates.
 @end deffn
+
+The following example converts from @var{x,y,z} coordinates to spherical
+coordinates.
 
 @example
 @group
@@ -275,6 +295,83 @@ to new coordinates that mimic the Schwarzschild metric.
                                    xi
 
 (%o5)                                done
+@end group
+@end example
+
+The following example converts from standard Schwarzschild coordinates to a
+radial tortoise coordinates.
+
+@example
+@group
+(%i1) dg_cords(schwarzschild); 
+(%o1)                                done
+(%i2) ds2; 
+                                                 2
+       2    2           2 G M         2       del (r)
+(%o2) r  del (theta) + (----- - 1) del (t) + ---------
+                          r                      2 G M
+                                             1 - -----
+                                                   r
+                                                        2    2           2
+                                                     + r  sin (theta) del (phi)
+(%i3) cords_in; 
+(%o3)                         [t, r, theta, phi]
+(%i4) cords_tr:[t/2,2*sqrt(xi)]; 
+                                 t
+(%o4)                           [-, 2 sqrt(xi)]
+                                 2
+(%i5) cords_tr:[t,R=r+2*M*G*log(r/(2*M*G)-1),theta,phi]; 
+                                     r
+(%o5)            [t, R = 2 G M log(----- - 1) + r, theta, phi]
+                                   2 G M
+(%i6) cords_ot:[t,R,theta,phi]; 
+(%o6)                         [t, R, theta, phi]
+(%i7) lg_in:ds2_to_lg(ds2,cords_in); 
+                [   r - 2 G M                                ]
+                [ - ---------      0      0         0        ]
+                [       r                                    ]
+                [                                            ]
+                [                  r                         ]
+                [      0       ---------  0         0        ]
+(%o7)           [              r - 2 G M                     ]
+                [                                            ]
+                [                          2                 ]
+                [      0           0      r         0        ]
+                [                                            ]
+                [                              2    2        ]
+                [      0           0      0   r  sin (theta) ]
+(%i8) dg_metric(cnvrt2); 
+                                         2           2
+          2    2          (r - 2 G M) del (t)   r del (r)
+ds2_in = r  del (theta) - ------------------- + ---------
+                                   r            r - 2 G M
+                                                        2    2           2
+                                                     + r  sin (theta) del (phi)
+
+                                      2
+       2    2          (r - 2 G M) del (t)    2    2           2
+ds2 = r  del (theta) - ------------------- + r  sin (theta) del (phi)
+                                r
+                                                                           2
+                                                            (r - 2 G M) del (R)
+                                                          + -------------------
+                                                                     r
+
+(%o8)                                done
+(%i9) lg_out:ds2_to_lg(ds2,cords_ot); 
+                [   r - 2 G M                                ]
+                [ - ---------      0      0         0        ]
+                [       r                                    ]
+                [                                            ]
+                [              r - 2 G M                     ]
+                [      0       ---------  0         0        ]
+(%o9)           [                  r                         ]
+                [                                            ]
+                [                          2                 ]
+                [      0           0      r         0        ]
+                [                                            ]
+                [                              2    2        ]
+                [      0           0      0   r  sin (theta) ]
 @end group
 @end example
 

@@ -11,5 +11,3 @@
 ;;  dgeom package for Maxima.
 ;;  Eric Majzoub, 2026
 
-;; Your lisp code here
-

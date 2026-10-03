@@ -1,3 +1,4 @@
+/* -*- lexical-binding: t; -*- */
 /*
 ;;  This program is free software; you can redistribute it and/or modify 
 ;;  it under the terms of the GNU General Public License as published by         
@@ -75,6 +76,13 @@ dg_cords(crds):=block(
                cosh(chi)*cos(theta)],
      cords_ot:[chi,theta,phi],
      assume(chi>0,theta>0,theta<%pi) )
+  else if crds='schwarzschild then
+   ( cords_in:[t,r,theta,phi],
+     cords_ot:cords_in,
+     declare([G,M],constant),
+     assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0),
+     ds2: -(1-2*G*M/r)*del(t)^2+1/(1-2*G*M/r)*del(r)^2+r^2*del(theta)^2+r^2*sin(theta)^2*del(phi)^2,
+     g:lg: ds2_to_lg(ds2,cords_in) )
   else if crds='xyz_to_paraboloid then
    ( cords_in:[x,y,z],
      cords_tr:[u*v*cos(phi),u*v*sin(phi),1/2*(u^2-v^2)],
@@ -278,7 +286,9 @@ dg_derivs():=block([N],
 /* dg_metric() */
 /***************/
 /*computes the metric in the new coordinates */
-dg_metric(trn):=block([N],
+is_eq(expr) := if not mapatom(expr) and op(expr) = "=" then 1 else 0;
+
+dg_metric(trn):=block([N,sol],
   N: length(cords_in),
 
   /* if trn = init, assume the metric is trivial */
@@ -288,25 +298,29 @@ dg_metric(trn):=block([N],
   for i: 2 thru N do ds2_in: ds2_in + diff(cords_in[i])^2,
   ds2_in: trigsimp(ds2_in)
   )
-  else if trn='cnvrt then
-  ds2_in: sum( sum( lg_in[i,j] * del(cords_in[i]) * del(cords_in[j]), i, 1, N ), j, 1, N)
-  else print("argument must be init or cnvrt"),
+  else if trn='cnvrt or trn='cnvrt2 then
+    ds2_in: sum( sum( lg_in[i,j] * del(cords_in[i]) * del(cords_in[j]), i, 1, N ), j, 1, N)
+  else print("argument must be init or cnvrt or cnvrt2"),
   display(ds2_in),
-  
+
   ds2:0,
   if trn='init then block(
     ds2: dg_minkowski * diff(cords_tr[1])^2, /* in case minkowski */
     for i: 2 thru N do ds2: ds2 + diff(cords_tr[i])^2 )
   else if trn='cnvrt then block(
     ds2_in: sum( sum( lg_in[i,j] * diff(cords_tr[i]) * diff(cords_tr[j]), i, 1, N ), j, 1, N),
-    ds2: subst(map("=",cords_in,cords_tr),ds2_in)
+    ds2: subst(map("=",cords_in,cords_tr),ds2_in) )
+  else if trn='cnvrt2 then block(
+    ds2:ds2_in,
+    for i:1 thru N do if is_eq(cords_tr[i])#0 then ds2: subst( solve(diff(cords_tr[i]),del(cords_in[i])), ds2 )
   ),
+
   ds2:expand(ds2),
   for i:1 thru N do ds2:collectterms(ds2,del( args(cords_ot)[i] ) ),
   for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i),
   for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i), /* yes, do this twice */
 
-  g: zeromatrix(N,N),
+g: zeromatrix(N,N),
   for i: 1 thru N do
     for j: 1 thru N do
       g[i,j]: coeff( expand( ds2 ) , del(args(cords_ot)[i]) * del(args(cords_ot)[j]) ),
