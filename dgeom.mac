@@ -42,6 +42,8 @@ declare_index_properties(mcs,[postsubscript,postsubscript,postsuperscript]);
 matchdeclare(X,true,Y,true)$
 tellsimpafter(Y*'diff(del(X),X,1)*del(X),0)$
 
+
+no_init_messg():=disp("Do NOT run dg_metric(init), the metric is already defined.")$
 /************************************/
 /* NOTE: Always call dg_coords first!!!
 
@@ -76,13 +78,6 @@ dg_cords(crds):=block(
                cosh(chi)*cos(theta)],
      cords_ot:[chi,theta,phi],
      assume(chi>0,theta>0,theta<%pi) )
-  else if crds='schwarzschild then
-   ( cords_in:[t,r,theta,phi],
-     cords_ot:cords_in,
-     declare([G,M],constant),
-     assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0),
-     ds2: -(1-2*G*M/r)*del(t)^2+1/(1-2*G*M/r)*del(r)^2+r^2*del(theta)^2+r^2*sin(theta)^2*del(phi)^2,
-     g:lg: ds2_to_lg(ds2,cords_in) )
   else if crds='xyz_to_paraboloid then
    ( cords_in:[x,y,z],
      cords_tr:[u*v*cos(phi),u*v*sin(phi),1/2*(u^2-v^2)],
@@ -129,10 +124,47 @@ dg_cords(crds):=block(
      cords_tr:[rho*sinh(omega),rho*cosh(omega)],
      cords_ot:[omega,rho],
      assume(rho>0) )
+   else if crds='schwarzschild then
+   ( no_init_messg(),
+     cords_in:[t,r,theta,phi],
+     cords_ot:cords_in,
+     declare([G,M],constant),
+     assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0,M>0),
+     ds2: -(1-2*G*M/r)*del(t)^2+1/(1-2*G*M/r)*del(r)^2+r^2*del(theta)^2+r^2*sin(theta)^2*del(phi)^2,
+     g:lg: ds2_to_lg(ds2,cords_in) )
+   else if crds='kerr then
+   ( no_init_messg(),
+     cords_in:[t,rho,theta,phi],
+     cords_ot:cords_in,
+     declare([M,a,J,G],constant),
+     assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0,J>0,M>0),
+     DD:r^2-2*G*M*r+a^2,
+     ds2: -(1-2*G*M*r/rho^2)*del(t)^2-4*G*M*r*a*sin(theta)^2/rho^2*del(t)*del(phi)+rho^2/DD*del(r)^2+rho^2*del(theta)^2+(r^2+a^2+2*G*M*r*a^2*sin(theta)^2/rho^2)*sin(theta)^2*del(phi)^2,
+     constraint_eq1: rho^2=r^2+a^2*cos(theta)^2,
+     constraint_eq2: DD,
+     g:lg: ds2_to_lg(ds2,cords_in) )
+   else if crds='kruskal then
+   ( no_init_messg(),
+     cords_in:[T,X,theta,phi],
+     cords_ot:cords_in,
+     declare([M,G],constant),
+     assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0,M>0),
+     ds2: (32*G^3*M^3/r)*exp(-r/(2*G*M))*(-del(T)^2+del(X)^2)+r^2*del(theta)^2+r^2*sin(theta)^2*del(phi)^2,
+     constraint_eq:(r/(2*M)-1)*exp(r/(2*M))=X^2-T^2,
+     g:lg: ds2_to_lg(ds2,cords_in) )
+   else if crds='eddfink then
+   ( no_init_messg(),
+     cords_in:[v,r,theta,phi],
+     cords_ot:cords_in,
+     declare([M,G],constant),
+     assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0,M>0),
+     ds2: -(1-2*G*M/r)*del(v)^2+2*del(v)*del(r)+r^2*del(theta)^2+r^2*sin(theta)^2*del(phi)^2,
+     g:lg: ds2_to_lg(ds2,cords_in) )
    else
    ( print("The following predefined coordinate systems are available:"),
      print("  cart2d, cart3d, xyz_to_spher, xyz_to_pro_spher, xyz_to_spher2, xyz_to_paraboloid"),
-     print("  txyz_to_spher, xyz_to_cyl, xy_to_polar, xy_to_exp1, xy_to_uv2, mink2d, mink4d, rindler") ),
+     print("  txyz_to_spher, xyz_to_cyl, xy_to_polar, xy_to_exp1, xy_to_uv2, mink2d, mink4d, rindler"),
+     print("  schwarzschild, kerr, eddfink, kruskal.") ),
    done
 )$
 

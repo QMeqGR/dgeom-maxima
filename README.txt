@@ -88,11 +88,17 @@ Eric Majzoub, Jan 2026
  -- Variable: dg_minkowski
      The variable ‘dg_minkowski’ (default value: 1) determines whether
      the metric in the output coordinates ‘cords_ot’ is computed with a
-     Minkowski signature.  This variable is set automatically for the
-     predefined coordinate transformations 'rindler'.  If defining
-     coordinates in Minkowski signature without using the function
-     ‘dg_cords’, the timelike coordinate must be the first element in
-     the list for both ‘cords_in’ and ‘cords_ot’.
+     Minkowski signature when running ‘dg_metric(init)’.  This variable
+     is set automatically for the predefined coordinate transformations
+     'rindler'.  If defining coordinates in Minkowski signature without
+     using the function ‘dg_cords’, the timelike coordinate must be the
+     first element in the list for both ‘cords_in’ and ‘cords_ot’.
+
+     Some of the predefined coordinate systems do not need to have
+     ‘dg_minkowski’ set.  These are the coordinate systems for which the
+     metric is predefined: schwarzschild, kerr, eddfink, kruskal, and
+     any other coordinate choice that shows the message indicating that
+     ‘dg_metric(init)’ need not be run.
 
  -- Function: dg_cords (<coordinate system>)
      The function ‘dg_cords’ takes a predefined coordinate system name
@@ -101,6 +107,9 @@ Eric Majzoub, Jan 2026
      transformation functions to the new or output coordinates, and
      ‘cords_ot’ are the output coordinates.  To see the available
      predefined coordinate systems use ‘dg_cords(all)’.
+
+     Some choices of coordinates have predefined metrics and these do
+     not require running ‘dg_metric(init)’.
 
      (%i1) dg_cords(rindler);
      (%o1)                                done
@@ -226,9 +235,12 @@ metric to new coordinates that mimic the Schwarzschild metric.
      (%o5)                                done
 
    The following example converts from standard Schwarzschild
-coordinates to a radial tortoise coordinates.
+coordinates to radial tortoise coordinates.  Note that Schwarzschild has
+a predefined metric, and it is not necessary to run ‘dg_metric(init)’.
 
      (%i1) dg_cords(schwarzschild);
+               Do NOT run dg_metric(init), the metric is already defined.
+
      (%o1)                                done
      (%i2) ds2;
                                                       2
@@ -618,33 +630,33 @@ Appendix A Function and Variable index
 * Menu:
 
 * dg_cords:                              Functions and Variables for dgeom.
-                                                              (line  96)
+                                                              (line 102)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 428)
+                                                              (line 440)
 * dg_derivs:                             Functions and Variables for dgeom.
-                                                              (line 129)
+                                                              (line 138)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 475)
+                                                              (line 487)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 545)
+                                                              (line 557)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 401)
+                                                              (line 413)
 * dg_jacobian:                           Functions and Variables for dgeom.
-                                                              (line 157)
+                                                              (line 166)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 583)
+                                                              (line 595)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 507)
+                                                              (line 519)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 163)
+                                                              (line 172)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 300)
+                                                              (line 312)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 340)
+                                                              (line 352)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 348)
+                                                              (line 360)
 * show_cords:                            Functions and Variables for dgeom.
-                                                              (line 125)
+                                                              (line 134)
 
 * Menu:
 

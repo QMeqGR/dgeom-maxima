@@ -134,11 +134,17 @@ below that show this explicitly.
 @defvr {Variable} dg_minkowski
 The variable @code{dg_minkowski} (default value: 1) determines whether
 the metric in the output coordinates @code{cords_ot} is computed with a
-Minkowski signature. This variable is set automatically for the
-predefined coordinate transformations 'rindler'. If defining coordinates
-in Minkowski signature without using the function @code{dg_cords}, the
-timelike coordinate must be the first element in the list for both
-@code{cords_in} and @code{cords_ot}.
+Minkowski signature when running @code{dg_metric(init)}. This variable
+is set automatically for the predefined coordinate transformations
+'rindler'. If defining coordinates in Minkowski signature without using
+the function @code{dg_cords}, the timelike coordinate must be the first
+element in the list for both @code{cords_in} and @code{cords_ot}.
+
+Some of the predefined coordinate systems do not need to have
+@code{dg_minkowski} set. These are the coordinate systems for which the
+metric is predefined: schwarzschild, kerr, eddfink, kruskal, and any
+other coordinate choice that shows the message indicating that
+@code{dg_metric(init)} need not be run.
 @end defvr
 
 @anchor{dg_cords}
@@ -149,6 +155,9 @@ and sets the variables @code{cords_in}, @code{cords_tr},
 @code{cords_tr} are the transformation functions to the new or output
 coordinates, and @code{cords_ot} are the output coordinates.  To see the
 available predefined coordinate systems use @code{dg_cords(all)}.
+
+Some choices of coordinates have predefined metrics and these
+do not require running @code{dg_metric(init)}.
 @end deffn
 
 @example
@@ -298,12 +307,15 @@ to new coordinates that mimic the Schwarzschild metric.
 @end group
 @end example
 
-The following example converts from standard Schwarzschild coordinates to a
-radial tortoise coordinates.
+The following example converts from standard Schwarzschild coordinates to
+radial tortoise coordinates. Note that Schwarzschild has a predefined metric,
+and it is not necessary to run @code{dg_metric(init)}.
 
 @example
 @group
 (%i1) dg_cords(schwarzschild); 
+          Do NOT run dg_metric(init), the metric is already defined.
+
 (%o1)                                done
 (%i2) ds2; 
                                                  2

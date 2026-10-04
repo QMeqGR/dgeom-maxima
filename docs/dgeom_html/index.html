@@ -154,11 +154,17 @@ below that show this explicitly.
 <dt class="defvr def-line" id="index-dg_005fminkowski"><span class="category-def">Variable: </span><span><strong class="def-name">dg_minkowski</strong><a class="copiable-link" href="#index-dg_005fminkowski"> &para;</a></span></dt>
 <dd><p>The variable <code class="code">dg_minkowski</code> (default value: 1) determines whether
 the metric in the output coordinates <code class="code">cords_ot</code> is computed with a
-Minkowski signature. This variable is set automatically for the
-predefined coordinate transformations &rsquo;rindler&rsquo;. If defining coordinates
-in Minkowski signature without using the function <code class="code">dg_cords</code>, the
-timelike coordinate must be the first element in the list for both
-<code class="code">cords_in</code> and <code class="code">cords_ot</code>.
+Minkowski signature when running <code class="code">dg_metric(init)</code>. This variable
+is set automatically for the predefined coordinate transformations
+&rsquo;rindler&rsquo;. If defining coordinates in Minkowski signature without using
+the function <code class="code">dg_cords</code>, the timelike coordinate must be the first
+element in the list for both <code class="code">cords_in</code> and <code class="code">cords_ot</code>.
+</p>
+<p>Some of the predefined coordinate systems do not need to have
+<code class="code">dg_minkowski</code> set. These are the coordinate systems for which the
+metric is predefined: schwarzschild, kerr, eddfink, kruskal, and any
+other coordinate choice that shows the message indicating that
+<code class="code">dg_metric(init)</code> need not be run.
 </p></dd></dl>
 
 <a class="anchor" id="dg_005fcords"></a><dl class="first-deffn def-block">
@@ -169,6 +175,9 @@ and sets the variables <code class="code">cords_in</code>, <code class="code">co
 <code class="code">cords_tr</code> are the transformation functions to the new or output
 coordinates, and <code class="code">cords_ot</code> are the output coordinates.  To see the
 available predefined coordinate systems use <code class="code">dg_cords(all)</code>.
+</p>
+<p>Some choices of coordinates have predefined metrics and these
+do not require running <code class="code">dg_metric(init)</code>.
 </p></dd></dl>
 
 <div class="example">
@@ -310,11 +319,14 @@ to new coordinates that mimic the Schwarzschild metric.
 (%o5)                                done
 </pre></div></div>
 
-<p>The following example converts from standard Schwarzschild coordinates to a
-radial tortoise coordinates.
+<p>The following example converts from standard Schwarzschild coordinates to
+radial tortoise coordinates. Note that Schwarzschild has a predefined metric,
+and it is not necessary to run <code class="code">dg_metric(init)</code>.
 </p>
 <div class="example">
 <div class="group"><pre class="example-preformatted">(%i1) dg_cords(schwarzschild); 
+          Do NOT run dg_metric(init), the metric is already defined.
+
 (%o1)                                done
 (%i2) ds2; 
                                                  2
