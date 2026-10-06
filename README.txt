@@ -305,31 +305,27 @@ Schwarzschild has a predefined metric, and it is not necessary to run
                                                           + r  sin (theta) del (phi)
      (%i3) cords_in;
      (%o3)                         [t, r, theta, phi]
-     (%i4) cords_tr:[t/2,2*sqrt(xi)];
-                                      t
-     (%o4)                           [-, 2 sqrt(xi)]
-                                      2
-     (%i5) cords_tr:[t,R=r+2*M*G*log(r/(2*M*G)-1),theta,phi];
+     (%i4) cords_tr:[t,R=r+2*M*G*log(r/(2*M*G)-1),theta,phi];
                                           r
-     (%o5)            [t, R = 2 G M log(----- - 1) + r, theta, phi]
+     (%o4)            [t, R = 2 G M log(----- - 1) + r, theta, phi]
                                         2 G M
-     (%i6) cords_ot:[t,R,theta,phi];
-     (%o6)                         [t, R, theta, phi]
-     (%i7) lg_in:ds2_to_lg(ds2,cords_in);
+     (%i5) cords_ot:[t,R,theta,phi];
+     (%o5)                         [t, R, theta, phi]
+     (%i6) lg_in:ds2_to_lg(ds2,cords_in);
                      [   r - 2 G M                                ]
                      [ - ---------      0      0         0        ]
                      [       r                                    ]
                      [                                            ]
                      [                  r                         ]
                      [      0       ---------  0         0        ]
-     (%o7)           [              r - 2 G M                     ]
+     (%o6)           [              r - 2 G M                     ]
                      [                                            ]
                      [                          2                 ]
                      [      0           0      r         0        ]
                      [                                            ]
                      [                              2    2        ]
                      [      0           0      0   r  sin (theta) ]
-     (%i8) dg_metric(cnvrt2);
+     (%i7) dg_metric(cnvrt2);
                                               2           2
                2    2          (r - 2 G M) del (t)   r del (r)
      ds2_in = r  del (theta) - ------------------- + ---------
@@ -361,7 +357,7 @@ Schwarzschild has a predefined metric, and it is not necessary to run
                        [                              2    2        ]
                        [      0           0      0   r  sin (theta) ]
 
-     (%o8)                                done
+     (%o7)                                done
 
  -- Function: ds2_to_lg (ds^{2} line element,cords_in)
      This function takes a line element in the form output by
@@ -742,29 +738,29 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line 102)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 513)
+                                                              (line 509)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 146)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 575)
+                                                              (line 571)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 663)
+                                                              (line 659)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 474)
+                                                              (line 470)
 * dg_jacobian:                           Functions and Variables for dgeom.
                                                               (line 174)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 701)
+                                                              (line 697)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 616)
+                                                              (line 612)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 180)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 365)
+                                                              (line 361)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 405)
+                                                              (line 401)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 413)
+                                                              (line 409)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 142)
 

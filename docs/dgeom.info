@@ -335,31 +335,27 @@ Schwarzschild has a predefined metric, and it is not necessary to run
                                                           + r  sin (theta) del (phi)
      (%i3) cords_in;
      (%o3)                         [t, r, theta, phi]
-     (%i4) cords_tr:[t/2,2*sqrt(xi)];
-                                      t
-     (%o4)                           [-, 2 sqrt(xi)]
-                                      2
-     (%i5) cords_tr:[t,R=r+2*M*G*log(r/(2*M*G)-1),theta,phi];
+     (%i4) cords_tr:[t,R=r+2*M*G*log(r/(2*M*G)-1),theta,phi];
                                           r
-     (%o5)            [t, R = 2 G M log(----- - 1) + r, theta, phi]
+     (%o4)            [t, R = 2 G M log(----- - 1) + r, theta, phi]
                                         2 G M
-     (%i6) cords_ot:[t,R,theta,phi];
-     (%o6)                         [t, R, theta, phi]
-     (%i7) lg_in:ds2_to_lg(ds2,cords_in);
+     (%i5) cords_ot:[t,R,theta,phi];
+     (%o5)                         [t, R, theta, phi]
+     (%i6) lg_in:ds2_to_lg(ds2,cords_in);
                      [   r - 2 G M                                ]
                      [ - ---------      0      0         0        ]
                      [       r                                    ]
                      [                                            ]
                      [                  r                         ]
                      [      0       ---------  0         0        ]
-     (%o7)           [              r - 2 G M                     ]
+     (%o6)           [              r - 2 G M                     ]
                      [                                            ]
                      [                          2                 ]
                      [      0           0      r         0        ]
                      [                                            ]
                      [                              2    2        ]
                      [      0           0      0   r  sin (theta) ]
-     (%i8) dg_metric(cnvrt2);
+     (%i7) dg_metric(cnvrt2);
                                               2           2
                2    2          (r - 2 G M) del (t)   r del (r)
      ds2_in = r  del (theta) - ------------------- + ---------
@@ -391,7 +387,7 @@ Schwarzschild has a predefined metric, and it is not necessary to run
                        [                              2    2        ]
                        [      0           0      0   r  sin (theta) ]
 
-     (%o8)                                done
+     (%o7)                                done
 
  -- Function: ds2_to_lg (ds^{2} line element,cords_in)
      This function takes a line element in the form output by
@@ -777,29 +773,29 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line  42)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 453)
+                                                              (line 449)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line  86)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 515)
+                                                              (line 511)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 603)
+                                                              (line 599)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 414)
+                                                              (line 410)
 * dg_jacobian:                           Functions and Variables for dgeom.
                                                               (line 114)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 642)
+                                                              (line 638)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 556)
+                                                              (line 552)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 120)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 305)
+                                                              (line 301)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 345)
+                                                              (line 341)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 353)
+                                                              (line 349)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line  82)
 
@@ -825,16 +821,16 @@ Ref: show_cords7295
 Ref: dg_derivs7481
 Ref: dg_jacobian8923
 Ref: dg_metric9230
-Ref: ds2_to_lg18737
-Ref: get_ctensor_vars21030
-Ref: set_ctensor_vars21479
-Ref: dg_grad24293
-Ref: dg_curl26295
-Ref: dg_diverg29454
-Ref: dg_laplac31533
-Ref: dg_ffc33762
-Ref: dg_kill35585
-Node: Function and Variable Index37033
+Ref: ds2_to_lg18566
+Ref: get_ctensor_vars20859
+Ref: set_ctensor_vars21308
+Ref: dg_grad24122
+Ref: dg_curl26124
+Ref: dg_diverg29283
+Ref: dg_laplac31362
+Ref: dg_ffc33591
+Ref: dg_kill35414
+Node: Function and Variable Index36862
 
 End Tag Table
 
