@@ -346,18 +346,19 @@ dg_metric(trn):=block([N,ds2_tmp,sol],
   else if trn='cnvrt2 then block(
     ds2:ds2_in,
     for i:1 thru N do if is_eq(cords_tr[i])#0 then ds2: subst( solve(diff(cords_tr[i]),del(cords_in[i])), ds2 ),
-    for i:1 thru N do if is_eq(cords_tr[i])=1 then ( sol:solve(cords_tr[i],cords_in[i]),
-      if freeof(cords_in[i],rhs(sol[1]))=true then
-      ds2: subst( sol, ds2 ) else print("Can't solve for coordinate", cords_in[i], "uniquely. Not substituting.") ),
+    for i:1 thru N do if is_eq(cords_tr[i])=1 and freeof(cords_in[i],cords_tr[i])=false then
+       ( sol:solve(cords_tr[i],cords_in[i]),
+         if freeof(cords_in[i],rhs(sol[1]))=true then
+         ds2: subst( sol, ds2 ) else print("Can't solve for coordinate", cords_in[i], "uniquely. Not substituting.") ),
     for i:1 thru N do if is_eq(cords_tr[i])=0 then ds2: subst( cords_tr[i], cords_in[i], ds2 )
   ),
 
-  ds2:expand(ds2),
-  for i:1 thru N do ds2:collectterms(ds2,del( args(cords_ot)[i] ) ),
+  for i:1 thru N do ds2:collectterms(ds2,del( args(cords_ot)[i] ) ), 
   for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i),
-  for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i),  /* yes, do this twice */
+  for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i), /* yes, do this twice */
 
-
+  display(ds2),
+  
   g: zeromatrix(N,N),
   for i : 1 thru N do
     for j : 1 thru N do
@@ -371,12 +372,12 @@ dg_metric(trn):=block([N,ds2_tmp,sol],
             ) / 2
         ),
 
-      g: trigsimp(g), lg:g, display(g),
+      g: trigsimp(g), lg:g,
       detg: determinant(g),
       if detg#0 then ug: g^^(-1) else error("g is singular!"),
       scrootg: sqrt( detg ),
+      display(g)
 
-  display( ds2 )
 )$
 
 /****************/

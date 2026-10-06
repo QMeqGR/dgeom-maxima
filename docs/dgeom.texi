@@ -178,13 +178,16 @@ do not require running @code{dg_metric(init)}.
                                       2         2
                           ds2_in = del (x) - del (t)
 
+ds2 = 2 cosh(omega) sinh(omega) rho del(omega) del(rho)
+       2           2            2           2    2
+ + cosh (omega) del (rho) + sinh (omega) rho  del (omega)
+                                                      2
+ - (sinh(omega) del(rho) + cosh(omega) rho del(omega))
+
                                    [      2    ]
                                g = [ - rho   0 ]
                                    [           ]
                                    [   0     1 ]
-
-                               2           2    2
-                      ds2 = del (rho) - rho  del (omega)
 
 (%o3)                                done
 @end group
@@ -274,6 +277,13 @@ coordinates.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
+    2    2           2             2           2
+ + r  sin (theta) del (theta) + cos (theta) del (r)
+ + expt(sin(phi) r cos(theta) del(theta) + sin(phi) sin(theta) del(r)
+ + cos(phi) r sin(theta) del(phi), 2) + expt(cos(phi) r cos(theta) del(theta)
+ + cos(phi) sin(theta) del(r) - sin(phi) r sin(theta) del(phi), 2)
+
                              [ 1  0         0        ]
                              [                       ]
                              [     2                 ]
@@ -281,9 +291,6 @@ coordinates.
                              [                       ]
                              [         2    2        ]
                              [ 0  0   r  sin (theta) ]
-
-                  2    2             2       2    2           2
-           ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
 
 (%o2)                                done
 @end group
@@ -311,16 +318,16 @@ to new coordinates that mimic the Schwarzschild metric.
                                  2           2    2
                      ds2_in = del (rho) - rho  del (omega)
 
+                                   2
+                                del (xi)         2
+                          ds2 = -------- - xi del (t)
+                                   xi
+
                                    [ - xi  0  ]
                                    [          ]
                                g = [       1  ]
                                    [  0    -- ]
                                    [       xi ]
-
-                                   2
-                                del (xi)         2
-                          ds2 = -------- - xi del (t)
-                                   xi
 
 (%o5)                                done
 @end group
@@ -338,6 +345,9 @@ leaves the metric with off-diagonal components.
                             2         2         2         2
                 ds2_in = del (Z) + del (Y) + del (X) - del (T)
 
+                            2    2             2       2    2           2
+ ds2 = - 2 del(r) del(t) + r  del (theta) - del (t) + r  sin (theta) del (phi)
+
                          [ - 1  - 1  0         0        ]
                          [                              ]
                          [ - 1   0   0         0        ]
@@ -347,9 +357,6 @@ leaves the metric with off-diagonal components.
                          [                              ]
                          [                2    2        ]
                          [  0    0   0   r  sin (theta) ]
-
-                            2    2             2       2    2           2
- ds2 = - 2 del(r) del(t) + r  del (theta) - del (t) + r  sin (theta) del (phi)
 
 (%o5)                                done
 @end group
@@ -410,6 +417,15 @@ ds2_in = r  del (theta) - ------------------- + ---------
                                                      + r  sin (theta) del (phi)
 
 Can't solve for coordinate r uniquely. Not substituting. 
+                                      2
+       2    2          (r - 2 G M) del (t)    2    2           2
+ds2 = r  del (theta) - ------------------- + r  sin (theta) del (phi)
+                                r
+                                                                           2
+                                                            (r - 2 G M) del (R)
+                                                          + -------------------
+                                                                     r
+
                   [   r - 2 G M                                ]
                   [ - ---------      0      0         0        ]
                   [       r                                    ]
@@ -424,30 +440,7 @@ Can't solve for coordinate r uniquely. Not substituting.
                   [                              2    2        ]
                   [      0           0      0   r  sin (theta) ]
 
-                                      2
-       2    2          (r - 2 G M) del (t)    2    2           2
-ds2 = r  del (theta) - ------------------- + r  sin (theta) del (phi)
-                                r
-                                                                           2
-                                                            (r - 2 G M) del (R)
-                                                          + -------------------
-                                                                     r
-
 (%o8)                                done
-(%i9) lg_out:ds2_to_lg(ds2,cords_ot); 
-                [   r - 2 G M                                ]
-                [ - ---------      0      0         0        ]
-                [       r                                    ]
-                [                                            ]
-                [              r - 2 G M                     ]
-                [      0       ---------  0         0        ]
-(%o9)           [                  r                         ]
-                [                                            ]
-                [                          2                 ]
-                [      0           0      r         0        ]
-                [                                            ]
-                [                              2    2        ]
-                [      0           0      0   r  sin (theta) ]
 @end group
 @end example
 
@@ -534,13 +527,16 @@ coordinates.
                                       2         2
                           ds2_in = del (y) + del (x)
 
+ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
+    2    2           2             2           2
+ + r  sin (theta) del (theta) + cos (theta) del (r)
+                                                2
+ + (r cos(theta) del(theta) + sin(theta) del(r))
+
                                      [ 1  0  ]
                                  g = [       ]
                                      [     2 ]
                                      [ 0  r  ]
-
-                               2    2             2
-                        ds2 = r  del (theta) + del (r)
 
                ctlist = [r cos(theta), r sin(theta), [r, theta]]
 
@@ -588,6 +584,13 @@ argument is @code{2} the gradient is computed in the coordinate basis.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
+    2    2           2             2           2
+ + r  sin (theta) del (theta) + cos (theta) del (r)
+ + expt(sin(phi) r cos(theta) del(theta) + sin(phi) sin(theta) del(r)
+ + cos(phi) r sin(theta) del(phi), 2) + expt(cos(phi) r cos(theta) del(theta)
+ + cos(phi) sin(theta) del(r) - sin(phi) r sin(theta) del(phi), 2)
+
                              [ 1  0         0        ]
                              [                       ]
                              [     2                 ]
@@ -595,9 +598,6 @@ argument is @code{2} the gradient is computed in the coordinate basis.
                              [                       ]
                              [         2    2        ]
                              [ 0  0   r  sin (theta) ]
-
-                  2    2             2       2    2           2
-           ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
 
 gradient in physical basis 
                              dF             dF
@@ -631,14 +631,14 @@ output coordinates @code{cord_ot}.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+                                2         2         2
+                       ds2 = del (z) + del (y) + del (x)
+
                                     [ 1  0  0 ]
                                     [         ]
                                 g = [ 0  1  0 ]
                                     [         ]
                                     [ 0  0  1 ]
-
-                                2         2         2
-                       ds2 = del (z) + del (y) + del (x)
 
 curl in physical basis 
                                  dW_z   dW_y  dW_x   dW_z  dW_y   dW_x
@@ -650,15 +650,17 @@ curl in physical basis
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+                                                 2         2         2
+ds2 = 2 cos(phi) sin(phi) r del(phi) del(r) + del (z) + sin (phi) del (r)
+                 2       2    2                                               2
+            + cos (phi) r  del (phi) + (cos(phi) del(r) - sin(phi) r del(phi))
+
                                    [ 1  0   0 ]
                                    [          ]
                                g = [     2    ]
                                    [ 0  r   0 ]
                                    [          ]
                                    [ 0  0   1 ]
-
-                             2         2       2    2
-                    ds2 = del (z) + del (r) + r  del (phi)
 
 curl in physical basis 
                                   dW_z
@@ -698,15 +700,17 @@ called before calling @code{dg_diverg}.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+                                                 2         2         2
+ds2 = 2 cos(phi) sin(phi) r del(phi) del(r) + del (z) + sin (phi) del (r)
+                 2       2    2                                               2
+            + cos (phi) r  del (phi) + (cos(phi) del(r) - sin(phi) r del(phi))
+
                                    [ 1  0   0 ]
                                    [          ]
                                g = [     2    ]
                                    [ 0  r   0 ]
                                    [          ]
                                    [ 0  0   1 ]
-
-                             2         2       2    2
-                    ds2 = del (z) + del (r) + r  del (phi)
 
 (%o2)                                done
 (%i3) dg_diverg(1); 
@@ -740,15 +744,17 @@ before calling @code{dg_laplac}.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+                                                 2         2         2
+ds2 = 2 cos(phi) sin(phi) r del(phi) del(r) + del (z) + sin (phi) del (r)
+                 2       2    2                                               2
+            + cos (phi) r  del (phi) + (cos(phi) del(r) - sin(phi) r del(phi))
+
                                    [ 1  0   0 ]
                                    [          ]
                                g = [     2    ]
                                    [ 0  r   0 ]
                                    [          ]
                                    [ 0  0   1 ]
-
-                             2         2       2    2
-                    ds2 = del (z) + del (r) + r  del (phi)
 
 (%o2)                                done
 (%i3) dg_laplac(); 
@@ -830,12 +836,12 @@ otherwise they can be accessed in the array @code{killeq}.
                                       2         2
                           ds2_in = del (x) - del (t)
 
+                                     2         2
+                            ds2 = del (x) - del (t)
+
                                     [ - 1  0 ]
                                 g = [        ]
                                     [  0   1 ]
-
-                                     2         2
-                            ds2 = del (x) - del (t)
 
 (%o2)                                done
 (%i3) dg_kill(show); 
