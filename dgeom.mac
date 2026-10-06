@@ -1,4 +1,3 @@
-/* -*- lexical-binding: t; -*- */
 /*
 ;;  This program is free software; you can redistribute it and/or modify 
 ;;  it under the terms of the GNU General Public License as published by         
@@ -320,7 +319,7 @@ dg_derivs():=block([N],
 /*computes the metric in the new coordinates */
 is_eq(expr) := if not mapatom(expr) and op(expr) = "=" then 1 else 0;
 
-dg_metric(trn):=block([N,sol],
+dg_metric(trn):=block([N,ds2_tmp,sol],
   N: length(cords_in),
 
   /* if trn = init, assume the metric is trivial */
@@ -340,23 +339,39 @@ dg_metric(trn):=block([N,sol],
     ds2: dg_minkowski * diff(cords_tr[1])^2, /* in case minkowski */
     for i: 2 thru N do ds2: ds2 + diff(cords_tr[i])^2 )
   else if trn='cnvrt then block(
-    ds2_in: sum( sum( lg_in[i,j] * diff(cords_tr[i]) * diff(cords_tr[j]), i, 1, N ), j, 1, N),
-    ds2: subst(map("=",cords_in,cords_tr),ds2_in) )
+    ds2_tmp: sum( sum( lg_in[i,j] * diff(cords_tr[i]) * diff(cords_tr[j]), i, 1, N ), j, 1, N),
+    for i:1 thru N do ds2_tmp:subst( diff(cords_tr[i]), del(cords_in[i]), ds2_tmp ),
+    for i:1 thru N do ds2_tmp:subst( cords_tr[i], cords_in[i], ds2_tmp ),
+    ds2:expand(ds2_tmp) )
   else if trn='cnvrt2 then block(
     ds2:ds2_in,
-    for i:1 thru N do if is_eq(cords_tr[i])#0 then ds2: subst( solve(diff(cords_tr[i]),del(cords_in[i])), ds2 )
+    for i:1 thru N do if is_eq(cords_tr[i])#0 then ds2: subst( solve(diff(cords_tr[i]),del(cords_in[i])), ds2 ),
+    for i:1 thru N do if is_eq(cords_tr[i])=1 then ( sol:solve(cords_tr[i],cords_in[i]),
+      if freeof(cords_in[i],rhs(sol[1]))=true then
+      ds2: subst( sol, ds2 ) else print("Can't solve for coordinate", cords_in[i], "uniquely. Not substituting.") ),
+    for i:1 thru N do if is_eq(cords_tr[i])=0 then ds2: subst( cords_tr[i], cords_in[i], ds2 )
   ),
 
   ds2:expand(ds2),
   for i:1 thru N do ds2:collectterms(ds2,del( args(cords_ot)[i] ) ),
   for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i),
-  for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i), /* yes, do this twice */
+  for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i),  /* yes, do this twice */
 
-g: zeromatrix(N,N),
-  for i: 1 thru N do
-    for j: 1 thru N do
-      g[i,j]: coeff( expand( ds2 ) , del(args(cords_ot)[i]) * del(args(cords_ot)[j]) ),
-      g: trigsimp(g), lg:g,
+
+  g: zeromatrix(N,N),
+  for i : 1 thru N do
+    for j : 1 thru N do
+        g[i,j] : ratsimp(
+            diff(
+                diff(
+                    ds2,
+                    del(args(cords_ot)[i])
+                ),
+                del(args(cords_ot)[j])
+            ) / 2
+        ),
+
+      g: trigsimp(g), lg:g, display(g),
       detg: determinant(g),
       if detg#0 then ug: g^^(-1) else error("g is singular!"),
       scrootg: sqrt( detg ),

@@ -157,6 +157,11 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
                                            2         2
                                ds2_in = del (x) - del (t)
 
+                                        [      2    ]
+                                    g = [ - rho   0 ]
+                                        [           ]
+                                        [   0     1 ]
+
                                     2           2    2
                            ds2 = del (rho) - rho  del (omega)
 
@@ -232,6 +237,14 @@ coordinates.
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
 
+                                  [ 1  0         0        ]
+                                  [                       ]
+                                  [     2                 ]
+                              g = [ 0  r         0        ]
+                                  [                       ]
+                                  [         2    2        ]
+                                  [ 0  0   r  sin (theta) ]
+
                        2    2             2       2    2           2
                 ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
 
@@ -257,6 +270,12 @@ metric to new coordinates that mimic the Schwarzschild metric.
                                       2           2    2
                           ds2_in = del (rho) - rho  del (omega)
 
+                                        [ - xi  0  ]
+                                        [          ]
+                                    g = [       1  ]
+                                        [  0    -- ]
+                                        [       xi ]
+
                                         2
                                      del (xi)         2
                                ds2 = -------- - xi del (t)
@@ -264,9 +283,35 @@ metric to new coordinates that mimic the Schwarzschild metric.
 
      (%o5)                                done
 
-   The following example converts from standard Schwarzschild
-coordinates to radial tortoise coordinates.  Note that Schwarzschild has
-a predefined metric, and it is not necessary to run ‘dg_metric(init)’.
+   leaves the metric with off-diagonal components.
+
+     (%i1) lg_in : matrix([-1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1])$
+     (%i2) cords_in : [T,X,Y,Z]$
+     (%i3) cords_tr : [t+r,r*sin(theta)*cos(phi),r*sin(theta)*sin(phi),r*cos(theta)]$
+     (%i4) cords_ot : [t,r,theta,phi]$
+     (%i5) dg_metric(cnvrt);
+                                 2         2         2         2
+                     ds2_in = del (Z) + del (Y) + del (X) - del (T)
+
+                              [ - 1  - 1  0         0        ]
+                              [                              ]
+                              [ - 1   0   0         0        ]
+                              [                              ]
+                          g = [            2                 ]
+                              [  0    0   r         0        ]
+                              [                              ]
+                              [                2    2        ]
+                              [  0    0   0   r  sin (theta) ]
+
+                                 2    2             2       2    2           2
+      ds2 = - 2 del(r) del(t) + r  del (theta) - del (t) + r  sin (theta) del (phi)
+
+     (%o5)                                done
+
+   The following example, using ‘cnvrt2’, converts from standard
+Schwarzschild coordinates to radial tortoise coordinates.  Note that
+Schwarzschild has a predefined metric, and it is not necessary to run
+‘dg_metric(init)’.
 
      (%i1) dg_cords(schwarzschild);
                Do NOT run dg_metric(init), the metric is already defined.
@@ -314,6 +359,21 @@ a predefined metric, and it is not necessary to run ‘dg_metric(init)’.
                                         r            r - 2 G M
                                                              2    2           2
                                                           + r  sin (theta) del (phi)
+
+     Can't solve for coordinate r uniquely. Not substituting.
+                       [   r - 2 G M                                ]
+                       [ - ---------      0      0         0        ]
+                       [       r                                    ]
+                       [                                            ]
+                       [              r - 2 G M                     ]
+                       [      0       ---------  0         0        ]
+                   g = [                  r                         ]
+                       [                                            ]
+                       [                          2                 ]
+                       [      0           0      r         0        ]
+                       [                                            ]
+                       [                              2    2        ]
+                       [      0           0      0   r  sin (theta) ]
 
                                            2
             2    2          (r - 2 G M) del (t)    2    2           2
@@ -413,6 +473,11 @@ coordinates.
                                            2         2
                                ds2_in = del (y) + del (x)
 
+                                          [ 1  0  ]
+                                      g = [       ]
+                                          [     2 ]
+                                          [ 0  r  ]
+
                                     2    2             2
                              ds2 = r  del (theta) + del (r)
 
@@ -458,6 +523,14 @@ differential geometry.  See AI for a description.
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
 
+                                  [ 1  0         0        ]
+                                  [                       ]
+                                  [     2                 ]
+                              g = [ 0  r         0        ]
+                                  [                       ]
+                                  [         2    2        ]
+                                  [ 0  0   r  sin (theta) ]
+
                        2    2             2       2    2           2
                 ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
 
@@ -487,6 +560,12 @@ differential geometry.  See AI for a description.
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
 
+                                         [ 1  0  0 ]
+                                         [         ]
+                                     g = [ 0  1  0 ]
+                                         [         ]
+                                         [ 0  0  1 ]
+
                                      2         2         2
                             ds2 = del (z) + del (y) + del (x)
 
@@ -499,6 +578,13 @@ differential geometry.  See AI for a description.
      (%i4) dg_curl(1);
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
+
+                                        [ 1  0   0 ]
+                                        [          ]
+                                    g = [     2    ]
+                                        [ 0  r   0 ]
+                                        [          ]
+                                        [ 0  0   1 ]
 
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
@@ -535,6 +621,13 @@ differential geometry.  See AI for a description.
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
 
+                                        [ 1  0   0 ]
+                                        [          ]
+                                    g = [     2    ]
+                                        [ 0  r   0 ]
+                                        [          ]
+                                        [ 0  0   1 ]
+
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
 
@@ -562,6 +655,13 @@ differential geometry.  See AI for a description.
      (%i2) dg_metric(init);
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
+
+                                        [ 1  0   0 ]
+                                        [          ]
+                                    g = [     2    ]
+                                        [ 0  r   0 ]
+                                        [          ]
+                                        [ 0  0   1 ]
 
                                   2         2       2    2
                          ds2 = del (z) + del (r) + r  del (phi)
@@ -636,6 +736,10 @@ the ctensor package.
                                            2         2
                                ds2_in = del (x) - del (t)
 
+                                         [ - 1  0 ]
+                                     g = [        ]
+                                         [  0   1 ]
+
                                           2         2
                                  ds2 = del (x) - del (t)
 
@@ -667,31 +771,31 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line  42)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 380)
+                                                              (line 453)
 * dg_derivs:                             Functions and Variables for dgeom.
-                                                              (line  78)
+                                                              (line  83)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 427)
+                                                              (line 513)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 497)
+                                                              (line 597)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 353)
+                                                              (line 418)
 * dg_jacobian:                           Functions and Variables for dgeom.
-                                                              (line 106)
+                                                              (line 111)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 536)
+                                                              (line 636)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 459)
+                                                              (line 552)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 112)
+                                                              (line 117)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 252)
+                                                              (line 312)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 292)
+                                                              (line 352)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 300)
+                                                              (line 360)
 * show_cords:                            Functions and Variables for dgeom.
-                                                              (line  74)
+                                                              (line  79)
 
  [index ]
 * Menu:
@@ -711,20 +815,20 @@ Node: Top282
 Node: Introduction to package dgeom629
 Node: Functions and Variables for dgeom3617
 Ref: dg_cords5616
-Ref: show_cords6894
-Ref: dg_derivs7080
-Ref: dg_jacobian8522
-Ref: dg_metric8829
-Ref: ds2_to_lg16105
-Ref: get_ctensor_vars18398
-Ref: set_ctensor_vars18847
-Ref: dg_grad21292
-Ref: dg_curl22618
-Ref: dg_diverg24991
-Ref: dg_laplac26550
-Ref: dg_ffc28259
-Ref: dg_kill30082
-Node: Function and Variable Index31373
+Ref: show_cords7111
+Ref: dg_derivs7297
+Ref: dg_jacobian8739
+Ref: dg_metric9046
+Ref: ds2_to_lg19225
+Ref: get_ctensor_vars21518
+Ref: set_ctensor_vars21967
+Ref: dg_grad24621
+Ref: dg_curl26368
+Ref: dg_diverg29326
+Ref: dg_laplac31204
+Ref: dg_ffc33232
+Ref: dg_kill35055
+Node: Function and Variable Index36503
 
 End Tag Table
 

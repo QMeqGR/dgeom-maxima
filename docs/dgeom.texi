@@ -178,6 +178,11 @@ do not require running @code{dg_metric(init)}.
                                       2         2
                           ds2_in = del (x) - del (t)
 
+                                   [      2    ]
+                               g = [ - rho   0 ]
+                                   [           ]
+                                   [   0     1 ]
+
                                2           2    2
                       ds2 = del (rho) - rho  del (omega)
 
@@ -269,6 +274,14 @@ coordinates.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+                             [ 1  0         0        ]
+                             [                       ]
+                             [     2                 ]
+                         g = [ 0  r         0        ]
+                             [                       ]
+                             [         2    2        ]
+                             [ 0  0   r  sin (theta) ]
+
                   2    2             2       2    2           2
            ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
 
@@ -298,6 +311,12 @@ to new coordinates that mimic the Schwarzschild metric.
                                  2           2    2
                      ds2_in = del (rho) - rho  del (omega)
 
+                                   [ - xi  0  ]
+                                   [          ]
+                               g = [       1  ]
+                                   [  0    -- ]
+                                   [       xi ]
+
                                    2
                                 del (xi)         2
                           ds2 = -------- - xi del (t)
@@ -307,9 +326,39 @@ to new coordinates that mimic the Schwarzschild metric.
 @end group
 @end example
 
-The following example converts from standard Schwarzschild coordinates to
-radial tortoise coordinates. Note that Schwarzschild has a predefined metric,
-and it is not necessary to run @code{dg_metric(init)}.
+leaves the metric with off-diagonal components.
+
+@example
+@group
+(%i1) lg_in : matrix([-1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1])$ 
+(%i2) cords_in : [T,X,Y,Z]$ 
+(%i3) cords_tr : [t+r,r*sin(theta)*cos(phi),r*sin(theta)*sin(phi),r*cos(theta)]$ 
+(%i4) cords_ot : [t,r,theta,phi]$ 
+(%i5) dg_metric(cnvrt); 
+                            2         2         2         2
+                ds2_in = del (Z) + del (Y) + del (X) - del (T)
+
+                         [ - 1  - 1  0         0        ]
+                         [                              ]
+                         [ - 1   0   0         0        ]
+                         [                              ]
+                     g = [            2                 ]
+                         [  0    0   r         0        ]
+                         [                              ]
+                         [                2    2        ]
+                         [  0    0   0   r  sin (theta) ]
+
+                            2    2             2       2    2           2
+ ds2 = - 2 del(r) del(t) + r  del (theta) - del (t) + r  sin (theta) del (phi)
+
+(%o5)                                done
+@end group
+@end example
+
+The following example, using @code{cnvrt2}, converts from standard
+Schwarzschild coordinates to radial tortoise coordinates. Note that
+Schwarzschild has a predefined metric, and it is not necessary to run
+@code{dg_metric(init)}.
 
 @example
 @group
@@ -359,6 +408,21 @@ ds2_in = r  del (theta) - ------------------- + ---------
                                    r            r - 2 G M
                                                         2    2           2
                                                      + r  sin (theta) del (phi)
+
+Can't solve for coordinate r uniquely. Not substituting. 
+                  [   r - 2 G M                                ]
+                  [ - ---------      0      0         0        ]
+                  [       r                                    ]
+                  [                                            ]
+                  [              r - 2 G M                     ]
+                  [      0       ---------  0         0        ]
+              g = [                  r                         ]
+                  [                                            ]
+                  [                          2                 ]
+                  [      0           0      r         0        ]
+                  [                                            ]
+                  [                              2    2        ]
+                  [      0           0      0   r  sin (theta) ]
 
                                       2
        2    2          (r - 2 G M) del (t)    2    2           2
@@ -470,6 +534,11 @@ coordinates.
                                       2         2
                           ds2_in = del (y) + del (x)
 
+                                     [ 1  0  ]
+                                 g = [       ]
+                                     [     2 ]
+                                     [ 0  r  ]
+
                                2    2             2
                         ds2 = r  del (theta) + del (r)
 
@@ -519,6 +588,14 @@ argument is @code{2} the gradient is computed in the coordinate basis.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+                             [ 1  0         0        ]
+                             [                       ]
+                             [     2                 ]
+                         g = [ 0  r         0        ]
+                             [                       ]
+                             [         2    2        ]
+                             [ 0  0   r  sin (theta) ]
+
                   2    2             2       2    2           2
            ds2 = r  del (theta) + del (r) + r  sin (theta) del (phi)
 
@@ -554,6 +631,12 @@ output coordinates @code{cord_ot}.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+                                    [ 1  0  0 ]
+                                    [         ]
+                                g = [ 0  1  0 ]
+                                    [         ]
+                                    [ 0  0  1 ]
+
                                 2         2         2
                        ds2 = del (z) + del (y) + del (x)
 
@@ -566,6 +649,13 @@ curl in physical basis
 (%i4) dg_curl(1); 
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
+
+                                   [ 1  0   0 ]
+                                   [          ]
+                               g = [     2    ]
+                                   [ 0  r   0 ]
+                                   [          ]
+                                   [ 0  0   1 ]
 
                              2         2       2    2
                     ds2 = del (z) + del (r) + r  del (phi)
@@ -608,6 +698,13 @@ called before calling @code{dg_diverg}.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
+                                   [ 1  0   0 ]
+                                   [          ]
+                               g = [     2    ]
+                                   [ 0  r   0 ]
+                                   [          ]
+                                   [ 0  0   1 ]
+
                              2         2       2    2
                     ds2 = del (z) + del (r) + r  del (phi)
 
@@ -642,6 +739,13 @@ before calling @code{dg_laplac}.
 (%i2) dg_metric(init); 
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
+
+                                   [ 1  0   0 ]
+                                   [          ]
+                               g = [     2    ]
+                                   [ 0  r   0 ]
+                                   [          ]
+                                   [ 0  0   1 ]
 
                              2         2       2    2
                     ds2 = del (z) + del (r) + r  del (phi)
@@ -725,6 +829,10 @@ otherwise they can be accessed in the array @code{killeq}.
 (%i2) dg_metric(init); 
                                       2         2
                           ds2_in = del (x) - del (t)
+
+                                    [ - 1  0 ]
+                                g = [        ]
+                                    [  0   1 ]
 
                                      2         2
                             ds2 = del (x) - del (t)
