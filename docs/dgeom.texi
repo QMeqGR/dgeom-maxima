@@ -100,7 +100,7 @@ symbols, the Riemann tensor and so forth. See the function
 @code{set_ctensor_vars} for more information.
 
 @noindent
-version: 0.1
+version: 0.2
 
 @noindent
 Eric Majzoub, Jan 2026
@@ -252,7 +252,7 @@ metric is assumed to be flat, but maybe Minkowski, in the initial
 coordinates @var{cords_in}. For example, this input option may be used
 for the following @var{x,y,x} to @var{r,theta,phi} coordinates:
 
-@code{
+@code{@*
 cords_in: [x,y,z]@*
 cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]@*
 cords_ot: [r,theta,phi]@*
@@ -266,9 +266,9 @@ the ordering of the variables in @code{cords_in}. The value of
 the line element @var{ds@sup{2}} in the variable @code{ds2}, and the
 metric in the matrix @code{g}. An example set of coordinates here is:
 
-@code{
+@code{@*
 cords_in: [x,y,z]@*
-cords_tr: [x=r*cos(phi)*cos(theta),y=r*cos(phi)*sin(theta),z=r*sin(phi)]@*
+cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]@*
 cords_ot: [r,theta,phi]@*
 }
 
@@ -277,9 +277,9 @@ everything is the same as for argument @var{cnvrt} except that the variable
 @var{cords_tr} may contain the equation relating the 'in' and out 'ot'
 coordinates. An example set of input coordinates is:
 
-@code{
+@code{@*
 cords_in: [x,y,z]@*
-cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]@*
+cords_tr: [x=r*cos(phi)*cos(theta),y=r*cos(phi)*sin(theta),z=r*sin(phi)]@*
 cords_ot: [r,theta,phi]@*
 }
 

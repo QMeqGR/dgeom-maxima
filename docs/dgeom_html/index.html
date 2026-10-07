@@ -113,7 +113,7 @@ computations in the <code class="code">ctensor</code> package such as the Christ
 symbols, the Riemann tensor and so forth. See the function
 <code class="code">set_ctensor_vars</code> for more information.
 </p>
-<p>version: 0.1
+<p>version: 0.2
 </p>
 <p>Eric Majzoub, Jan 2026
 </p>
@@ -268,7 +268,7 @@ metric is assumed to be flat, but maybe Minkowski, in the initial
 coordinates <var class="var">cords_in</var>. For example, this input option may be used
 for the following <var class="var">x,y,x</var> to <var class="var">r,theta,phi</var> coordinates:
 </p>
-<p><code class="code">
+<p><code class="code"><br>
 cords_in: [x,y,z]<br>
 cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]<br>
 cords_ot: [r,theta,phi]<br>
@@ -282,9 +282,9 @@ the ordering of the variables in <code class="code">cords_in</code>. The value o
 the line element <var class="var">ds<sup class="sup">2</sup></var> in the variable <code class="code">ds2</code>, and the
 metric in the matrix <code class="code">g</code>. An example set of coordinates here is:
 </p>
-<p><code class="code">
+<p><code class="code"><br>
 cords_in: [x,y,z]<br>
-cords_tr: [x=r*cos(phi)*cos(theta),y=r*cos(phi)*sin(theta),z=r*sin(phi)]<br>
+cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]<br>
 cords_ot: [r,theta,phi]<br>
 </code>
 </p>
@@ -293,9 +293,9 @@ everything is the same as for argument <var class="var">cnvrt</var> except that 
 <var class="var">cords_tr</var> may contain the equation relating the &rsquo;in&rsquo; and out &rsquo;ot&rsquo;
 coordinates. An example set of input coordinates is:
 </p>
-<p><code class="code">
+<p><code class="code"><br>
 cords_in: [x,y,z]<br>
-cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]<br>
+cords_tr: [x=r*cos(phi)*cos(theta),y=r*cos(phi)*sin(theta),z=r*sin(phi)]<br>
 cords_ot: [r,theta,phi]<br>
 </code>
 </p>
