@@ -14,7 +14,7 @@
 */
 
 if get('dgeom,'dgeom_version)#false then error("Package dgeom already loaded!")$
-put('dgeom,'0.1,'dgeom_version)$
+put('dgeom,'0.2,'dgeom_version)$
 
 load("dgeom.lisp") $
 load("dg_defs.mac")$
@@ -52,33 +52,38 @@ cords_ot is coordinates OUT
 
 */
 dg_cords(crds):=block(
-  dg_minkowski:1, /* set to 1 for all coordinate systems by default */
   if crds='cart2d then
-   ( cords_in:[x,y],
+   ( dg_minkowski: 1,
+     cords_in:[x,y],
      cords_tr:[x,y],
      cords_ot:[x,y] )
   else if crds='cart3d then
-   ( cords_in:[x,y,z],
+   ( dg_minkowski: 1,
+     cords_in:[x,y,z],
      cords_tr:[x,y,z],
      cords_ot:[x,y,z] )
   else if crds='xyz_to_spher then
-   ( cords_in:[x,y,z],
+   ( dg_minkowski: 1,
+     cords_in:[x,y,z],
      cords_tr:[r*sin(theta)*cos(phi),r*sin(theta)*sin(phi),r*cos(theta)],
      cords_ot:[r,theta,phi],
      assume(r>0,theta>0,theta<%pi) )
   else if crds='xyz_to_spher2 then
-   ( cords_in:[x,y,z],
+   ( dg_minkowski: 1,
+     cords_in:[x,y,z],
      cords_tr:[r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)],
      cords_ot:[r,theta,phi],
      assume(r>0,phi>0,phi<%pi) )
   else if crds='xyz_to_pro_spher then
-   ( cords_in:[x,y,z],
+   ( dg_minkowski: 1,
+     cords_in:[x,y,z],
      cords_tr:[sinh(chi)*sin(theta)*cos(phi),sinh(chi)*sin(theta)*sin(phi),
                cosh(chi)*cos(theta)],
      cords_ot:[chi,theta,phi],
      assume(chi>0,theta>0,theta<%pi) )
   else if crds='xyz_to_paraboloid then
-   ( cords_in:[x,y,z],
+   ( dg_minkowski: 1,
+     cords_in:[x,y,z],
      cords_tr:[u*v*cos(phi),u*v*sin(phi),1/2*(u^2-v^2)],
      cords_ot:[u,v,phi],
      assume(phi>=0) )
@@ -89,22 +94,26 @@ dg_cords(crds):=block(
      cords_ot:[t,r,theta,phi],
      assume(r>0,theta>0,theta<%pi) )
    else if crds='xyz_to_cyl then
-   ( cords_in:[x,y,z],
+   ( dg_minkowski: 1,
+     cords_in:[x,y,z],
      cords_tr:[r*cos(phi),r*sin(phi),z],
      cords_ot:[r,phi,z],
      assume(r>0) )
    else if crds='xy_to_polar then
-   ( cords_in:[x,y],
+   ( dg_minkowski: 1,
+     cords_in:[x,y],
      cords_tr:[r*cos(theta),r*sin(theta)],
      cords_ot:[r,theta],
      assume(r>0) )
    else if crds='xy_to_exp1 then
-   ( cords_in:[x,y],
+   ( dg_minkowski: 1,
+     cords_in:[x,y],
      cords_tr:[s*exp(t),s*exp(-t)],
      cords_ot:[s,t],
      assume(t>0) )
    else if crds='xy_to_uv2 then
-   ( cords_in:[x,y],
+   ( dg_minkowski: 1,
+     cords_in:[x,y],
      cords_tr:[u,v^2],
      cords_ot:[u,v] )
    else if crds='mink2d then
@@ -125,6 +134,7 @@ dg_cords(crds):=block(
      assume(rho>0) )
    else if crds='schwarzschild then
    ( no_init_messg(),
+     dg_minkowski: -1,
      cords_in:[t,r,theta,phi],
      cords_ot:cords_in,
      declare([G,M],constant),
@@ -133,6 +143,7 @@ dg_cords(crds):=block(
      g:lg: ds2_to_lg(ds2,cords_in) )
    else if crds='kerr then
    ( no_init_messg(),
+     dg_minkowski: -1,
      cords_in:[t,rho,theta,phi],
      cords_ot:cords_in,
      declare([M,a,J,G],constant),
@@ -144,6 +155,7 @@ dg_cords(crds):=block(
      g:lg: ds2_to_lg(ds2,cords_in) )
    else if crds='kruskal then
    ( no_init_messg(),
+     dg_minkowski: -1,
      cords_in:[T,X,theta,phi],
      cords_ot:cords_in,
      declare([M,G],constant),
@@ -153,6 +165,7 @@ dg_cords(crds):=block(
      g:lg: ds2_to_lg(ds2,cords_in) )
    else if crds='eddfink then
    ( no_init_messg(),
+     dg_minkowski: 1,
      cords_in:[v,r,theta,phi],
      cords_ot:cords_in,
      declare([M,G],constant),
