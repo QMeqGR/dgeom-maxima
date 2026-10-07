@@ -252,8 +252,11 @@ metric is assumed to be flat, but maybe Minkowski, in the initial
 coordinates @var{cords_in}. For example, this input option may be used
 for the following @var{x,y,x} to @var{r,theta,phi} coordinates:
 
-@example
-@end example
+@code{
+cords_in: [x,y,z]@*
+cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]@*
+cords_ot: [r,theta,phi]@*
+}
 
 If @code{dg_metric} is called with the argument @var{cnvrt}, then the
 function assumes there is an initial (non-trivial) metric given in the
@@ -263,16 +266,22 @@ the ordering of the variables in @code{cords_in}. The value of
 the line element @var{ds@sup{2}} in the variable @code{ds2}, and the
 metric in the matrix @code{g}. An example set of coordinates here is:
 
-@example
-@end example
+@code{
+cords_in: [x,y,z]@*
+cords_tr: [x=r*cos(phi)*cos(theta),y=r*cos(phi)*sin(theta),z=r*sin(phi)]@*
+cords_ot: [r,theta,phi]@*
+}
 
 If @code{dg_metric} is called with the argument @var{cnvrt2}, then the
 everything is the same as for argument @var{cnvrt} except that the variable
 @var{cords_tr} may contain the equation relating the 'in' and out 'ot'
 coordinates. An example set of input coordinates is:
 
-@example
-@end example
+@code{
+cords_in: [x,y,z]@*
+cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]@*
+cords_ot: [r,theta,phi]@*
+}
 
 If @code{dg_metric} is called with the argument @var{cnvrt3}, then the
 everything is the same as for argument @var{cnvrt}. Example coordinate

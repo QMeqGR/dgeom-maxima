@@ -218,6 +218,11 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
      coordinates <cords_in>.  For example, this input option may be used
      for the following <x,y,x> to <r,theta,phi> coordinates:
 
+     ‘ cords_in: [x,y,z]
+     cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]
+     cords_ot: [r,theta,phi]
+     ’
+
      If ‘dg_metric’ is called with the argument <cnvrt>, then the
      function assumes there is an initial (non-trivial) metric given in
      the matrix ‘lg_in’ with the ordering of the entries in accordance
@@ -226,10 +231,21 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
      line element <ds^{2}> in the variable ‘ds2’, and the metric in the
      matrix ‘g’.  An example set of coordinates here is:
 
+     ‘ cords_in: [x,y,z]
+     cords_tr:
+     [x=r*cos(phi)*cos(theta),y=r*cos(phi)*sin(theta),z=r*sin(phi)]
+     cords_ot: [r,theta,phi]
+     ’
+
      If ‘dg_metric’ is called with the argument <cnvrt2>, then the
      everything is the same as for argument <cnvrt> except that the
      variable <cords_tr> may contain the equation relating the 'in' and
      out 'ot' coordinates.  An example set of input coordinates is:
+
+     ‘ cords_in: [x,y,z]
+     cords_tr: [r*cos(phi)*cos(theta),r*cos(phi)*sin(theta),r*sin(phi)]
+     cords_ot: [r,theta,phi]
+     ’
 
      If ‘dg_metric’ is called with the argument <cnvrt3>, then the
      everything is the same as for argument <cnvrt>.  Example coordinate
@@ -784,29 +800,29 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line  42)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 481)
+                                                              (line 497)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line  81)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 535)
+                                                              (line 551)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 613)
+                                                              (line 629)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 449)
+                                                              (line 465)
 * dg_jacobian:                           Functions and Variables for dgeom.
                                                               (line 109)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 652)
+                                                              (line 668)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 571)
+                                                              (line 587)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 115)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 346)
+                                                              (line 362)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 386)
+                                                              (line 402)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 394)
+                                                              (line 410)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line  77)
 
@@ -832,16 +848,16 @@ Ref: show_cords7067
 Ref: dg_derivs7253
 Ref: dg_jacobian8695
 Ref: dg_metric9002
-Ref: ds2_to_lg20244
-Ref: get_ctensor_vars22537
-Ref: set_ctensor_vars22986
-Ref: dg_grad25522
-Ref: dg_curl27125
-Ref: dg_diverg29837
-Ref: dg_laplac31591
-Ref: dg_ffc33495
-Ref: dg_kill35318
-Node: Function and Variable Index36654
+Ref: ds2_to_lg20669
+Ref: get_ctensor_vars22962
+Ref: set_ctensor_vars23411
+Ref: dg_grad25947
+Ref: dg_curl27550
+Ref: dg_diverg30262
+Ref: dg_laplac32016
+Ref: dg_ffc33920
+Ref: dg_kill35743
+Node: Function and Variable Index37079
 
 End Tag Table
 
