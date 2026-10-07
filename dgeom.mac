@@ -159,6 +159,11 @@ dg_cords(crds):=block(
      assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0,M>0),
      ds2: -(1-2*G*M/r)*del(v)^2+2*del(v)*del(r)+r^2*del(theta)^2+r^2*sin(theta)^2*del(phi)^2,
      g:lg: ds2_to_lg(ds2,cords_in) )
+   else if crds='show then
+   (  display(cords_in),
+     display(cords_tr),
+     display(cords_ot),
+     display(dg_minkowski) )
    else
    ( print("The following predefined coordinate systems are available:"),
      print("  cart2d, cart3d, xyz_to_spher, xyz_to_pro_spher, xyz_to_spher2, xyz_to_paraboloid"),
@@ -319,8 +324,9 @@ dg_derivs():=block([N],
 /*computes the metric in the new coordinates */
 is_eq(expr) := if not mapatom(expr) and op(expr) = "=" then 1 else 0;
 
-dg_metric(trn):=block([N,ds2_tmp,sol],
+dg_metric(trn):=block([N,ds2_tmp,sol,J,i,j,lg_out,l,m,cords_otf],
   N: length(cords_in),
+  cords_otf: makelist(0,i,N),
 
   /* if trn = init, assume the metric is trivial */
   if trn='init then block(
@@ -329,20 +335,31 @@ dg_metric(trn):=block([N,ds2_tmp,sol],
   for i: 2 thru N do ds2_in: ds2_in + diff(cords_in[i])^2,
   ds2_in: trigsimp(ds2_in)
   )
-  else if trn='cnvrt or trn='cnvrt2 then
+  else if trn='cnvrt or trn='cnvrt2 or trn='cnvrt3 then
     ds2_in: sum( sum( lg_in[i,j] * del(cords_in[i]) * del(cords_in[j]), i, 1, N ), j, 1, N)
-  else print("argument must be init or cnvrt or cnvrt2"),
+  else print("argument must be init or cnvrt or cnvrt2 or cnvrt3"),
   display(ds2_in),
-
   ds2:0,
+
+  /**********************************/
+  /*      option: init              */
+  /**********************************/
   if trn='init then block(
     ds2: dg_minkowski * diff(cords_tr[1])^2, /* in case minkowski */
     for i: 2 thru N do ds2: ds2 + diff(cords_tr[i])^2 )
+
+  /**********************************/
+  /*      option: cnvrt             */
+  /**********************************/
   else if trn='cnvrt then block(
     ds2_tmp: sum( sum( lg_in[i,j] * diff(cords_tr[i]) * diff(cords_tr[j]), i, 1, N ), j, 1, N),
     for i:1 thru N do ds2_tmp:subst( diff(cords_tr[i]), del(cords_in[i]), ds2_tmp ),
     for i:1 thru N do ds2_tmp:subst( cords_tr[i], cords_in[i], ds2_tmp ),
     ds2:expand(ds2_tmp) )
+  
+  /**********************************/
+  /*      option: cnvrt2            */
+  /**********************************/
   else if trn='cnvrt2 then block(
     ds2:ds2_in,
     for i:1 thru N do if is_eq(cords_tr[i])#0 then ds2: subst( solve(diff(cords_tr[i]),del(cords_in[i])), ds2 ),
@@ -351,32 +368,65 @@ dg_metric(trn):=block([N,ds2_tmp,sol],
          if freeof(cords_in[i],rhs(sol[1]))=true then
          ds2: subst( sol, ds2 ) else print("Can't solve for coordinate", cords_in[i], "uniquely. Not substituting.") ),
     for i:1 thru N do if is_eq(cords_tr[i])=0 then ds2: subst( cords_tr[i], cords_in[i], ds2 )
+  )
+  /**********************************/
+  /*      option: cnvrt3            */
+  /**********************************/
+  else if trn='cnvrt3 then block(
+    J: zeromatrix(N,N),
+    for i:1 thru N do
+      for j:1 thru N do
+        J[i,j]: diff( cords_tr[i], cords_ot[j] ),
+    J: trigsimp(J), if dg_dbg=1 then display(J),
+    lg_out: zeromatrix(N,N),
+    for i:1 thru N do
+      for j:1 thru N do
+        for l:1 thru N do
+          for m:1 thru N do
+            lg_out[l,m]: lg_out[l,m] + lg_in[i,j] * J[i,l] * J[j,m],
+    if dg_dbg=1 then display(lg_out),
+    /* solve for the cords_ot in terms of cords_in */
+    sol: solve( map(cords_in,cords_tr), cords_ot ),
+    if sol=[] then block(
+      print("Failure inverting coordinates. Trying serial solutions."),
+      for i:1 thru N do
+        (
+        cords_otf[i]: solve( cords_in[i]=cords_tr[i], cords_in[i] ),
+        if dg_dbg=1 then display(cords_otf[i]),
+        if cords_otf[i]=[] or cords_otf[i]= 'all or freeof(cords_in,rhs(cords_otf[i]))=false then
+          print("Can't solve for coordinate", cords_in[i], "uniquely. Not substituting.")
+        else
+          for l:1 thru N do
+            for m: 1 thru N do
+              lg_out[l,m]: subst( cords_otf[i], lg_out[l,m] )
+        ), if dg_dbg=1 then display(lg_out)
+      ),
+    ds2: sum( sum ( lg_out[l,m]*del(cords_ot[l])*del(cords_ot[m]), l,1,N ), m,1,N ),
+    if dg_dbg=1 then display(ds2)
   ),
 
-  for i:1 thru N do ds2:collectterms(ds2,del( args(cords_ot)[i] ) ), 
-  for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i),
-  for i:1 thru N do ds2:substpart( trigsimp(part(ds2,i)), ds2,i), /* yes, do this twice */
 
-  display(ds2),
+  /***********************************/
+  /*   Clean up ds2                  */
+  /***********************************/
+  for i:1 thru N do ds2:collectterms( ds2, del( cords_ot[i] ) ), 
+  /* for i:1 thru N do (
+    ds2:substpart( ratsimp(part(ds2,i)), ds2,i),
+    ds2:substpart( trigsimp(part(ds2,i)), ds2,i) ), */
+
+  /* display(ds2), */
   
   g: zeromatrix(N,N),
   for i : 1 thru N do
     for j : 1 thru N do
-        g[i,j] : ratsimp(
-            diff(
-                diff(
-                    ds2,
-                    del(args(cords_ot)[i])
-                ),
-                del(args(cords_ot)[j])
-            ) / 2
-        ),
+        g[i,j]: ratsimp(
+            diff( diff( ds2 , del(cords_ot[i] ) ), del(cords_ot[j]) ) / 2 ),
 
-      g: trigsimp(g), lg:g,
-      detg: determinant(g),
-      if detg#0 then ug: g^^(-1) else error("g is singular!"),
-      scrootg: sqrt( detg ),
-      display(g)
+  g: trigsimp(g), lg:g,
+  detg: determinant(g),
+  if detg#0 then ug: g^^(-1) else error("g is singular!"),
+  scrootg: sqrt( detg ),
+  display(g)
 
 )$
 

@@ -155,6 +155,7 @@ and sets the variables @code{cords_in}, @code{cords_tr},
 @code{cords_tr} are the transformation functions to the new or output
 coordinates, and @code{cords_ot} are the output coordinates.  To see the
 available predefined coordinate systems use @code{dg_cords(all)}.
+Issuing @code{dg_cords(show)} will display the coordinate variables.
 
 Some choices of coordinates have predefined metrics and these
 do not require running @code{dg_metric(init)}.
@@ -177,12 +178,6 @@ do not require running @code{dg_metric(init)}.
 (%i3) dg_metric(init); 
                                       2         2
                           ds2_in = del (x) - del (t)
-
-ds2 = 2 cosh(omega) sinh(omega) rho del(omega) del(rho)
-       2           2            2           2    2
- + cosh (omega) del (rho) + sinh (omega) rho  del (omega)
-                                                      2
- - (sinh(omega) del(rho) + cosh(omega) rho del(omega))
 
                                    [      2    ]
                                g = [ - rho   0 ]
@@ -242,7 +237,7 @@ assigned to the matrix @code{J} and the inverse is assigned to the matrix
 @end deffn
 
 @anchor{dg_metric}
-@deffn {Function} dg_metric ([init,cnvrt,cnvrt2])
+@deffn {Function} dg_metric ([init,cnvrt,cnvrt2,cnvrt3])
 This function takes as argument @var{init} or @var{cnvrt}. The input and
 output coordinates and the transformation functions must be defined
 beforehand for this function to work. See the function @ref{dg_cords}.
@@ -252,18 +247,46 @@ argument @var{init} then the function assumes the input metric is
 diagonal with unit entries, although @code{dg_minkowski} may be set to
 -1 for the time component.
 
-If @code{dg_metric} is called with the
-argument @var{cnvrt}, then the function assumes there is an initial
-metric given in the matrix @code{lg_in} with the ordering of the entries
-in accordance with the ordering of the variables in @code{cords_in}. The
-value of @code{dg_minkowski} is ignored for this case. @code{dg_metric}
-returns the line element @var{ds@sup{2}} in the variable @code{ds2}, and
-the metric in the matrix @code{g}.
+If calling @code{dg_metric} with the argument @var{init}, the initial
+metric is assumed to be flat, but maybe Minkowski, in the initial
+coordinates @var{cords_in}. For example, this input option may be used
+for the following @var{x,y,x} to @var{r,theta,phi} coordinates:
+
+@example
+@end example
+
+If @code{dg_metric} is called with the argument @var{cnvrt}, then the
+function assumes there is an initial (non-trivial) metric given in the
+matrix @code{lg_in} with the ordering of the entries in accordance with
+the ordering of the variables in @code{cords_in}. The value of
+@code{dg_minkowski} is ignored for this case. @code{dg_metric} returns
+the line element @var{ds@sup{2}} in the variable @code{ds2}, and the
+metric in the matrix @code{g}. An example set of coordinates here is:
+
+@example
+@end example
 
 If @code{dg_metric} is called with the argument @var{cnvrt2}, then the
 everything is the same as for argument @var{cnvrt} except that the variable
 @var{cords_tr} may contain the equation relating the 'in' and out 'ot'
-coordinates.
+coordinates. An example set of input coordinates is:
+
+@example
+@end example
+
+If @code{dg_metric} is called with the argument @var{cnvrt3}, then the
+everything is the same as for argument @var{cnvrt}. Example coordinate
+inputs are the same as for @var{cnvrt} above.
+
+@example
+@end example
+
+Notes: The options @var{cnvrt}, @var{cnvrt2}, and @var{cnvrt3} use
+successively more sophisticated methods to try constructing the
+transformed metric. This sometimes fails because the coordinates cannot
+be uniquely inverted. If none of the methods works please send me a
+message.
+
 @end deffn
 
 The following example converts from @var{x,y,z} coordinates to spherical
@@ -276,13 +299,6 @@ coordinates.
 (%i2) dg_metric(init); 
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
-
-ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
-    2    2           2             2           2
- + r  sin (theta) del (theta) + cos (theta) del (r)
- + expt(sin(phi) r cos(theta) del(theta) + sin(phi) sin(theta) del(r)
- + cos(phi) r sin(theta) del(phi), 2) + expt(cos(phi) r cos(theta) del(theta)
- + cos(phi) sin(theta) del(r) - sin(phi) r sin(theta) del(phi), 2)
 
                              [ 1  0         0        ]
                              [                       ]
@@ -297,7 +313,10 @@ ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
 @end example
 
 The following example illustrates the conversion of the Rindler metric
-to new coordinates that mimic the Schwarzschild metric.
+to new coordinates that mimic the Schwarzschild metric using all
+three algorithms in @code{dg_metric}.
+
+Using @code{dg_metric(cnvrt)}
 
 @example
 @group
@@ -318,10 +337,37 @@ to new coordinates that mimic the Schwarzschild metric.
                                  2           2    2
                      ds2_in = del (rho) - rho  del (omega)
 
-                                   2
-                                del (xi)         2
-                          ds2 = -------- - xi del (t)
-                                   xi
+                                   [ - xi  0  ]
+                                   [          ]
+                               g = [       1  ]
+                                   [  0    -- ]
+                                   [       xi ]
+
+(%o5)                                done
+@end group
+@end example
+
+
+Using @code{dg_metric(cnvrt2)}
+
+@example
+@group
+(%i1) cords_in:[omega,rho]; 
+(%o1)                            [omega, rho]
+(%i2) cords_ot:[t,xi]; 
+(%o2)                               [t, xi]
+(%i3) cords_tr:[omega=t/2,rho=2*sqrt(xi)]; 
+                                  t
+(%o3)                    [omega = -, rho = 2 sqrt(xi)]
+                                  2
+(%i4) lg_in:matrix([-rho^2,0],[0,1]); 
+                                 [      2    ]
+(%o4)                            [ - rho   0 ]
+                                 [           ]
+                                 [   0     1 ]
+(%i5) dg_metric(cnvrt2); 
+                                 2           2    2
+                     ds2_in = del (rho) - rho  del (omega)
 
                                    [ - xi  0  ]
                                    [          ]
@@ -333,7 +379,40 @@ to new coordinates that mimic the Schwarzschild metric.
 @end group
 @end example
 
-leaves the metric with off-diagonal components.
+
+Using @code{dg_metric(cnvrt3)}
+
+@example
+@group
+(%i1) cords_in:[omega,rho]; 
+(%o1)                            [omega, rho]
+(%i2) cords_ot:[t,xi]; 
+(%o2)                               [t, xi]
+(%i3) cords_tr:[t/2,2*sqrt(xi)]; 
+                                 t
+(%o3)                           [-, 2 sqrt(xi)]
+                                 2
+(%i4) lg_in:matrix([-rho^2,0],[0,1]); 
+                                 [      2    ]
+(%o4)                            [ - rho   0 ]
+                                 [           ]
+                                 [   0     1 ]
+(%i5) dg_metric(cnvrt3); 
+                                 2           2    2
+                     ds2_in = del (rho) - rho  del (omega)
+
+Failure inverting coordinates. Trying serial solutions. 
+                                   [ - xi  0  ]
+                                   [          ]
+                               g = [       1  ]
+                                   [  0    -- ]
+                                   [       xi ]
+
+(%o5)                                done
+@end group
+@end example
+
+The following example transformation leaves the metric with off-diagonal components.
 
 @example
 @group
@@ -344,9 +423,6 @@ leaves the metric with off-diagonal components.
 (%i5) dg_metric(cnvrt); 
                             2         2         2         2
                 ds2_in = del (Z) + del (Y) + del (X) - del (T)
-
-                            2    2             2       2    2           2
- ds2 = - 2 del(r) del(t) + r  del (theta) - del (t) + r  sin (theta) del (phi)
 
                          [ - 1  - 1  0         0        ]
                          [                              ]
@@ -413,15 +489,6 @@ ds2_in = r  del (theta) - ------------------- + ---------
                                                      + r  sin (theta) del (phi)
 
 Can't solve for coordinate r uniquely. Not substituting. 
-                                      2
-       2    2          (r - 2 G M) del (t)    2    2           2
-ds2 = r  del (theta) - ------------------- + r  sin (theta) del (phi)
-                                r
-                                                                           2
-                                                            (r - 2 G M) del (R)
-                                                          + -------------------
-                                                                     r
-
                   [   r - 2 G M                                ]
                   [ - ---------      0      0         0        ]
                   [       r                                    ]
@@ -523,12 +590,6 @@ coordinates.
                                       2         2
                           ds2_in = del (y) + del (x)
 
-ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
-    2    2           2             2           2
- + r  sin (theta) del (theta) + cos (theta) del (r)
-                                                2
- + (r cos(theta) del(theta) + sin(theta) del(r))
-
                                      [ 1  0  ]
                                  g = [       ]
                                      [     2 ]
@@ -580,13 +641,6 @@ argument is @code{2} the gradient is computed in the coordinate basis.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
-ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
-    2    2           2             2           2
- + r  sin (theta) del (theta) + cos (theta) del (r)
- + expt(sin(phi) r cos(theta) del(theta) + sin(phi) sin(theta) del(r)
- + cos(phi) r sin(theta) del(phi), 2) + expt(cos(phi) r cos(theta) del(theta)
- + cos(phi) sin(theta) del(r) - sin(phi) r sin(theta) del(phi), 2)
-
                              [ 1  0         0        ]
                              [                       ]
                              [     2                 ]
@@ -627,9 +681,6 @@ output coordinates @code{cord_ot}.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
-                                2         2         2
-                       ds2 = del (z) + del (y) + del (x)
-
                                     [ 1  0  0 ]
                                     [         ]
                                 g = [ 0  1  0 ]
@@ -645,11 +696,6 @@ curl in physical basis
 (%i4) dg_curl(1); 
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
-
-                                                 2         2         2
-ds2 = 2 cos(phi) sin(phi) r del(phi) del(r) + del (z) + sin (phi) del (r)
-                 2       2    2                                               2
-            + cos (phi) r  del (phi) + (cos(phi) del(r) - sin(phi) r del(phi))
 
                                    [ 1  0   0 ]
                                    [          ]
@@ -696,11 +742,6 @@ called before calling @code{dg_diverg}.
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
 
-                                                 2         2         2
-ds2 = 2 cos(phi) sin(phi) r del(phi) del(r) + del (z) + sin (phi) del (r)
-                 2       2    2                                               2
-            + cos (phi) r  del (phi) + (cos(phi) del(r) - sin(phi) r del(phi))
-
                                    [ 1  0   0 ]
                                    [          ]
                                g = [     2    ]
@@ -739,11 +780,6 @@ before calling @code{dg_laplac}.
 (%i2) dg_metric(init); 
                                  2         2         2
                      ds2_in = del (z) + del (y) + del (x)
-
-                                                 2         2         2
-ds2 = 2 cos(phi) sin(phi) r del(phi) del(r) + del (z) + sin (phi) del (r)
-                 2       2    2                                               2
-            + cos (phi) r  del (phi) + (cos(phi) del(r) - sin(phi) r del(phi))
 
                                    [ 1  0   0 ]
                                    [          ]
@@ -831,9 +867,6 @@ otherwise they can be accessed in the array @code{killeq}.
 (%i2) dg_metric(init); 
                                       2         2
                           ds2_in = del (x) - del (t)
-
-                                     2         2
-                            ds2 = del (x) - del (t)
 
                                     [ - 1  0 ]
                                 g = [        ]

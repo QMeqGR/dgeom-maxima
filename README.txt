@@ -106,7 +106,8 @@ Eric Majzoub, Jan 2026
      ‘cords_in’ are the input coordinates, ‘cords_tr’ are the
      transformation functions to the new or output coordinates, and
      ‘cords_ot’ are the output coordinates.  To see the available
-     predefined coordinate systems use ‘dg_cords(all)’.
+     predefined coordinate systems use ‘dg_cords(all)’.  Issuing
+     ‘dg_cords(show)’ will display the coordinate variables.
 
      Some choices of coordinates have predefined metrics and these do
      not require running ‘dg_metric(init)’.
@@ -126,12 +127,6 @@ Eric Majzoub, Jan 2026
      (%i3) dg_metric(init);
                                            2         2
                                ds2_in = del (x) - del (t)
-
-     ds2 = 2 cosh(omega) sinh(omega) rho del(omega) del(rho)
-            2           2            2           2    2
-      + cosh (omega) del (rho) + sinh (omega) rho  del (omega)
-                                                           2
-      - (sinh(omega) del(rho) + cosh(omega) rho del(omega))
 
                                         [      2    ]
                                     g = [ - rho   0 ]
@@ -178,7 +173,7 @@ Eric Majzoub, Jan 2026
      to the matrix ‘Jinv’ The optional integer argument may be 0 (show
      no output), 1 (show ‘J’), 2 (show ‘Jinv’).
 
- -- Function: dg_metric ([init,cnvrt,cnvrt2])
+ -- Function: dg_metric ([init,cnvrt,cnvrt2,cnvrt3])
      This function takes as argument <init> or <cnvrt>.  The input and
      output coordinates and the transformation functions must be defined
      beforehand for this function to work.  See the function dg_cords.
@@ -188,18 +183,33 @@ Eric Majzoub, Jan 2026
      unit entries, although ‘dg_minkowski’ may be set to -1 for the time
      component.
 
+     If calling ‘dg_metric’ with the argument <init>, the initial metric
+     is assumed to be flat, but maybe Minkowski, in the initial
+     coordinates <cords_in>.  For example, this input option may be used
+     for the following <x,y,x> to <r,theta,phi> coordinates:
+
      If ‘dg_metric’ is called with the argument <cnvrt>, then the
-     function assumes there is an initial metric given in the matrix
-     ‘lg_in’ with the ordering of the entries in accordance with the
-     ordering of the variables in ‘cords_in’.  The value of
+     function assumes there is an initial (non-trivial) metric given in
+     the matrix ‘lg_in’ with the ordering of the entries in accordance
+     with the ordering of the variables in ‘cords_in’.  The value of
      ‘dg_minkowski’ is ignored for this case.  ‘dg_metric’ returns the
      line element <ds^{2}> in the variable ‘ds2’, and the metric in the
-     matrix ‘g’.
+     matrix ‘g’.  An example set of coordinates here is:
 
      If ‘dg_metric’ is called with the argument <cnvrt2>, then the
      everything is the same as for argument <cnvrt> except that the
      variable <cords_tr> may contain the equation relating the 'in' and
-     out 'ot' coordinates.
+     out 'ot' coordinates.  An example set of input coordinates is:
+
+     If ‘dg_metric’ is called with the argument <cnvrt3>, then the
+     everything is the same as for argument <cnvrt>.  Example coordinate
+     inputs are the same as for <cnvrt> above.
+
+     Notes: The options <cnvrt>, <cnvrt2>, and <cnvrt3> use successively
+     more sophisticated methods to try constructing the transformed
+     metric.  This sometimes fails because the coordinates cannot be
+     uniquely inverted.  If none of the methods works please send me a
+     message.
 
    The following example converts from <x,y,z> coordinates to spherical
 coordinates.
@@ -209,13 +219,6 @@ coordinates.
      (%i2) dg_metric(init);
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
-
-     ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
-         2    2           2             2           2
-      + r  sin (theta) del (theta) + cos (theta) del (r)
-      + expt(sin(phi) r cos(theta) del(theta) + sin(phi) sin(theta) del(r)
-      + cos(phi) r sin(theta) del(phi), 2) + expt(cos(phi) r cos(theta) del(theta)
-      + cos(phi) sin(theta) del(r) - sin(phi) r sin(theta) del(phi), 2)
 
                                   [ 1  0         0        ]
                                   [                       ]
@@ -228,7 +231,10 @@ coordinates.
      (%o2)                                done
 
    The following example illustrates the conversion of the Rindler
-metric to new coordinates that mimic the Schwarzschild metric.
+metric to new coordinates that mimic the Schwarzschild metric using all
+three algorithms in ‘dg_metric’.
+
+   Using ‘dg_metric(cnvrt)’
 
      (%i1) cords_in:[omega,rho];
      (%o1)                            [omega, rho]
@@ -247,10 +253,32 @@ metric to new coordinates that mimic the Schwarzschild metric.
                                       2           2    2
                           ds2_in = del (rho) - rho  del (omega)
 
-                                        2
-                                     del (xi)         2
-                               ds2 = -------- - xi del (t)
-                                        xi
+                                        [ - xi  0  ]
+                                        [          ]
+                                    g = [       1  ]
+                                        [  0    -- ]
+                                        [       xi ]
+
+     (%o5)                                done
+
+   Using ‘dg_metric(cnvrt2)’
+
+     (%i1) cords_in:[omega,rho];
+     (%o1)                            [omega, rho]
+     (%i2) cords_ot:[t,xi];
+     (%o2)                               [t, xi]
+     (%i3) cords_tr:[omega=t/2,rho=2*sqrt(xi)];
+                                       t
+     (%o3)                    [omega = -, rho = 2 sqrt(xi)]
+                                       2
+     (%i4) lg_in:matrix([-rho^2,0],[0,1]);
+                                      [      2    ]
+     (%o4)                            [ - rho   0 ]
+                                      [           ]
+                                      [   0     1 ]
+     (%i5) dg_metric(cnvrt2);
+                                      2           2    2
+                          ds2_in = del (rho) - rho  del (omega)
 
                                         [ - xi  0  ]
                                         [          ]
@@ -260,7 +288,36 @@ metric to new coordinates that mimic the Schwarzschild metric.
 
      (%o5)                                done
 
-   leaves the metric with off-diagonal components.
+   Using ‘dg_metric(cnvrt3)’
+
+     (%i1) cords_in:[omega,rho];
+     (%o1)                            [omega, rho]
+     (%i2) cords_ot:[t,xi];
+     (%o2)                               [t, xi]
+     (%i3) cords_tr:[t/2,2*sqrt(xi)];
+                                      t
+     (%o3)                           [-, 2 sqrt(xi)]
+                                      2
+     (%i4) lg_in:matrix([-rho^2,0],[0,1]);
+                                      [      2    ]
+     (%o4)                            [ - rho   0 ]
+                                      [           ]
+                                      [   0     1 ]
+     (%i5) dg_metric(cnvrt3);
+                                      2           2    2
+                          ds2_in = del (rho) - rho  del (omega)
+
+     Failure inverting coordinates. Trying serial solutions.
+                                        [ - xi  0  ]
+                                        [          ]
+                                    g = [       1  ]
+                                        [  0    -- ]
+                                        [       xi ]
+
+     (%o5)                                done
+
+   The following example transformation leaves the metric with
+off-diagonal components.
 
      (%i1) lg_in : matrix([-1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1])$
      (%i2) cords_in : [T,X,Y,Z]$
@@ -269,9 +326,6 @@ metric to new coordinates that mimic the Schwarzschild metric.
      (%i5) dg_metric(cnvrt);
                                  2         2         2         2
                      ds2_in = del (Z) + del (Y) + del (X) - del (T)
-
-                                 2    2             2       2    2           2
-      ds2 = - 2 del(r) del(t) + r  del (theta) - del (t) + r  sin (theta) del (phi)
 
                               [ - 1  - 1  0         0        ]
                               [                              ]
@@ -334,15 +388,6 @@ Schwarzschild has a predefined metric, and it is not necessary to run
                                                           + r  sin (theta) del (phi)
 
      Can't solve for coordinate r uniquely. Not substituting.
-                                           2
-            2    2          (r - 2 G M) del (t)    2    2           2
-     ds2 = r  del (theta) - ------------------- + r  sin (theta) del (phi)
-                                     r
-                                                                                2
-                                                                 (r - 2 G M) del (R)
-                                                               + -------------------
-                                                                          r
-
                        [   r - 2 G M                                ]
                        [ - ---------      0      0         0        ]
                        [       r                                    ]
@@ -432,12 +477,6 @@ coordinates.
                                            2         2
                                ds2_in = del (y) + del (x)
 
-     ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
-         2    2           2             2           2
-      + r  sin (theta) del (theta) + cos (theta) del (r)
-                                                     2
-      + (r cos(theta) del(theta) + sin(theta) del(r))
-
                                           [ 1  0  ]
                                       g = [       ]
                                           [     2 ]
@@ -485,13 +524,6 @@ differential geometry.  See AI for a description.
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
 
-     ds2 = - 2 r cos(theta) sin(theta) del(r) del(theta)
-         2    2           2             2           2
-      + r  sin (theta) del (theta) + cos (theta) del (r)
-      + expt(sin(phi) r cos(theta) del(theta) + sin(phi) sin(theta) del(r)
-      + cos(phi) r sin(theta) del(phi), 2) + expt(cos(phi) r cos(theta) del(theta)
-      + cos(phi) sin(theta) del(r) - sin(phi) r sin(theta) del(phi), 2)
-
                                   [ 1  0         0        ]
                                   [                       ]
                                   [     2                 ]
@@ -526,9 +558,6 @@ differential geometry.  See AI for a description.
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
 
-                                     2         2         2
-                            ds2 = del (z) + del (y) + del (x)
-
                                          [ 1  0  0 ]
                                          [         ]
                                      g = [ 0  1  0 ]
@@ -544,11 +573,6 @@ differential geometry.  See AI for a description.
      (%i4) dg_curl(1);
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
-
-                                                      2         2         2
-     ds2 = 2 cos(phi) sin(phi) r del(phi) del(r) + del (z) + sin (phi) del (r)
-                      2       2    2                                               2
-                 + cos (phi) r  del (phi) + (cos(phi) del(r) - sin(phi) r del(phi))
 
                                         [ 1  0   0 ]
                                         [          ]
@@ -589,11 +613,6 @@ differential geometry.  See AI for a description.
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
 
-                                                      2         2         2
-     ds2 = 2 cos(phi) sin(phi) r del(phi) del(r) + del (z) + sin (phi) del (r)
-                      2       2    2                                               2
-                 + cos (phi) r  del (phi) + (cos(phi) del(r) - sin(phi) r del(phi))
-
                                         [ 1  0   0 ]
                                         [          ]
                                     g = [     2    ]
@@ -625,11 +644,6 @@ differential geometry.  See AI for a description.
      (%i2) dg_metric(init);
                                       2         2         2
                           ds2_in = del (z) + del (y) + del (x)
-
-                                                      2         2         2
-     ds2 = 2 cos(phi) sin(phi) r del(phi) del(r) + del (z) + sin (phi) del (r)
-                      2       2    2                                               2
-                 + cos (phi) r  del (phi) + (cos(phi) del(r) - sin(phi) r del(phi))
 
                                         [ 1  0   0 ]
                                         [          ]
@@ -707,9 +721,6 @@ the ctensor package.
                                            2         2
                                ds2_in = del (x) - del (t)
 
-                                          2         2
-                                 ds2 = del (x) - del (t)
-
                                          [ - 1  0 ]
                                      g = [        ]
                                          [  0   1 ]
@@ -738,31 +749,31 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line 102)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 509)
+                                                              (line 541)
 * dg_derivs:                             Functions and Variables for dgeom.
-                                                              (line 146)
+                                                              (line 141)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 571)
+                                                              (line 595)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 659)
+                                                              (line 673)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 470)
+                                                              (line 509)
 * dg_jacobian:                           Functions and Variables for dgeom.
-                                                              (line 174)
+                                                              (line 169)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 697)
+                                                              (line 711)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 612)
+                                                              (line 631)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 180)
+                                                              (line 175)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 361)
+                                                              (line 406)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 401)
+                                                              (line 446)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 409)
+                                                              (line 454)
 * show_cords:                            Functions and Variables for dgeom.
-                                                              (line 142)
+                                                              (line 137)
 
 * Menu:
 
