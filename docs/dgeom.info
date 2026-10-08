@@ -84,9 +84,9 @@ Coordinates defined in ‘dgeom’ can be used for computations in the
 ‘ctensor’ package such as the Christoffel symbols, the Riemann tensor
 and so forth.  See the function ‘set_ctensor_vars’ for more information.
 
-version: 0.2
+version: 0.3
 
-Eric Majzoub, Jan 2026
+Eric Majzoub, Oct 2026
 
 
 File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction to package dgeom,  Up: Top
@@ -203,7 +203,7 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
      to the matrix ‘Jinv’ The optional integer argument may be 0 (show
      no output), 1 (show ‘J’), 2 (show ‘Jinv’).
 
- -- Function: dg_metric ([init,cnvrt,cnvrt2,cnvrt3])
+ -- Function: dg_metric ([init,cnvrt,cnvrt2,cnvrt3,cnvrt4])
      This function takes as argument <init> or <cnvrt>.  The input and
      output coordinates and the transformation functions must be defined
      beforehand for this function to work.  See the function *note
@@ -216,7 +216,8 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
      If calling ‘dg_metric’ with the argument <init>, the initial metric
      is assumed to be flat, but maybe Minkowski, in the initial
      coordinates <cords_in>.  For example, this input option may be used
-     for the following <x,y,x> to <r,theta,phi> coordinates:
+     for the following <x,y,x> to <r,theta,phi> coordinates.  These
+     <cords_tr> imply that <x=r*cos(phi)*cos(theta)>, and so on.
 
      ‘
      cords_in: [x,y,z]
@@ -230,7 +231,8 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
      with the ordering of the variables in ‘cords_in’.  The value of
      ‘dg_minkowski’ is ignored for this case.  ‘dg_metric’ returns the
      line element <ds^{2}> in the variable ‘ds2’, and the metric in the
-     matrix ‘g’.  An example set of coordinates here is:
+     matrix ‘g’.  An example set of coordinates is below.  Again, these
+     <cords_tr> imply that <x=r*cos(phi)*cos(theta)>, and so on.
 
      ‘
      cords_in: [x,y,z]
@@ -240,8 +242,8 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
 
      If ‘dg_metric’ is called with the argument <cnvrt2>, then the
      everything is the same as for argument <cnvrt> except that the
-     variable <cords_tr> may contain the equation relating the 'in' and
-     out 'ot' coordinates.  An example set of input coordinates is:
+     variable <cords_tr> may contain the equations relating the 'in' and
+     out 'ot' coordinates.  An example set of coordinates is:
 
      ‘
      cords_in: [x,y,z]
@@ -252,13 +254,25 @@ File: dgeom.info,  Node: Functions and Variables for dgeom,  Prev: Introduction 
 
      If ‘dg_metric’ is called with the argument <cnvrt3>, then the
      everything is the same as for argument <cnvrt>.  Example coordinate
-     inputs are the same as for <cnvrt> above.
+     inputs are the same as for <cnvrt> above.  This option attempts
+     conversion using the standard equation for conversion of
+     coordinates of a second rank tensor.
 
-     Notes: The options <cnvrt>, <cnvrt2>, and <cnvrt3> use successively
-     more sophisticated methods to try constructing the transformed
-     metric.  This sometimes fails because the coordinates cannot be
-     uniquely inverted.  If none of the methods works please send me a
-     message.
+     If ‘dg_metric’ is called with the argument <cnvrt4>, then the
+     variable <cords_tr> may contain equations relating the
+     differentials of input and output coordinates.  This works
+     similarly to option <cnvrt2>.  An example set of coordinates is:
+
+     ‘
+     cords_in: [t,r,theta,phi]
+     cords_tr: [del(p)=del(t)+r/(r-2*M*G)*del(r),r,theta,phi]
+     cords_ot: [p,r,theta,phi]
+     ’
+
+     Notes: The options <cnvrt>, <cnvrt2>, <cnvrt3>, and <cnvrt4> use
+     different methods to try constructing the transformed metric.  This
+     sometimes fails because the coordinates cannot be inverted.  If
+     none of the methods works please send me a message.
 
    The following example converts from <x,y,z> coordinates to spherical
 coordinates.
@@ -365,6 +379,40 @@ three algorithms in ‘dg_metric’.
 
      (%o5)                                done
 
+   Using ‘dg_metric(cnvrt4)’.  This example is Schwarzschild to
+Eddington-Finkelstein coordinates.
+
+     (%i1) dg_cords(schwarzschild)$
+               Do NOT run dg_metric(init), the metric is already defined.
+
+     (%i2) lg_in:lg$
+     (%i3) cords_tr:[del(p)=del(t)+r/(r-2*M*G)*del(r),r,theta,phi];
+                                         r del(r)
+     (%o3)            [del(p) = del(t) + ---------, r, theta, phi]
+                                         r - 2 G M
+     (%i4) cords_ot:[p,r,theta,phi]$
+     (%i5) dg_metric(cnvrt4);
+                                              2           2
+               2    2          (r - 2 G M) del (t)   r del (r)
+     ds2_in = r  del (theta) - ------------------- + ---------
+                                        r            r - 2 G M
+                                                             2    2           2
+                                                          + r  sin (theta) del (phi)
+
+                           [   r - 2 G M                        ]
+                           [ - ---------  2  0         0        ]
+                           [       r                            ]
+                           [                                    ]
+                           [      2       0  0         0        ]
+                       g = [                                    ]
+                           [                  2                 ]
+                           [      0       0  r         0        ]
+                           [                                    ]
+                           [                      2    2        ]
+                           [      0       0  0   r  sin (theta) ]
+
+     (%o5)                                done
+
    The following example transformation leaves the metric with
 off-diagonal components.
 
@@ -376,9 +424,9 @@ off-diagonal components.
                                  2         2         2         2
                      ds2_in = del (Z) + del (Y) + del (X) - del (T)
 
-                              [ - 1  - 1  0         0        ]
+                              [ - 1  - 2  0         0        ]
                               [                              ]
-                              [ - 1   0   0         0        ]
+                              [ - 2   0   0         0        ]
                               [                              ]
                           g = [            2                 ]
                               [  0    0   r         0        ]
@@ -803,29 +851,29 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line  42)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 500)
+                                                              (line 548)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line  81)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 554)
+                                                              (line 602)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 632)
+                                                              (line 680)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 468)
+                                                              (line 516)
 * dg_jacobian:                           Functions and Variables for dgeom.
                                                               (line 109)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 671)
+                                                              (line 719)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 590)
+                                                              (line 638)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 115)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 365)
-* get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 405)
-* set_ctensor_vars:                      Functions and Variables for dgeom.
                                                               (line 413)
+* get_ctensor_vars:                      Functions and Variables for dgeom.
+                                                              (line 453)
+* set_ctensor_vars:                      Functions and Variables for dgeom.
+                                                              (line 461)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line  77)
 
@@ -851,16 +899,16 @@ Ref: show_cords7067
 Ref: dg_derivs7253
 Ref: dg_jacobian8695
 Ref: dg_metric9002
-Ref: ds2_to_lg20684
-Ref: get_ctensor_vars22977
-Ref: set_ctensor_vars23426
-Ref: dg_grad25962
-Ref: dg_curl27565
-Ref: dg_diverg30277
-Ref: dg_laplac32031
-Ref: dg_ffc33935
-Ref: dg_kill35758
-Node: Function and Variable Index37094
+Ref: ds2_to_lg23076
+Ref: get_ctensor_vars25369
+Ref: set_ctensor_vars25818
+Ref: dg_grad28354
+Ref: dg_curl29957
+Ref: dg_diverg32669
+Ref: dg_laplac34423
+Ref: dg_ffc36327
+Ref: dg_kill38150
+Node: Function and Variable Index39486
 
 End Tag Table
 

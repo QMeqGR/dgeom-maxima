@@ -57,9 +57,9 @@ Coordinates defined in ‘dgeom’ can be used for computations in the
 ‘ctensor’ package such as the Christoffel symbols, the Riemann tensor
 and so forth.  See the function ‘set_ctensor_vars’ for more information.
 
-version: 0.2
+version: 0.3
 
-Eric Majzoub, Jan 2026
+Eric Majzoub, Oct 2026
 
 1.2 Functions and Variables for dgeom
 =====================================
@@ -173,7 +173,7 @@ Eric Majzoub, Jan 2026
      to the matrix ‘Jinv’ The optional integer argument may be 0 (show
      no output), 1 (show ‘J’), 2 (show ‘Jinv’).
 
- -- Function: dg_metric ([init,cnvrt,cnvrt2,cnvrt3])
+ -- Function: dg_metric ([init,cnvrt,cnvrt2,cnvrt3,cnvrt4])
      This function takes as argument <init> or <cnvrt>.  The input and
      output coordinates and the transformation functions must be defined
      beforehand for this function to work.  See the function dg_cords.
@@ -186,7 +186,8 @@ Eric Majzoub, Jan 2026
      If calling ‘dg_metric’ with the argument <init>, the initial metric
      is assumed to be flat, but maybe Minkowski, in the initial
      coordinates <cords_in>.  For example, this input option may be used
-     for the following <x,y,x> to <r,theta,phi> coordinates:
+     for the following <x,y,x> to <r,theta,phi> coordinates.  These
+     <cords_tr> imply that <x=r*cos(phi)*cos(theta)>, and so on.
 
      ‘
      cords_in: [x,y,z]
@@ -200,7 +201,8 @@ Eric Majzoub, Jan 2026
      with the ordering of the variables in ‘cords_in’.  The value of
      ‘dg_minkowski’ is ignored for this case.  ‘dg_metric’ returns the
      line element <ds^{2}> in the variable ‘ds2’, and the metric in the
-     matrix ‘g’.  An example set of coordinates here is:
+     matrix ‘g’.  An example set of coordinates is below.  Again, these
+     <cords_tr> imply that <x=r*cos(phi)*cos(theta)>, and so on.
 
      ‘
      cords_in: [x,y,z]
@@ -210,8 +212,8 @@ Eric Majzoub, Jan 2026
 
      If ‘dg_metric’ is called with the argument <cnvrt2>, then the
      everything is the same as for argument <cnvrt> except that the
-     variable <cords_tr> may contain the equation relating the 'in' and
-     out 'ot' coordinates.  An example set of input coordinates is:
+     variable <cords_tr> may contain the equations relating the 'in' and
+     out 'ot' coordinates.  An example set of coordinates is:
 
      ‘
      cords_in: [x,y,z]
@@ -222,13 +224,25 @@ Eric Majzoub, Jan 2026
 
      If ‘dg_metric’ is called with the argument <cnvrt3>, then the
      everything is the same as for argument <cnvrt>.  Example coordinate
-     inputs are the same as for <cnvrt> above.
+     inputs are the same as for <cnvrt> above.  This option attempts
+     conversion using the standard equation for conversion of
+     coordinates of a second rank tensor.
 
-     Notes: The options <cnvrt>, <cnvrt2>, and <cnvrt3> use successively
-     more sophisticated methods to try constructing the transformed
-     metric.  This sometimes fails because the coordinates cannot be
-     uniquely inverted.  If none of the methods works please send me a
-     message.
+     If ‘dg_metric’ is called with the argument <cnvrt4>, then the
+     variable <cords_tr> may contain equations relating the
+     differentials of input and output coordinates.  This works
+     similarly to option <cnvrt2>.  An example set of coordinates is:
+
+     ‘
+     cords_in: [t,r,theta,phi]
+     cords_tr: [del(p)=del(t)+r/(r-2*M*G)*del(r),r,theta,phi]
+     cords_ot: [p,r,theta,phi]
+     ’
+
+     Notes: The options <cnvrt>, <cnvrt2>, <cnvrt3>, and <cnvrt4> use
+     different methods to try constructing the transformed metric.  This
+     sometimes fails because the coordinates cannot be inverted.  If
+     none of the methods works please send me a message.
 
    The following example converts from <x,y,z> coordinates to spherical
 coordinates.
@@ -335,6 +349,40 @@ three algorithms in ‘dg_metric’.
 
      (%o5)                                done
 
+   Using ‘dg_metric(cnvrt4)’.  This example is Schwarzschild to
+Eddington-Finkelstein coordinates.
+
+     (%i1) dg_cords(schwarzschild)$
+               Do NOT run dg_metric(init), the metric is already defined.
+
+     (%i2) lg_in:lg$
+     (%i3) cords_tr:[del(p)=del(t)+r/(r-2*M*G)*del(r),r,theta,phi];
+                                         r del(r)
+     (%o3)            [del(p) = del(t) + ---------, r, theta, phi]
+                                         r - 2 G M
+     (%i4) cords_ot:[p,r,theta,phi]$
+     (%i5) dg_metric(cnvrt4);
+                                              2           2
+               2    2          (r - 2 G M) del (t)   r del (r)
+     ds2_in = r  del (theta) - ------------------- + ---------
+                                        r            r - 2 G M
+                                                             2    2           2
+                                                          + r  sin (theta) del (phi)
+
+                           [   r - 2 G M                        ]
+                           [ - ---------  2  0         0        ]
+                           [       r                            ]
+                           [                                    ]
+                           [      2       0  0         0        ]
+                       g = [                                    ]
+                           [                  2                 ]
+                           [      0       0  r         0        ]
+                           [                                    ]
+                           [                      2    2        ]
+                           [      0       0  0   r  sin (theta) ]
+
+     (%o5)                                done
+
    The following example transformation leaves the metric with
 off-diagonal components.
 
@@ -346,9 +394,9 @@ off-diagonal components.
                                  2         2         2         2
                      ds2_in = del (Z) + del (Y) + del (X) - del (T)
 
-                              [ - 1  - 1  0         0        ]
+                              [ - 1  - 2  0         0        ]
                               [                              ]
-                              [ - 1   0   0         0        ]
+                              [ - 2   0   0         0        ]
                               [                              ]
                           g = [            2                 ]
                               [  0    0   r         0        ]
@@ -768,29 +816,29 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line 102)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 560)
+                                                              (line 608)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 141)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 614)
+                                                              (line 662)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 692)
+                                                              (line 740)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 528)
+                                                              (line 576)
 * dg_jacobian:                           Functions and Variables for dgeom.
                                                               (line 169)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 730)
+                                                              (line 778)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 650)
+                                                              (line 698)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 175)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 425)
-* get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 465)
-* set_ctensor_vars:                      Functions and Variables for dgeom.
                                                               (line 473)
+* get_ctensor_vars:                      Functions and Variables for dgeom.
+                                                              (line 513)
+* set_ctensor_vars:                      Functions and Variables for dgeom.
+                                                              (line 521)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 137)
 

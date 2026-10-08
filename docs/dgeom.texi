@@ -100,10 +100,10 @@ symbols, the Riemann tensor and so forth. See the function
 @code{set_ctensor_vars} for more information.
 
 @noindent
-version: 0.2
+version: 0.3
 
 @noindent
-Eric Majzoub, Jan 2026
+Eric Majzoub, Oct 2026
 
 @node Functions and Variables for dgeom, , Introduction to package dgeom, Top
 @section Functions and Variables for dgeom
@@ -237,7 +237,7 @@ assigned to the matrix @code{J} and the inverse is assigned to the matrix
 @end deffn
 
 @anchor{dg_metric}
-@deffn {Function} dg_metric ([init,cnvrt,cnvrt2,cnvrt3])
+@deffn {Function} dg_metric ([init,cnvrt,cnvrt2,cnvrt3,cnvrt4])
 This function takes as argument @var{init} or @var{cnvrt}. The input and
 output coordinates and the transformation functions must be defined
 beforehand for this function to work. See the function @ref{dg_cords}.
@@ -250,7 +250,8 @@ diagonal with unit entries, although @code{dg_minkowski} may be set to
 If calling @code{dg_metric} with the argument @var{init}, the initial
 metric is assumed to be flat, but maybe Minkowski, in the initial
 coordinates @var{cords_in}. For example, this input option may be used
-for the following @var{x,y,x} to @var{r,theta,phi} coordinates:
+for the following @var{x,y,x} to @var{r,theta,phi} coordinates.  These
+@var{cords_tr} imply that @var{x=r*cos(phi)*cos(theta)}, and so on.
 
 @code{@*
 cords_in: [x,y,z]@*
@@ -264,7 +265,9 @@ matrix @code{lg_in} with the ordering of the entries in accordance with
 the ordering of the variables in @code{cords_in}. The value of
 @code{dg_minkowski} is ignored for this case. @code{dg_metric} returns
 the line element @var{ds@sup{2}} in the variable @code{ds2}, and the
-metric in the matrix @code{g}. An example set of coordinates here is:
+metric in the matrix @code{g}. An example set of coordinates is
+below. Again, these @var{cords_tr} imply that
+@var{x=r*cos(phi)*cos(theta)}, and so on.
 
 @code{@*
 cords_in: [x,y,z]@*
@@ -274,8 +277,8 @@ cords_ot: [r,theta,phi]@*
 
 If @code{dg_metric} is called with the argument @var{cnvrt2}, then the
 everything is the same as for argument @var{cnvrt} except that the variable
-@var{cords_tr} may contain the equation relating the 'in' and out 'ot'
-coordinates. An example set of input coordinates is:
+@var{cords_tr} may contain the @i{equations} relating the 'in' and out 'ot'
+coordinates. An example set of coordinates is:
 
 @code{@*
 cords_in: [x,y,z]@*
@@ -285,16 +288,25 @@ cords_ot: [r,theta,phi]@*
 
 If @code{dg_metric} is called with the argument @var{cnvrt3}, then the
 everything is the same as for argument @var{cnvrt}. Example coordinate
-inputs are the same as for @var{cnvrt} above.
+inputs are the same as for @var{cnvrt} above. This option attempts
+conversion using the standard equation for conversion of coordinates of
+a second rank tensor.
 
-@example
-@end example
+If @code{dg_metric} is called with the argument @var{cnvrt4}, then the
+variable @var{cords_tr} may contain equations relating the differentials
+of input and output coordinates. This works similarly to option
+@var{cnvrt2}. An example set of coordinates is:
 
-Notes: The options @var{cnvrt}, @var{cnvrt2}, and @var{cnvrt3} use
-successively more sophisticated methods to try constructing the
-transformed metric. This sometimes fails because the coordinates cannot
-be uniquely inverted. If none of the methods works please send me a
-message.
+@code{@*
+cords_in: [t,r,theta,phi]@*
+cords_tr: [del(p)=del(t)+r/(r-2*M*G)*del(r),r,theta,phi]@*
+cords_ot: [p,r,theta,phi]@*
+}
+
+Notes: The options @var{cnvrt}, @var{cnvrt2}, @var{cnvrt3}, and
+@var{cnvrt4} use different methods to try constructing the transformed
+metric. This sometimes fails because the coordinates cannot be
+inverted. If none of the methods works please send me a message.
 
 @end deffn
 
@@ -421,6 +433,44 @@ Failure inverting coordinates. Trying serial solutions.
 @end group
 @end example
 
+Using @code{dg_metric(cnvrt4)}. This example is Schwarzschild to
+Eddington-Finkelstein coordinates.
+
+@example
+@group
+(%i1) dg_cords(schwarzschild)$ 
+          Do NOT run dg_metric(init), the metric is already defined.
+
+(%i2) lg_in:lg$ 
+(%i3) cords_tr:[del(p)=del(t)+r/(r-2*M*G)*del(r),r,theta,phi]; 
+                                    r del(r)
+(%o3)            [del(p) = del(t) + ---------, r, theta, phi]
+                                    r - 2 G M
+(%i4) cords_ot:[p,r,theta,phi]$ 
+(%i5) dg_metric(cnvrt4); 
+                                         2           2
+          2    2          (r - 2 G M) del (t)   r del (r)
+ds2_in = r  del (theta) - ------------------- + ---------
+                                   r            r - 2 G M
+                                                        2    2           2
+                                                     + r  sin (theta) del (phi)
+
+                      [   r - 2 G M                        ]
+                      [ - ---------  2  0         0        ]
+                      [       r                            ]
+                      [                                    ]
+                      [      2       0  0         0        ]
+                  g = [                                    ]
+                      [                  2                 ]
+                      [      0       0  r         0        ]
+                      [                                    ]
+                      [                      2    2        ]
+                      [      0       0  0   r  sin (theta) ]
+
+(%o5)                                done
+@end group
+@end example
+
 The following example transformation leaves the metric with off-diagonal components.
 
 @example
@@ -433,9 +483,9 @@ The following example transformation leaves the metric with off-diagonal compone
                             2         2         2         2
                 ds2_in = del (Z) + del (Y) + del (X) - del (T)
 
-                         [ - 1  - 1  0         0        ]
+                         [ - 1  - 2  0         0        ]
                          [                              ]
-                         [ - 1   0   0         0        ]
+                         [ - 2   0   0         0        ]
                          [                              ]
                      g = [            2                 ]
                          [  0    0   r         0        ]

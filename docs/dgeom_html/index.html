@@ -113,9 +113,9 @@ computations in the <code class="code">ctensor</code> package such as the Christ
 symbols, the Riemann tensor and so forth. See the function
 <code class="code">set_ctensor_vars</code> for more information.
 </p>
-<p>version: 0.2
+<p>version: 0.3
 </p>
-<p>Eric Majzoub, Jan 2026
+<p>Eric Majzoub, Oct 2026
 </p>
 <hr>
 </div>
@@ -253,7 +253,7 @@ assigned to the matrix <code class="code">J</code> and the inverse is assigned t
 </p></dd></dl>
 
 <a class="anchor" id="dg_005fmetric"></a><dl class="first-deffn def-block">
-<dt class="deffn def-line" id="index-dg_005fmetric"><span class="category-def">Function: </span><span><strong class="def-name">dg_metric</strong> <var class="def-var-arguments">([init,cnvrt,cnvrt2,cnvrt3])</var><a class="copiable-link" href="#index-dg_005fmetric"> &para;</a></span></dt>
+<dt class="deffn def-line" id="index-dg_005fmetric"><span class="category-def">Function: </span><span><strong class="def-name">dg_metric</strong> <var class="def-var-arguments">([init,cnvrt,cnvrt2,cnvrt3,cnvrt4])</var><a class="copiable-link" href="#index-dg_005fmetric"> &para;</a></span></dt>
 <dd><p>This function takes as argument <var class="var">init</var> or <var class="var">cnvrt</var>. The input and
 output coordinates and the transformation functions must be defined
 beforehand for this function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
@@ -266,7 +266,8 @@ diagonal with unit entries, although <code class="code">dg_minkowski</code> may 
 <p>If calling <code class="code">dg_metric</code> with the argument <var class="var">init</var>, the initial
 metric is assumed to be flat, but maybe Minkowski, in the initial
 coordinates <var class="var">cords_in</var>. For example, this input option may be used
-for the following <var class="var">x,y,x</var> to <var class="var">r,theta,phi</var> coordinates:
+for the following <var class="var">x,y,x</var> to <var class="var">r,theta,phi</var> coordinates.  These
+<var class="var">cords_tr</var> imply that <var class="var">x=r*cos(phi)*cos(theta)</var>, and so on.
 </p>
 <p><code class="code"><br>
 cords_in: [x,y,z]<br>
@@ -280,7 +281,9 @@ matrix <code class="code">lg_in</code> with the ordering of the entries in accor
 the ordering of the variables in <code class="code">cords_in</code>. The value of
 <code class="code">dg_minkowski</code> is ignored for this case. <code class="code">dg_metric</code> returns
 the line element <var class="var">ds<sup class="sup">2</sup></var> in the variable <code class="code">ds2</code>, and the
-metric in the matrix <code class="code">g</code>. An example set of coordinates here is:
+metric in the matrix <code class="code">g</code>. An example set of coordinates is
+below. Again, these <var class="var">cords_tr</var> imply that
+<var class="var">x=r*cos(phi)*cos(theta)</var>, and so on.
 </p>
 <p><code class="code"><br>
 cords_in: [x,y,z]<br>
@@ -290,8 +293,8 @@ cords_ot: [r,theta,phi]<br>
 </p>
 <p>If <code class="code">dg_metric</code> is called with the argument <var class="var">cnvrt2</var>, then the
 everything is the same as for argument <var class="var">cnvrt</var> except that the variable
-<var class="var">cords_tr</var> may contain the equation relating the &rsquo;in&rsquo; and out &rsquo;ot&rsquo;
-coordinates. An example set of input coordinates is:
+<var class="var">cords_tr</var> may contain the <i class="i">equations</i> relating the &rsquo;in&rsquo; and out &rsquo;ot&rsquo;
+coordinates. An example set of coordinates is:
 </p>
 <p><code class="code"><br>
 cords_in: [x,y,z]<br>
@@ -301,14 +304,25 @@ cords_ot: [r,theta,phi]<br>
 </p>
 <p>If <code class="code">dg_metric</code> is called with the argument <var class="var">cnvrt3</var>, then the
 everything is the same as for argument <var class="var">cnvrt</var>. Example coordinate
-inputs are the same as for <var class="var">cnvrt</var> above.
+inputs are the same as for <var class="var">cnvrt</var> above. This option attempts
+conversion using the standard equation for conversion of coordinates of
+a second rank tensor.
 </p>
-
-<p>Notes: The options <var class="var">cnvrt</var>, <var class="var">cnvrt2</var>, and <var class="var">cnvrt3</var> use
-successively more sophisticated methods to try constructing the
-transformed metric. This sometimes fails because the coordinates cannot
-be uniquely inverted. If none of the methods works please send me a
-message.
+<p>If <code class="code">dg_metric</code> is called with the argument <var class="var">cnvrt4</var>, then the
+variable <var class="var">cords_tr</var> may contain equations relating the differentials
+of input and output coordinates. This works similarly to option
+<var class="var">cnvrt2</var>. An example set of coordinates is:
+</p>
+<p><code class="code"><br>
+cords_in: [t,r,theta,phi]<br>
+cords_tr: [del(p)=del(t)+r/(r-2*M*G)*del(r),r,theta,phi]<br>
+cords_ot: [p,r,theta,phi]<br>
+</code>
+</p>
+<p>Notes: The options <var class="var">cnvrt</var>, <var class="var">cnvrt2</var>, <var class="var">cnvrt3</var>, and
+<var class="var">cnvrt4</var> use different methods to try constructing the transformed
+metric. This sometimes fails because the coordinates cannot be
+inverted. If none of the methods works please send me a message.
 </p>
 </dd></dl>
 
@@ -427,6 +441,42 @@ Failure inverting coordinates. Trying serial solutions.
 (%o5)                                done
 </pre></div></div>
 
+<p>Using <code class="code">dg_metric(cnvrt4)</code>. This example is Schwarzschild to
+Eddington-Finkelstein coordinates.
+</p>
+<div class="example">
+<div class="group"><pre class="example-preformatted">(%i1) dg_cords(schwarzschild)$ 
+          Do NOT run dg_metric(init), the metric is already defined.
+
+(%i2) lg_in:lg$ 
+(%i3) cords_tr:[del(p)=del(t)+r/(r-2*M*G)*del(r),r,theta,phi]; 
+                                    r del(r)
+(%o3)            [del(p) = del(t) + ---------, r, theta, phi]
+                                    r - 2 G M
+(%i4) cords_ot:[p,r,theta,phi]$ 
+(%i5) dg_metric(cnvrt4); 
+                                         2           2
+          2    2          (r - 2 G M) del (t)   r del (r)
+ds2_in = r  del (theta) - ------------------- + ---------
+                                   r            r - 2 G M
+                                                        2    2           2
+                                                     + r  sin (theta) del (phi)
+
+                      [   r - 2 G M                        ]
+                      [ - ---------  2  0         0        ]
+                      [       r                            ]
+                      [                                    ]
+                      [      2       0  0         0        ]
+                  g = [                                    ]
+                      [                  2                 ]
+                      [      0       0  r         0        ]
+                      [                                    ]
+                      [                      2    2        ]
+                      [      0       0  0   r  sin (theta) ]
+
+(%o5)                                done
+</pre></div></div>
+
 <p>The following example transformation leaves the metric with off-diagonal components.
 </p>
 <div class="example">
@@ -438,9 +488,9 @@ Failure inverting coordinates. Trying serial solutions.
                             2         2         2         2
                 ds2_in = del (Z) + del (Y) + del (X) - del (T)
 
-                         [ - 1  - 1  0         0        ]
+                         [ - 1  - 2  0         0        ]
                          [                              ]
-                         [ - 1   0   0         0        ]
+                         [ - 2   0   0         0        ]
                          [                              ]
                      g = [            2                 ]
                          [  0    0   r         0        ]
