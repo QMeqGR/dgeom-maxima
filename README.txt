@@ -171,7 +171,16 @@ Eric Majzoub, Oct 2026
      Computes the Jacobian of the coordinate transformation.  The
      Jacaobian is assigned to the matrix ‘J’ and the inverse is assigned
      to the matrix ‘Jinv’ The optional integer argument may be 0 (show
-     no output), 1 (show ‘J’), 2 (show ‘Jinv’).
+     no output), 1 (show ‘J’), 2 (show ‘Jinv’).  The format for
+     ‘cords_tr’ must be a set of expressions in terms of ‘cords_ot’.
+     For example:
+
+     ‘
+     cords_in = [x, y, z]
+     cords_tr =
+     [r*cos(phi)*sin(theta),r*sin(phi)*sin(theta),r*cos(theta)]
+     cords_ot = [r, theta, phi]
+     ’
 
  -- Function: dg_metric ([init,cnvrt,cnvrt2,cnvrt3,cnvrt4])
      This function takes as argument <init> or <cnvrt>.  The input and
@@ -816,29 +825,29 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line 102)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 608)
+                                                              (line 617)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 141)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 662)
+                                                              (line 671)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 740)
+                                                              (line 749)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 576)
+                                                              (line 585)
 * dg_jacobian:                           Functions and Variables for dgeom.
                                                               (line 169)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 778)
+                                                              (line 787)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 698)
+                                                              (line 707)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 175)
+                                                              (line 184)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 473)
+                                                              (line 482)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 513)
+                                                              (line 522)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 521)
+                                                              (line 530)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 137)
 

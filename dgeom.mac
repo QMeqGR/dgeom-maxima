@@ -375,9 +375,9 @@ dg_metric(trn):=block([N,ds2_tmp,sol,J,i,j,lg_out,l,m,cords_otf],
   /**********************************/
   else if trn='cnvrt2 then block(
     ds2:ds2_in,
-    for i:1 thru N do if is_eq(cords_tr[i])#0 then ds2: subst( solve(diff(cords_tr[i]),del(cords_in[i])), ds2 ),
+    for i:1 thru N do if is_eq(cords_tr[i])=1 then ds2: subst( solve(diff(cords_tr[i]),del(cords_in[i])), ds2 ),
     for i:1 thru N do if is_eq(cords_tr[i])=1 and freeof(cords_in[i],cords_tr[i])=false then
-       ( sol:solve(cords_tr[i],cords_in[i]),
+       ( sol:solve(cords_tr[i],cords_in[i]), if dg_dbg=1 then display(sol),
          if freeof(cords_in[i],rhs(sol[1]))=true then
          ds2: subst( sol, ds2 ) else print("Can't solve for coordinate", cords_in[i], "uniquely. Not substituting.") ),
     for i:1 thru N do if is_eq(cords_tr[i])=0 then ds2: subst( cords_tr[i], cords_in[i], ds2 )
