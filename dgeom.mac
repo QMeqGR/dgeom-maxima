@@ -14,7 +14,7 @@
 */
 
 if get('dgeom,'dgeom_version)#false then error("Package dgeom already loaded!")$
-put('dgeom,'0.3,'dgeom_version)$
+put('dgeom,'0.31,'dgeom_version)$
 
 load("dgeom.lisp") $
 load("dg_defs.mac")$
@@ -26,6 +26,7 @@ load("dgeom-index-html.lisp")$
 /********************/
 /* Global variables */
 /********************/
+dg_dbg:0;
 dg_minkowski:1;
 scrootg:0;
 cords_ot:0;
@@ -144,7 +145,7 @@ dg_cords(crds):=block(
    else if crds='kerr then
    ( no_init_messg(),
      dg_minkowski: -1,
-     cords_in:[t,rho,theta,phi],
+     cords_in:[t,r,theta,phi],
      cords_ot:cords_in,
      declare([M,a,J,G],constant),
      assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0,J>0,M>0),
@@ -161,11 +162,11 @@ dg_cords(crds):=block(
      declare([M,G],constant),
      assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0,M>0),
      ds2: (32*G^3*M^3/r)*exp(-r/(2*G*M))*(-del(T)^2+del(X)^2)+r^2*del(theta)^2+r^2*sin(theta)^2*del(phi)^2,
-     constraint_eq:(r/(2*M)-1)*exp(r/(2*M))=X^2-T^2,
+     constraint_eq:(r/(2*G*M)-1)*exp(r/(2*G*M))=X^2-T^2,
      g:lg: ds2_to_lg(ds2,cords_in) )
    else if crds='eddfink then
    ( no_init_messg(),
-     dg_minkowski: 1,
+     dg_minkowski: -1,
      cords_in:[v,r,theta,phi],
      cords_ot:cords_in,
      declare([M,G],constant),
@@ -270,7 +271,7 @@ row_norm(M):=block([dim,rmag,R],
 /*****************/
 /* dg_jacobian() */
 /*****************/
-dg_jacobian([args]):=block([N,ishow],
+dg_jacobian([args]):=block([N,ishow,Jt,Jinv],
   ishow: if args=[] then 0 else first(args),
   run_checks(),
   N:length(cords_in),
@@ -444,13 +445,12 @@ dg_metric(trn):=block([N,ds2_tmp,sol,J,i,j,lg_out,l,m,cords_otf],
   g: zeromatrix(N,N),
   for i : 1 thru N do
     for j : 1 thru N do
-        ( g[i,j]: ratsimp( diff( diff( ds2 , del(cords_ot[i] ) ), del(cords_ot[j]) ) ),
-          if i=j then g[i,j]: g[i,j]/2 ),
+        g[i,j]: ratsimp( diff( diff( ds2 , del(cords_ot[i] ) ), del(cords_ot[j]) ) ) / 2,
 
   g: trigsimp(g), lg:g,
   detg: determinant(g),
   if detg#0 then ug: g^^(-1) else error("g is singular!"),
-  scrootg: sqrt( detg ),
+  if detg<0 then scrootg: sqrt( -detg ) else scrootg: sqrt( detg ),
   display(g)
 
 )$
@@ -521,6 +521,7 @@ dg_diverg(ff):=block([W,N,tolist:cords_ot,tmp],
 /*************/
 /* dg_grad() */
 /*************/
+/* compute the gradient in new coords  */
 dg_grad(ff):=block([N,F,tolist:cords_ot,tmp],
 
   if scrootg=0 then dg_metric(init),
@@ -534,30 +535,6 @@ dg_grad(ff):=block([N,F,tolist:cords_ot,tmp],
   else if ff=2 then tmp: sum( diff( F,args(tolist)[i])*hats[i], i,1,N),
   define( funmake(dg_gra,[F]), expand(trigsimp(tmp) ) )
 )$
-/* compute the gradient in new coords  */
-/*
-dg_grad_old():=block([N,F,diffmx,T1,T2,hats],
-  run_checks(),
-  N:length(cords_in),
-  diffmx:makelist( 'diff(F,cords_ot[i]),i,N),
-  hats:makelist( concat(e_,cords_ot[i]),i,N),
-  T1:makelist(0,i,N),
-  dg_jacobian(),
-  Jitn: transpose( row_norm(Jinv) ),
-  for i: 1 thru N do
-    for j:1 thru N do
-      T1[i]:T1[i]+diffmx[j]*Jinv[j,i],
-  T2:makelist(0,i,N),
-  for i:1 thru N do
-    for j:1 thru N do
-      T2[i]:T2[i]+hats[j]*Jitn[i,j],
-  /* display(T1,T2,hats), */
-  gra: sum(T1[i]*T2[i],i,1,N),
-  gra:trigsimp(gra),
-  gra:expand(gra),
-  define( funmake(dg_gra,[F]) , gra )
-);
-*/
 
 /****************/
 /* dg_laplac()  */
@@ -604,7 +581,8 @@ d/dth= dth/dx, dth/dy, dth/dz,...
 These need to be normalized to get the correct
 connection coefficients. */
 
-dg_ffc([seq]):=block([cfunc:cords_tr,coords:cords_ot,i,j,dA,rmag,dx,dim,Ktmp],
+dg_ffc([seq]):=block([cfunc:cords_tr,coords:cords_ot,i,j,dA,rmag,dx,dim,Ktmp,TT,
+  DD,KK],
     dim:length(coords),
     A:zeromatrix(dim,dim),
     dA:zeromatrix(dim,dim),
@@ -650,7 +628,7 @@ dg_kill(dis):=block([i,j,mu,nu,sg,dim:length(cords_ot)],
             killeq[mu,nu]: sum(g[mu,sg]*'diff(xi[cords_ot[sg]],cords_ot[nu]),sg,1,dim)+
             sum(g[sg,nu]*'diff(xi[cords_ot[sg]],cords_ot[mu]),sg,1,dim)+
             sum(xi[cords_ot[sg]]*diff(g[mu,nu],cords_ot[sg]),sg,1,dim),
-   if dis = show then
+   if dis = 'show then
       for i:1 thru dim do
          for j:1 thru i do
             display(killeq[j,i])

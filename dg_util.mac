@@ -4,7 +4,8 @@ ds2_to_lg(ds2,cords_in):=block([N,line,i,j],
     lg:zeromatrix(N,N),
     for i:1 thru N do
         for j:1 thru N do
-            lg[i,j]:ratcoef(line,del(cords_in[i])*del(cords_in[j])),
+            ( lg[i,j]:ratcoef(line,del(cords_in[i])*del(cords_in[j])),
+              if i#j then lg[i,j]:lg[i,j]/2 ),
     lg
 )$
 

@@ -379,10 +379,10 @@ Eddington-Finkelstein coordinates.
                                                           + r  sin (theta) del (phi)
 
                            [   r - 2 G M                        ]
-                           [ - ---------  2  0         0        ]
+                           [ - ---------  1  0         0        ]
                            [       r                            ]
                            [                                    ]
-                           [      2       0  0         0        ]
+                           [      1       0  0         0        ]
                        g = [                                    ]
                            [                  2                 ]
                            [      0       0  r         0        ]
@@ -403,9 +403,9 @@ off-diagonal components.
                                  2         2         2         2
                      ds2_in = del (Z) + del (Y) + del (X) - del (T)
 
-                              [ - 1  - 2  0         0        ]
+                              [ - 1  - 1  0         0        ]
                               [                              ]
-                              [ - 2   0   0         0        ]
+                              [ - 1   0   0         0        ]
                               [                              ]
                           g = [            2                 ]
                               [  0    0   r         0        ]
