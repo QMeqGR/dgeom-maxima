@@ -14,7 +14,7 @@
 */
 
 if get('dgeom,'dgeom_version)#false then error("Package dgeom already loaded!")$
-put('dgeom,'0.31,'dgeom_version)$
+put('dgeom,'0.32,'dgeom_version)$
 
 load("dgeom.lisp") $
 load("dg_defs.mac")$
