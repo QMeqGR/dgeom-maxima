@@ -445,7 +445,8 @@ dg_metric(trn):=block([N,ds2_tmp,sol,J,i,j,lg_out,l,m,cords_otf],
   g: zeromatrix(N,N),
   for i : 1 thru N do
     for j : 1 thru N do
-        g[i,j]: ratsimp( diff( diff( ds2 , del(cords_ot[i] ) ), del(cords_ot[j]) ) ) / 2,
+       (g[i,j]: ratcoef( collectterms(ds2, del(cords_ot[i])*del(cords_ot[j])), del(cords_ot[i])*del(cords_ot[j]) ),
+         if i#j then g[i,j]: g[i,j] / 2 ),
 
   g: trigsimp(g), lg:g,
   detg: determinant(g),
