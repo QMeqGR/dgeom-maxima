@@ -336,9 +336,14 @@ dg_derivs():=block([N],
 /* dg_metric() */
 /***************/
 /*computes the metric in the new coordinates */
-is_eq(expr) := if not mapatom(expr) and op(expr) = "=" then 1 else 0;
 
-dg_metric(trn):=block([N,ds2_tmp,sol,J,i,j,lg_out,l,m,cords_otf],
+/* helper functions */
+/* is_eq checks an expression for an equal sign */
+is_eq(expr) := if not mapatom(expr) and op(expr) = "=" then 1 else 0;
+/* count_eq counts the number of equal signs in a list */
+count_eq(L) := length(sublist(L, lambda([e], not atom(e) and op(e) = "=")));
+
+dg_metric(trn):=block([N,ds2_tmp,sol,J,i,j,lg_out,l,m,cords_otf,eqL,crdL],
   N: length(cords_in),
   cords_otf: makelist(0,i,N),
 
@@ -375,13 +380,20 @@ dg_metric(trn):=block([N,ds2_tmp,sol,J,i,j,lg_out,l,m,cords_otf],
   /*      option: cnvrt2            */
   /**********************************/
   else if trn='cnvrt2 then block(
-    ds2:ds2_in,
+    ds2:ds2_in, eqL:[], crdL:[],
     for i:1 thru N do if is_eq(cords_tr[i])=1 then ds2: subst( solve(diff(cords_tr[i]),del(cords_in[i])), ds2 ),
-    for i:1 thru N do if is_eq(cords_tr[i])=1 and freeof(cords_in[i],cords_tr[i])=false then
+    /* if there is more than one equation in the cords_tr list, then try to solve them together */
+    if is( count_eq(cords_tr)>1 ) then
+       for i:1 thru N do if is_eq(cords_tr[i])=1 and freeof(cords_in[i],cords_tr[i])=false then
+         ( eqL: append(eqL,[cords_tr[i]]), crdL: append(crdL,[cords_in[i]]),
+           sol:solve(eqL,crdL)[1], if dg_dbg=1 then display(sol),
+           ds2: subst(sol,ds2) ),
+    if is( count_eq(cords_tr)=1 ) then
+       for i:1 thru N do if is_eq(cords_tr[i])=1 and freeof(cords_in[i],cords_tr[i])=false then
        ( sol:solve(cords_tr[i],cords_in[i]), if dg_dbg=1 then display(sol),
          if freeof(cords_in[i],rhs(sol[1]))=true then
-         ds2: subst( sol, ds2 ) else print("Can't solve for coordinate", cords_in[i], "uniquely. Not substituting.") ),
-    for i:1 thru N do if is_eq(cords_tr[i])=0 then ds2: subst( cords_tr[i], cords_in[i], ds2 )
+         ds2: subst( sol, ds2 ) else print("Can't solve for coordinate", cords_in[i], "uniquely. Not substituting."),
+         for i:1 thru N do if is_eq(cords_tr[i])=0 then ds2: subst( cords_tr[i], cords_in[i], ds2 ) )
   )
   /**********************************/
   /*      option: cnvrt3            */
