@@ -100,7 +100,7 @@ symbols, the Riemann tensor and so forth. See the function
 @code{set_ctensor_vars} for more information.
 
 @noindent
-version: 0.3
+version: 0.33
 
 @noindent
 Eric Majzoub, Oct 2026
@@ -618,6 +618,9 @@ coordinate conversion of the metric.
 @end example
 
 @section Interfacing with the CTENSOR package of Maxima
+The commands @code{get_ctensor_vars} and @code{set_ctensor_vars} allows
+one to set up variables for working with the @code{ctensor} package.
+
 @anchor{get_ctensor_vars}
 @deffn {Function} get_ctensor_vars ( )
 This command is used to set the @code{dgeom} coordinate variables from
@@ -871,20 +874,22 @@ before calling @code{dg_laplac}.
 
 @section Frame field calculations, and Killing vectors
 The following section contains the commands for computing the frame
-field connections, and the killing vectors. The command set_ctensor_vars
-also allows one to set up variables for working with the ctensor
-package.
+field connections, and the killing vectors.
 
 @anchor{dg_ffc}
 @deffn {Function} dg_ffc (@var{[constraint equations]})
-Compute the frame field connections. The input and output coordinates
-and the transformation functions must be defined beforehand for this
-function to work. See the function @ref{dg_cords}.
+Compute the frame field connections. (Note: This is currently restricted
+to 2D surfaces embedded in flat 3D space! If you need to compute
+connections in more general spaces use the @code{ctensor} package.) The
+input and output coordinates and the transformation functions must be
+defined beforehand for this function to work. See the function
+@ref{dg_cords}.
 
-The function @code{dg_ffc} computes the attitude matrix @code{A}, the
-connection coefficients in the matrix @code{Omega}, and the dual 1-forms
-in the array @code{thi}. Any constraint equations given are imposed after
-calculating the attitude matrix.
+Our computation follows O'Neill, Elementary Differential Geometry
+section 2.6.  The function @code{dg_ffc} computes the attitude matrix
+@code{A}, the connection coefficients in the matrix @code{Omega}, and
+the dual 1-forms in the array @code{thi}. Any constraint equations given
+are imposed after calculating the attitude matrix.
 
 The structural equations are computed by first computing the matrices
 @code{TT[i,j]: thi[i] . thi[j]}, and @code{DD[i,j]: diff(Omega[i,j])},

@@ -113,7 +113,7 @@ computations in the <code class="code">ctensor</code> package such as the Christ
 symbols, the Riemann tensor and so forth. See the function
 <code class="code">set_ctensor_vars</code> for more information.
 </p>
-<p>version: 0.3
+<p>version: 0.33
 </p>
 <p>Eric Majzoub, Oct 2026
 </p>
@@ -620,6 +620,9 @@ coordinate conversion of the metric.
 </div>
 <div class="section-level-extent" id="Interfacing-with-the-CTENSOR-package-of-Maxima">
 <h3 class="section"><span>1.3 Interfacing with the CTENSOR package of Maxima<a class="copiable-link" href="#Interfacing-with-the-CTENSOR-package-of-Maxima"> &para;</a></span></h3>
+<p>The commands <code class="code">get_ctensor_vars</code> and <code class="code">set_ctensor_vars</code> allows
+one to set up variables for working with the <code class="code">ctensor</code> package.
+</p>
 <a class="anchor" id="get_005fctensor_005fvars"></a><dl class="first-deffn def-block">
 <dt class="deffn def-line" id="index-get_005fctensor_005fvars"><span class="category-def">Function: </span><span><strong class="def-name">get_ctensor_vars</strong> <var class="def-var-arguments">( )</var><a class="copiable-link" href="#index-get_005fctensor_005fvars"> &para;</a></span></dt>
 <dd><p>This command is used to set the <code class="code">dgeom</code> coordinate variables from
@@ -867,20 +870,22 @@ before calling <code class="code">dg_laplac</code>.
 <div class="section-level-extent" id="Frame-field-calculations_002c-and-Killing-vectors">
 <h3 class="section"><span>1.5 Frame field calculations, and Killing vectors<a class="copiable-link" href="#Frame-field-calculations_002c-and-Killing-vectors"> &para;</a></span></h3>
 <p>The following section contains the commands for computing the frame
-field connections, and the killing vectors. The command set_ctensor_vars
-also allows one to set up variables for working with the ctensor
-package.
+field connections, and the killing vectors.
 </p>
 <a class="anchor" id="dg_005fffc"></a><dl class="first-deffn def-block">
 <dt class="deffn def-line" id="index-dg_005fffc"><span class="category-def">Function: </span><span><strong class="def-name">dg_ffc</strong> <var class="def-var-arguments">(<var class="var">[constraint equations]</var>)</var><a class="copiable-link" href="#index-dg_005fffc"> &para;</a></span></dt>
-<dd><p>Compute the frame field connections. The input and output coordinates
-and the transformation functions must be defined beforehand for this
-function to work. See the function <a class="ref" href="#dg_005fcords">dg_cords</a>.
+<dd><p>Compute the frame field connections. (Note: This is currently restricted
+to 2D surfaces embedded in flat 3D space! If you need to compute
+connections in more general spaces use the <code class="code">ctensor</code> package.) The
+input and output coordinates and the transformation functions must be
+defined beforehand for this function to work. See the function
+<a class="ref" href="#dg_005fcords">dg_cords</a>.
 </p>
-<p>The function <code class="code">dg_ffc</code> computes the attitude matrix <code class="code">A</code>, the
-connection coefficients in the matrix <code class="code">Omega</code>, and the dual 1-forms
-in the array <code class="code">thi</code>. Any constraint equations given are imposed after
-calculating the attitude matrix.
+<p>Our computation follows O&rsquo;Neill, Elementary Differential Geometry
+section 2.6.  The function <code class="code">dg_ffc</code> computes the attitude matrix
+<code class="code">A</code>, the connection coefficients in the matrix <code class="code">Omega</code>, and
+the dual 1-forms in the array <code class="code">thi</code>. Any constraint equations given
+are imposed after calculating the attitude matrix.
 </p>
 <p>The structural equations are computed by first computing the matrices
 <code class="code">TT[i,j]: thi[i] . thi[j]</code>, and <code class="code">DD[i,j]: diff(Omega[i,j])</code>,

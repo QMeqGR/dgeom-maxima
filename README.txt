@@ -57,7 +57,7 @@ Coordinates defined in ‘dgeom’ can be used for computations in the
 ‘ctensor’ package such as the Christoffel symbols, the Riemann tensor
 and so forth.  See the function ‘set_ctensor_vars’ for more information.
 
-version: 0.3
+version: 0.33
 
 Eric Majzoub, Oct 2026
 
@@ -520,6 +520,9 @@ Schwarzschild has a predefined metric, and it is not necessary to run
 1.3 Interfacing with the CTENSOR package of Maxima
 ==================================================
 
+The commands ‘get_ctensor_vars’ and ‘set_ctensor_vars’ allows one to set
+up variables for working with the ‘ctensor’ package.
+
  -- Function: get_ctensor_vars ( )
      This command is used to set the ‘dgeom’ coordinate variables from
      those defined in the ‘ctensor’ package.  This command sets the
@@ -743,19 +746,21 @@ differential geometry.  See AI for a description.
 =================================================
 
 The following section contains the commands for computing the frame
-field connections, and the killing vectors.  The command
-set_ctensor_vars also allows one to set up variables for working with
-the ctensor package.
+field connections, and the killing vectors.
 
  -- Function: dg_ffc (<[constraint equations]>)
-     Compute the frame field connections.  The input and output
-     coordinates and the transformation functions must be defined
-     beforehand for this function to work.  See the function dg_cords.
+     Compute the frame field connections.  (Note: This is currently
+     restricted to 2D surfaces embedded in flat 3D space!  If you need
+     to compute connections in more general spaces use the ‘ctensor’
+     package.)  The input and output coordinates and the transformation
+     functions must be defined beforehand for this function to work.
+     See the function dg_cords.
 
-     The function ‘dg_ffc’ computes the attitude matrix ‘A’, the
-     connection coefficients in the matrix ‘Omega’, and the dual 1-forms
-     in the array ‘thi’.  Any constraint equations given are imposed
-     after calculating the attitude matrix.
+     Our computation follows O'Neill, Elementary Differential Geometry
+     section 2.6.  The function ‘dg_ffc’ computes the attitude matrix
+     ‘A’, the connection coefficients in the matrix ‘Omega’, and the
+     dual 1-forms in the array ‘thi’.  Any constraint equations given
+     are imposed after calculating the attitude matrix.
 
      The structural equations are computed by first computing the
      matrices ‘TT[i,j]: thi[i] . thi[j]’, and ‘DD[i,j]:
@@ -825,29 +830,29 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line 102)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 617)
+                                                              (line 620)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 141)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 671)
+                                                              (line 674)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 749)
+                                                              (line 750)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 585)
+                                                              (line 588)
 * dg_jacobian:                           Functions and Variables for dgeom.
                                                               (line 169)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 787)
+                                                              (line 792)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 707)
+                                                              (line 710)
 * dg_metric:                             Functions and Variables for dgeom.
                                                               (line 184)
 * ds2_to_lg:                             Functions and Variables for dgeom.
                                                               (line 482)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 522)
+                                                              (line 525)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 530)
+                                                              (line 533)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 137)
 

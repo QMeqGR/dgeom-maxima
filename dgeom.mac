@@ -14,7 +14,7 @@
 */
 
 if get('dgeom,'dgeom_version)#false then error("Package dgeom already loaded!")$
-put('dgeom,'0.32,'dgeom_version)$
+put('dgeom,'0.33,'dgeom_version)$
 
 load("dgeom.lisp") $
 load("dg_defs.mac")$
@@ -174,7 +174,7 @@ dg_cords(crds):=block(
      ds2: -(1-2*G*M/r)*del(v)^2+2*del(v)*del(r)+r^2*del(theta)^2+r^2*sin(theta)^2*del(phi)^2,
      g:lg: ds2_to_lg(ds2,cords_in) )
    else if crds='show then
-   (  display(cords_in),
+   ( display(cords_in),
      display(cords_tr),
      display(cords_ot),
      display(dg_minkowski) )
@@ -576,6 +576,10 @@ dg_laplac():=block([F,N,tolist:cords_ot,tmp,M],
 /* dg_ffc() */
 /************/
 /*
+dg_ffc is restricted to 2D surfaces embedded in 3D space. The
+coordinate transformtion describing the surface must be specified
+in the cords_tr variable.
+
 This function takes three arguments:
     1. cfunc: Euclidean coordinate functions in terms of
         curvilinear coordinates or other coordinates.
@@ -597,6 +601,8 @@ connection coefficients. */
 dg_ffc([seq]):=block([cfunc:cords_tr,coords:cords_ot,i,j,dA,rmag,dx,dim,Ktmp,TT,
   DD,KK],
     dim:length(coords),
+    if is(dim>3) then
+      error("Error: dim > 3, dg_ffc is restricted to 2D surfaces embedded in 3D flat space."),
     A:zeromatrix(dim,dim),
     dA:zeromatrix(dim,dim),
     rmag:zeromatrix(1,dim),
