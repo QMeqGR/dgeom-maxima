@@ -147,8 +147,8 @@ dg_cords(crds):=block(
      dg_minkowski: -1,
      cords_in:[t,r,theta,phi],
      cords_ot:cords_in,
-     declare([M,a,J,G],constant),
-     assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0,J>0,M>0),
+     declare([M,a,G],constant),
+     assume(r>0,theta>0,theta<%pi,phi>0,phi<2*%pi,G>0,M>0),
      DD:r^2-2*G*M*r+a^2,
      ds2: -(1-2*G*M*r/rho^2)*del(t)^2-4*G*M*r*a*sin(theta)^2/rho^2*del(t)*del(phi)+rho^2/DD*del(r)^2+rho^2*del(theta)^2+(r^2+a^2+2*G*M*r*a^2*sin(theta)^2/rho^2)*sin(theta)^2*del(phi)^2,
      constraint_eq1: rho^2=r^2+a^2*cos(theta)^2,
@@ -254,7 +254,7 @@ rowmag(M,n):=block([dim:length(M),i,j,mgsq:0],
 /* row_norm() */
 /**************/
 /* Normalize the rows of a matrix */
-row_norm(M):=block([dim,rmag,R],
+row_norm(M):=block([dim,rmag,R,i,j],
   dim:length(M),
   rmag:zeromatrix(1,dim),
   R:zeromatrix(dim,dim),
@@ -271,8 +271,8 @@ row_norm(M):=block([dim,rmag,R],
 /*****************/
 /* dg_jacobian() */
 /*****************/
-dg_jacobian([args]):=block([N,ishow,Jt,Jinv],
-  ishow: if args=[] then 0 else first(args),
+dg_jacobian([args]):=block([N,show_flag,i,j],
+  show_flag: member('show,args),
   run_checks(),
   N:length(cords_in),
   J:zeromatrix(N,N),
@@ -286,8 +286,8 @@ dg_jacobian([args]):=block([N,ishow,Jt,Jinv],
   /* compute the inverse and transpose of J */
     Jinv: trigsimp( invert(J) ),
     Jt: trigsimp( transpose(J) ),
-    if ishow=1 then return(J),
-    if ishow=2 then return(Jinv),    
+    hsq: trigsimp( Jt . J ),
+    if show_flag then (display(J),display(Jinv),display(hsq)),
     done
 );
 
@@ -302,33 +302,50 @@ Invoke the derivatives by...
 d_dx( ev(d_dx(r),diff) ),diff;
 
 */
-dg_derivs():=block([N],
+dg_derivs(ff,[args]):=block([N,i,j,show_flag],
+  if ff=1 then print("computing in physical basis"),
+  if ff=2 then print("computing in coordinate basis"),
+  if ff#1 and ff#2 then return(print("Arg must be (1) physical basis or (2) coordinate basis")),
+  
+  show_flag: member('show,args),
   run_checks(),
   N:length(cords_in),
-  dg_jacobian(0),
+  dg_jacobian(),
   
   /* construct the differential operators */
   for i: 1 thru N do
     block([tmp],
+      /* Forward derivatives: d/dcords_in[i] in terms of d/dcords_ot[j] */
       block([ffin:0,F],
         for j: 1 thru N do
-        ffin: ffin + J[j,i] * 'diff(F,cords_ot[j]),
-        ffin: trigsimp(ffin),
+        if ff=1 then ffin: ffin + trigsimp( J[i,j]/sqrt(hsq[j,j]) * 'diff(F,cords_ot[j]) )
+                else ffin: ffin + trigsimp( Jinv[j,i] * 'diff(F,cords_ot[j]) ),
+        ffin: expand( trigsimp(ffin) ),
         tmp: cords_in[i],
         tmp: concat(d_d,tmp),
         /* display(tmp),
         display(ff), */
         define( funmake(tmp,[F]) , ffin) ),
+      /* backward derivatives: d/dcords_ot[i] in terms of d/dcords_in[j] */      
       block([ffot:0,F],
         for j: 1 thru N do
-        ffot: ffot + Jinv[j,i] * 'diff(F,cords_in[j]),
-        ffot: trigsimp(ffot),
+        if ff=1 then ffot: ffot + trigsimp( J[j,i]/sqrt(hsq[i,i]) * 'diff(F,cords_in[j]) )
+                else ffot: ffot + trigsimp( J[j,i] * 'diff(F,cords_in[j]) ),
+        ffot: expand( trigsimp(ffot) ),
         tmp: cords_ot[i],
         tmp: concat(d_d,tmp),
         /* display(tmp),
         display(ff), */
         define( funmake(tmp,[F]) , ffot) )
-     )
+     ),
+     
+     if show_flag then ( 
+      for i: 1 thru N do
+        disp( apply( fundef, [concat(d_d,cords_in[i])] )),
+      for i: 1 thru N do
+        disp( apply( fundef, [concat(d_d,cords_ot[i])] )) ),
+
+     done
 );
 
 
@@ -490,7 +507,7 @@ curcomp2(i):=block(
 
 /* Curl in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
-dg_curl(ff):=block([W,N,tolist:cords_ot,tmp],
+dg_curl(ff):=block([W,N,tolist:cords_ot,tmp,i],
     if ff#1 and ff#2 then return(print("Arg must be (1) physical basis or (2) coordinate basis")),
   dg_metric(init),
   N:length(tolist),
@@ -517,7 +534,7 @@ dg_curl(ff):=block([W,N,tolist:cords_ot,tmp],
 /****************/
 /* Divergence in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
-dg_diverg(ff):=block([W,N,tolist:cords_ot,tmp],
+dg_diverg(ff):=block([W,N,tolist:cords_ot,tmp,i],
   if ff=1 then print("divergence in physical basis"),
   if ff=2 then print("divergence in coordinate basis"),
   if ff#1 and ff#2 then return(print("Arg must be (1) physical basis or (2) coordinate basis")),
@@ -554,7 +571,7 @@ dg_grad(ff):=block([N,F,tolist:cords_ot,tmp],
 /****************/
 /* Laplacian in the new coordinates */
 /* Need to call dg_metric(); first for this to work */
-dg_laplac():=block([F,N,tolist:cords_ot,tmp,M],
+dg_laplac():=block([F,N,tolist:cords_ot,tmp,M,i,j],
   if scrootg=0 then dg_metric(init),
   N:length(tolist),
   depends(F,tolist),
@@ -639,7 +656,8 @@ dg_ffc([seq]):=block([cfunc:cords_tr,coords:cords_ot,i,j,dA,rmag,dx,dim,Ktmp,TT,
 /*  dg_kill();       */
 /*********************/
 /* Compute the Killing equations */
-dg_kill(dis):=block([i,j,mu,nu,sg,dim:length(cords_ot)],
+dg_kill([args]):=block([i,j,mu,nu,sg,dim:length(cords_ot),show_flag],
+    show_flag: member('show,args),
     declare_index_properties(xi,[postsuperscript]),
     killeq:zeromatrix(dim,dim),
     for mu: 1 thru dim do
@@ -647,7 +665,7 @@ dg_kill(dis):=block([i,j,mu,nu,sg,dim:length(cords_ot)],
             killeq[mu,nu]: sum(g[mu,sg]*'diff(xi[cords_ot[sg]],cords_ot[nu]),sg,1,dim)+
             sum(g[sg,nu]*'diff(xi[cords_ot[sg]],cords_ot[mu]),sg,1,dim)+
             sum(xi[cords_ot[sg]]*diff(g[mu,nu],cords_ot[sg]),sg,1,dim),
-   if dis = 'show then
+   if show_flag then
       for i:1 thru dim do
          for j:1 thru i do
             display(killeq[j,i])
