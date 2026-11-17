@@ -311,29 +311,36 @@ dg_derivs(ff,[args]):=block([N,i,j,show_flag],
   run_checks(),
   N:length(cords_in),
   dg_jacobian(),
+
+  /* If physical basis (ff=1), define unit basis operators e_r(F), e_theta(F), e_phi(F) */
+  if ff=1 then
+  for j: 1 thru N do
+  ( ebase: concat(e_,cords_ot[j]),
+    define( funmake(ebase,[F]), trigsimp( 'diff(F,cords_ot[j]) / sqrt(hsq[j,j]) ) )  ),
   
   /* construct the differential operators */
   for i: 1 thru N do
     block([tmp],
-      /* Forward derivatives: d/dcords_in[i] in terms of d/dcords_ot[j] */
+      /* (1) Forward derivatives: d/dcords_in[i] in terms of d/dcords_ot[j] */
       block([ffin:0,F],
         for j: 1 thru N do
-        if ff=1 then ffin: ffin + trigsimp( J[i,j]/sqrt(hsq[j,j]) * 'diff(F,cords_ot[j]) )
-                else ffin: ffin + trigsimp( Jinv[j,i] * 'diff(F,cords_ot[j]) ),
+        if ff=1 then (
+          ebase: concat(e_,cords_ot[j]),
+          ffin: ffin + trigsimp( J[i,j]/sqrt(hsq[j,j]) * funmake(ebase,[F]) )
+          )
+        else ffin: ffin + trigsimp( Jinv[j,i] * 'diff(F,cords_ot[j]) ),
         ffin: expand( trigsimp(ffin) ),
-        tmp: cords_in[i],
-        tmp: concat(d_d,tmp),
+        tmp: concat(d_d,cords_in[i]),
         /* display(tmp),
         display(ff), */
         define( funmake(tmp,[F]) , ffin) ),
-      /* backward derivatives: d/dcords_ot[i] in terms of d/dcords_in[j] */      
+      /* (2) backward derivatives: d/dcords_ot[i] in terms of d/dcords_in[j] */      
       block([ffot:0,F],
         for j: 1 thru N do
         if ff=1 then ffot: ffot + trigsimp( J[j,i]/sqrt(hsq[i,i]) * 'diff(F,cords_in[j]) )
                 else ffot: ffot + trigsimp( J[j,i] * 'diff(F,cords_in[j]) ),
         ffot: expand( trigsimp(ffot) ),
-        tmp: cords_ot[i],
-        tmp: concat(d_d,tmp),
+        tmp: concat(d_d,cords_ot[i]),
         /* display(tmp),
         display(ff), */
         define( funmake(tmp,[F]) , ffot) )

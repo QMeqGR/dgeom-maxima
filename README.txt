@@ -139,7 +139,7 @@ Eric Majzoub, Oct 2026
      The function ‘show_cords’ takes no arguments.  It displays the
      variables ‘cord_in’, ‘cord_tr’, ‘cord_ot’, and ‘dg_minkowski’.
 
- -- Function: dg_derivs ([show])
+ -- Function: dg_derivs ([1,2],[show])
      The input and output coordinates and the transformation functions
      must be defined beforehand for this function to work.  See the
      function dg_cords.  The function ‘dg_derivs’ computes the partial
@@ -150,6 +150,12 @@ Eric Majzoub, Oct 2026
      transformation ‘xyz_to_cyl’, one obtains the partial derivatives
      with respect to <(x,y,z)> in terms of the partial derivatives with
      respect to the variables <(r,phi,z)>.
+
+     There are two optional choices.  (1) computes the derivatives in
+     the physical basis, with the scale factors included in the vectors
+     (differential operators), e.g., ‘e_r, e_theta, e_phi’ for example
+     in spherical coordinates.  (2) computes the derivatives in the
+     coordinate basis where the scale factors are explicit.
 
      The resulting partial derivative functions are named according to
      the input variable names, in the following notation.  The partial
@@ -164,9 +170,7 @@ Eric Majzoub, Oct 2026
      computing in physical basis
      (%o2)                                done
      (%i3) fundef(d_dx);
-                                    dF             dF
-     (%o3)               d_dx(F) := -- cos(phi) - ---- sin(phi)
-                                    dr            dphi
+     (%o3)           d_dx(F) := e_r(F) cos(phi) - e_phi(F) sin(phi)
      (%i4) dg_derivs(2);
      computing in coordinate basis
      (%o4)                                done
@@ -839,29 +843,29 @@ Appendix A Function and Variable index
 * dg_cords:                              Functions and Variables for dgeom.
                                                               (line 102)
 * dg_curl:                               Functions and Variables for dgeom.
-                                                              (line 629)
+                                                              (line 633)
 * dg_derivs:                             Functions and Variables for dgeom.
                                                               (line 141)
 * dg_diverg:                             Functions and Variables for dgeom.
-                                                              (line 683)
+                                                              (line 687)
 * dg_ffc:                                Functions and Variables for dgeom.
-                                                              (line 759)
+                                                              (line 763)
 * dg_grad:                               Functions and Variables for dgeom.
-                                                              (line 597)
+                                                              (line 601)
 * dg_jacobian:                           Functions and Variables for dgeom.
-                                                              (line 179)
+                                                              (line 183)
 * dg_kill:                               Functions and Variables for dgeom.
-                                                              (line 801)
+                                                              (line 805)
 * dg_laplac:                             Functions and Variables for dgeom.
-                                                              (line 719)
+                                                              (line 723)
 * dg_metric:                             Functions and Variables for dgeom.
-                                                              (line 193)
+                                                              (line 197)
 * ds2_to_lg:                             Functions and Variables for dgeom.
-                                                              (line 491)
+                                                              (line 495)
 * get_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 534)
+                                                              (line 538)
 * set_ctensor_vars:                      Functions and Variables for dgeom.
-                                                              (line 542)
+                                                              (line 546)
 * show_cords:                            Functions and Variables for dgeom.
                                                               (line 137)
 

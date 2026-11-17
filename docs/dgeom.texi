@@ -196,7 +196,7 @@ variables @code{cord_in}, @code{cord_tr}, @code{cord_ot}, and
 @end deffn
 
 @anchor{dg_derivs} 
-@deffn {Function} dg_derivs ([show])
+@deffn {Function} dg_derivs ([1,2],[show])
 The input and output coordinates and the transformation functions must
 be defined beforehand for this function to work. See the function
 @ref{dg_cords}.  The function @code{dg_derivs} computes the partial
@@ -207,6 +207,12 @@ using the predefined cylindrical coordinate transformation
 @code{xyz_to_cyl}, one obtains the partial derivatives with respect to
 @var{(x,y,z)} in terms of the partial derivatives with respect to the
 variables @var{(r,phi,z)}.
+
+There are two optional choices. (1) computes the derivatives in the
+physical basis, with the scale factors included in the vectors
+(differential operators), e.g., @code{e_r, e_theta, e_phi} for example
+in spherical coordinates. (2) computes the derivatives in the coordinate
+basis where the scale factors are explicit.
 
 The resulting partial derivative functions are named according to the
 input variable names, in the following notation. The partial derivative
@@ -224,9 +230,7 @@ computed in terms of the other.
 computing in physical basis 
 (%o2)                                done
 (%i3) fundef(d_dx); 
-                               dF             dF
-(%o3)               d_dx(F) := -- cos(phi) - ---- sin(phi)
-                               dr            dphi
+(%o3)           d_dx(F) := e_r(F) cos(phi) - e_phi(F) sin(phi)
 (%i4) dg_derivs(2); 
 computing in coordinate basis 
 (%o4)                                done
