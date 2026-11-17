@@ -568,7 +568,7 @@ dg_grad(ff):=block([N,F,tolist:cords_ot,tmp],
   N:length(tolist),
   depends(F,tolist),
   hats:makelist( concat(e_,cords_ot[i]),i,N),
-  if ff=1 then tmp: sum( diff( F/sqrt(g[i,i]),args(tolist)[i])*hats[i], i,1,N)
+  if ff=1 then tmp: sum( diff( F , args(tolist)[i] ) / sqrt(g[i,i]) * hats[i], i,1,N)
   else if ff=2 then tmp: sum( diff( F,args(tolist)[i])*hats[i], i,1,N),
   define( funmake(dg_gra,[F]), expand(trigsimp(tmp) ) )
 )$
